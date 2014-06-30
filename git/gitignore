@@ -1,0 +1,17 @@
+bin/
+obj/
+TestResults/
+.idea/
+build/
+_UpgradeReport_Files/
+Logs/
+nbproject/
+*.suo
+*.dbmdl
+*.user
+*.orig
+*.sdf
+*.sublime-*
+.tern-project
+UpgradeLog.XML
+UpgradeLog.htm

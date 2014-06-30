@@ -1,0 +1,33 @@
+[user]
+    email = ljph.fontaine@gmail.com
+    name  = Loïc Fontaine
+
+[core]
+    editor       = vim
+    excludesfile = ~/.gitignore
+
+[diff]
+    guitool = p4
+    tool    = p4
+[difftool]
+    prompt = false
+[difftool "p4"]
+    cmd = "p4merge $LOCAL $REMOTE"
+
+[merge]
+    tool = p4
+[mergetool]
+    keepBackup = false
+    prompt     = false
+[mergetool "p4"]
+    cmd = "p4merge $BASE $LOCAL $REMOTE $MERGED"
+
+#[url "https://"]
+#  insteadOf = git://
+
+[color]
+    ui = true
+
+[push]
+    default = simple
+

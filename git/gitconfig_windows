@@ -1,0 +1,41 @@
+[user]
+	email = ljph.fontaine@gmail.com
+	name = Loïc Fontaine
+
+[core]
+	editor = \"C:/Program Files/Sublime Text 3/sublime_text.exe -n -w\"
+	autocrlf = false
+	excludesfile = c:/Users/lfontaine/.gitignore
+
+[diff]
+	guitool = p4merge
+	tool = p4merge
+[difftool]
+	prompt = false
+[difftool "kdiff3"]
+	path = C:/Program Files (x86)/KDiff3/kdiff3.exe
+[difftool "p4merge"]
+	path = C:/Program Files/Perforce/p4merge.exe
+[difftool "meld"]
+	path = C:/Valtech/Bin/meld.sh
+
+[merge]
+	tool = p4merge
+[mergetool]
+	keepBackup = false
+	prompt = false
+[mergetool "kdiff3"]
+	path = C:/Program Files (x86)/KDiff3/kdiff3.exe
+[mergetool "p4merge"]
+	path = C:/Program Files/Perforce/p4merge.exe
+[mergetool "meld"]
+	path = C:/Valtech/Bin/meld.sh
+
+[credential]
+	helper = !\"C:/Program Files (x86)/GitExtensions/GitCredentialWinStore/git-credential-winstore.exe\"
+
+[url "https://"]
+	insteadOf = git://
+
+[color]
+    ui = true

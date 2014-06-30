@@ -1,0 +1,51 @@
+function! GetRunningOS()
+  if has('win32')
+    return 'win'
+  endif
+  if has('unix')
+    if system('uname')=~'Darwin'
+      return 'mac'
+    else
+      return 'linux'
+    endif
+  endif
+endfunction
+
+let os=GetRunningOS()
+
+" use the x clipboard
+" this option should be set by spf13 but has('x') returns false!?
+if os =~ 'linux' " On Linux use + register for copy-paste
+    set clipboard=unnamedplus
+else             " On mac and Windows, use * register for copy-paste
+    set clipboard=unnamed
+endif
+
+" standard copy/cut/paste
+vnoremap <C-c> "+y
+vnoremap <C-x> "+x
+nmap <C-a> ggVG
+nmap <C-v> "+gP
+
+" vim indent guides config
+let g:indent_guides_enable_on_vim_startup = 0
+
+" session config
+set sessionoptions+=resize,winpos
+set sessionoptions-=help
+
+" vim config
+let maplocalleader = ';'
+set viminfo+=!
+"set updatetime=500
+
+" column ruler
+set colorcolumn=80
+highlight ColorColumn ctermbg=8
+highlight ColorColumn guibg=#3e3d32
+
+" folding
+set foldmethod=syntax
+:autocmd BufWinEnter * normal zR
+au FileType javascript call JavaScriptFold()
+

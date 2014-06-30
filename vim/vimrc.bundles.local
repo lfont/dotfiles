@@ -1,0 +1,27 @@
+" spf13 config
+let g:spf13_bundle_groups = ['general', 'programming', 'php', 'twig', 'javascript', 'html', 'misc']
+
+" tern config
+"let g:tern_show_argument_hints = 'on_hold'
+let g:tern_map_keys = 1
+Plugin 'marijnh/tern_for_vim'
+
+" YouCompleteMe config
+" sudo apt-get install build-essential cmake python-dev
+" sudo yum install cmake python-devel
+"let g:ycm_allow_changing_updatetime = 0
+Plugin 'Valloric/YouCompleteMe'
+
+" vim-bufonly
+Plugin 'duff/vim-bufonly'
+
+" javascript
+Plugin 'jelera/vim-javascript-syntax'
+
+" CtrlP
+let g:ctrlp_by_filename = 1
+let g:ctrlp_cmd = 'CtrlPBuffer'
+
+" Rust
+Plugin 'rust-lang/rust', { 'rtp': 'src/etc/vim/' }
+
