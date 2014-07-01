@@ -8,11 +8,23 @@ function install_archive
   mkdir $install_dir
 
   rm -r $tmp_dir/*
-  wget -P $tmp_dir $url
 
-  tar -C $install_dir -xjvf $tmp_dir/*.tar.bz2 --strip-components 1 > $DOTFILES_TMP_DIR/{$name}-extract.log
-  tar -C $install_dir -xzvf $tmp_dir/*.tar.gz  --strip-components 1 > $DOTFILES_TMP_DIR/{$name}-extract.log
-  tar -C $install_dir -xzvf $tmp_dir/*.tgz     --strip-components 1 > $DOTFILES_TMP_DIR/{$name}-extract.log
+  mkdir $tmp_dir/download
+  wget -P $tmp_dir/download $url
+
+  mkdir $tmp_dir/extract
+
+  if bzip2 -t $tmp_dir/download/*
+    tar -C $tmp_dir/extract -xjvf $tmp_dir/download/* > $DOTFILES_TMP_DIR/{$name}-extract.log
+  else
+    tar -C $tmp_dir/extract -xzvf $tmp_dir/download/* > $DOTFILES_TMP_DIR/{$name}-extract.log
+  end
+
+  if test (ls $tmp_dir/extract | wc -l) -eq 1
+    mv $tmp_dir/extract/*/* $install_dir/
+  else
+    mv $tmp_dir/extract/* $install_dir/
+  end
 
   echo $install_dir
 end
