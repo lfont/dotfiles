@@ -34,21 +34,23 @@
   # -env -qaP | grep wget
   environment.systemPackages = with pkgs; [
     wget
-    fish
     htop
-    cmake
-    gcc
-    gnumake
-    python
-    vimHugeX
-    firefox
+    fish
+    tmux
+
     networkmanagerapplet
+    gvfs
+
+    vimHugeX
+    git
+
+    nodejs
+    python
+
+    firefox
+    pidgin
     keepassx2
     dropbox
-    gvfs
-    nodejs
-    git
-    pidgin
     bitcoin
   ];
 
