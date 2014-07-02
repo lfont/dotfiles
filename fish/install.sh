@@ -19,9 +19,6 @@ fi
 mkdir -p ~/.config/fish
 ln -sf $(pwd)/fish/config.fish ~/.config/fish/
 
-# create the user's bin directory
-mkdir -p ~/bin
-
 # set fish as the default shell
 if [ $SHELL != $(which fish) ]
 then

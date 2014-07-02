@@ -14,6 +14,7 @@
   boot.loader.grub.enable = false;
   boot.loader.grub.device = "/dev/sda4";
   boot.loader.gummiboot.enable = true;
+  boot.loader.gummiboot.timeout = 4;
   boot.loader.efi.canTouchEfiVariables = false;
 
   networking.hostName = "loics-macbook-pro"; # Define your hostname.
@@ -40,6 +41,14 @@
 
     networkmanagerapplet
     gvfs
+    xdg-user-dirs
+    unzipNLS
+    xarchiver
+    gnome3.gtk
+    gtk-engine-murrine
+    #librsvg
+    #gdk_pixbuf
+    #cairo
 
     vimHugeX
     git

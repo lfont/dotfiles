@@ -8,6 +8,5 @@ cd "$(dirname $0)"/..
 . ./script/env.sh
 
 # find the installers and run them iteratively
-find . -name install.sh | while read installer ; do bash "${installer}" ; done
 find . -name install.fish | while read installer ; do fish "${installer}" ; done
 
