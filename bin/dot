@@ -15,6 +15,11 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 cd $DIR/..
 . ./script/env.sh
 
-# find the updaters and run them iteratively
-find . -name update.fish | while read updater ; do fish "${updater}" ; done
+if [ $1 ]
+then
+  fish ./$1/update.fish
+else
+  # find the updaters and run them iteratively
+  find . -name update.fish | while read updater ; do fish "${updater}" ; done
+fi
 
