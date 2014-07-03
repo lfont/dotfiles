@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=p4merge
+GenericName=Diff Tool
+Comment=3 ways merge tool
+Exec=p4merge %F
+Terminal=false
+MimeType=text/plain;
+Icon=p4merge
+Categories=Development;
+StartupNotify=true
