@@ -25,3 +25,6 @@ let g:ctrlp_cmd = 'CtrlPBuffer'
 " Rust
 Plugin 'rust-lang/rust', { 'rtp': 'src/etc/vim/' }
 
+" Fish
+Plugin 'dag/vim-fish'
+

@@ -1,6 +1,6 @@
 cd ~/.spf13-vim-3/
 git pull
-vim +BundleInstall! +BundleClean +q
+vim +PluginInstall! +PluginClean +qall
 cd -
 
 cd ~/.vim/bundle/tern_for_vim/
