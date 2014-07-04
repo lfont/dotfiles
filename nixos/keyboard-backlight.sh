@@ -8,22 +8,21 @@ INCREMENT=15
 #    exit 1
 #fi
 
-SET_VALUE=0
 case $1 in
 
     up)
         TOTAL=`expr $BACKLIGHT + $INCREMENT`
         if [ $TOTAL -gt "255" ]; then
-            exit 1
+            TOTAL=255
         fi
-        SET_VALUE=1
+        echo $TOTAL > /sys/class/leds/smc::kbd_backlight/brightness
         ;;
     down)
         TOTAL=`expr $BACKLIGHT - $INCREMENT`
         if [ $TOTAL -lt "0" ]; then
-            exit 1
+            TOTAL=0
         fi
-        SET_VALUE=1
+        echo $TOTAL > /sys/class/leds/smc::kbd_backlight/brightness
         ;;
     total)
     TEMP_VALUE=$BACKLIGHT
@@ -45,8 +44,4 @@ case $1 in
         echo "Use: keyboard-light up|down|total|off"
         ;;
 esac
-
-if [ $SET_VALUE -eq "1" ]; then
-    echo $TOTAL > /sys/class/leds/smc::kbd_backlight/brightness
-fi
 
