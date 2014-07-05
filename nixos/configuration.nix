@@ -19,9 +19,6 @@
   boot.extraModprobeConfig = ''
     options hid_apple fnmode=2
   '';
-  boot.postBootCommands = ''
-    echo 0 > /sys/class/leds/smc::kbd_backlight/brightness
-  '';
 
   networking.hostName = "loics-macbook-pro"; # Define your hostname.
   networking.networkmanager.enable = true;
@@ -49,7 +46,6 @@
     xdg-user-dirs
     unzipNLS
     xarchiver
-    gnome3.gtk
     gtk-engine-murrine
 
     vimHugeX
@@ -110,23 +106,92 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs: {
+  nixpkgs.config.packageOverrides = pkgs: rec {
     # smb support
     gvfs = pkgs.gvfs.override { lightWeight = false; };
     # svg support
-   # xfce.xfce4panel = (pkgs.lib.overrideDerivation pkgs.xfce.xfce4panel (attrs: {
-   #     buildInputs = [
-   #         pkgconfig intltool gtk xfce.libxfce4util xfce.exo libwnck
-   #         xfce.garcon xfce.xfconf libstartup_notification
-   #         gdk_pixbuf librsvg
-   #     ];
+    xfce = {
+     libxfce4util = pkgs.xfce.libxfce4util;
+     xinitrc = pkgs.xfce.xinitrc;
+     xfce4_power_manager = pkgs.xfce.xfce4_power_manager;
+     xfce4notifyd = pkgs.xfce.xfce4notifyd;
+     tumbler = (pkgs.lib.overrideDerivation pkgs.xfce.tumbler (attrs: {
+        buildInputs = attrs.buildInputs ++ (with pkgs; [ makeWrapper ]);
+        librsvg = pkgs.librsvg;
+        preFixup = ''
+          cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
 
-   #     preFixup = ''
-   #         wrapProgram "$out/bin/xfce4-panel" \*/
-   #             --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-   #         rm $out/share/icons/hicolor/icon-theme.cache
-   #     '';
-   # }));
+          wrapProgram "$out/lib/tumbler-1/tumblerd" \
+            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+        '';
+     }));
+     xfce4_appfinder = pkgs.xfce.xfce4_appfinder;
+     thunar_volman = pkgs.xfce.thunar_volman;
+     garcon = pkgs.xfce.garcon;
+     libxfce4ui = pkgs.xfce.libxfce4ui;
+     xfwm4 = pkgs.xfce.xfwm4;
+     xfdesktop = (pkgs.lib.overrideDerivation pkgs.xfce.xfdesktop (attrs: {
+       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
+       librsvg = pkgs.librsvg;
+       preFixup = ''
+         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
+
+         wrapProgram "$out/bin/xfdesktop" \
+           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+       '' + attrs.preFixup;
+     }));
+     xfconf = pkgs.xfce.xfconf;
+     xfce4screenshooter = pkgs.xfce.xfce4screenshooter;
+     xfce4mixer = pkgs.xfce.xfce4mixer;
+     xfce4settings = pkgs.xfce.xfce4settings;
+     xfce4session = (pkgs.lib.overrideDerivation pkgs.xfce.xfce4session (attrs: {
+       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
+       librsvg = pkgs.librsvg;
+       preFixup = ''
+        cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
+
+        wrapProgram "$out/bin/xfce4-session" \
+          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+       '' + attrs.preFixup;
+     }));
+     xfce4icontheme = pkgs.xfce.xfce4icontheme;
+     thunar = (pkgs.lib.overrideDerivation pkgs.xfce.thunar (attrs: {
+       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
+       librsvg = pkgs.librsvg;
+       preFixup = ''
+         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
+
+         wrapProgram "$out/bin/thunar" \
+           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+       '' + attrs.preFixup;
+     }));
+     terminal = pkgs.xfce.terminal;
+     ristretto = (pkgs.lib.overrideDerivation pkgs.xfce.ristretto (attrs: {
+       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
+       librsvg = pkgs.librsvg;
+       preFixup = ''
+         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
+
+         wrapProgram "$out/bin/ristretto" \
+           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+       '' + attrs.preFixup;
+     }));
+     mousepad = pkgs.xfce.mousepad;
+     libxfcegui4 = pkgs.xfce.libxfcegui4;
+     gtk_xfce_engine = pkgs.xfce.gtk_xfce_engine;
+     exo = pkgs.xfce.exo;
+     gvfs = gvfs;
+     xfce4panel = (pkgs.lib.overrideDerivation pkgs.xfce.xfce4panel (attrs: {
+       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
+       librsvg = pkgs.librsvg;
+       preFixup = ''
+         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
+
+         wrapProgram "$out/bin/xfce4-panel" \
+           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
+       '' + attrs.preFixup;
+      }));
+    };
   };
 }
 
