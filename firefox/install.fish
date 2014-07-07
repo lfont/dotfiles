@@ -2,11 +2,12 @@ if test (which firefox-nightly)
   exit 0
 end
 
+. ./functions/link_desktop_file.fish
+
 if test ! (which nix-env)
   . ./functions/install_archive.fish
   . ./functions/link_command.fish
   . ./functions/link_application_icon.fish
-  . ./functions/link_desktop_file.fish
 
   set NAME    firefox-nightly
   set VERSION 33.0a1
@@ -22,5 +23,11 @@ if test ! (which nix-env)
   link_desktop_file $install_dir/firefox-nightly.desktop
 else
     nix-env -if (pwd)/firefox/firefox-bin-nightly.nix
+
+    if test ! (which nixos-install)
+        link_desktop_file ~/.nix-profile/share/applications/firefox-nightly.desktop
+    end
 end
+
+exit 0
 

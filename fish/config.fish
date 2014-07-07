@@ -1,6 +1,10 @@
-if status --is-login
-    set PATH ~/bin /usr/local/bin $PATH
+set PATH /usr/local/bin $PATH
+
+if test ! (which nixos-install 2>/dev/null)
+  set PATH ~/.nix-profile/bin ~/.nix-profile/sbin $PATH
 end
+
+set PATH ~/bin $PATH
 
 if test -f ~/.autojump/etc/profile.d/autojump.fish
   . ~/.autojump/etc/profile.d/autojump.fish
