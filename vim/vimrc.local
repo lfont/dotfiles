@@ -47,5 +47,5 @@ highlight ColorColumn guibg=#3e3d32
 " folding
 set foldmethod=syntax
 :autocmd BufWinEnter * normal zR
-au FileType javascript call JavaScriptFold()
+"au FileType javascript call JavaScriptFold()
 
