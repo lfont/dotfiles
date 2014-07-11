@@ -22,7 +22,7 @@ if test ! (which nix-env)
   ln -s (pwd)/firefox/firefox-nightly.desktop $install_dir/
   link_desktop_file $install_dir/firefox-nightly.desktop
 else
-    nix-env -if (pwd)/firefox/firefox-bin-nightly.nix
+    fish ./firefox/update.fish
 
     if test ! (which nixos-install)
         link_desktop_file ~/.nix-profile/share/applications/firefox-nightly.desktop
