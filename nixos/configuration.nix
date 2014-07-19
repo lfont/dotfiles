@@ -16,6 +16,7 @@
   boot.loader.gummiboot.enable = true;
   boot.loader.gummiboot.timeout = 4;
   boot.loader.efi.canTouchEfiVariables = false;
+  boot.kernelPackages = pkgs.linuxPackages_3_14;
   boot.extraModprobeConfig = ''
     options hid_apple fnmode=2
   '';
@@ -49,16 +50,23 @@
     gtk-engine-murrine
 
     vimHugeX
+
     git
 
-    nodejs
     python
+    nodejs
 
-    firefox
+    chromiumDev
     pidgin
+
     keepassx2
+
     dropbox
+
+    shotwell
+
     bitcoin
+    electrum
   ];
 
   environment.shells = [
@@ -104,6 +112,8 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.chromium.enablePepperFlash = true;
+  nixpkgs.config.chromium.enablePepperPDF = true;
   nixpkgs.config.packageOverrides = pkgs: rec {
     # smb support
     gvfs = pkgs.gvfs.override { lightWeight = false; };
