@@ -16,6 +16,12 @@ pkgs.lib.overrideDerivation pkgs.firefox-bin (attrs: rec {
         sha256 = sha256;
     };
 
+    libPath = stdenv.lib.makeLibraryPath
+        [ xlibs.libXdamage
+          xlibs.libXfixes
+          xlibs.libXcomposite
+        ] + ":" + attrs.libPath;
+
     installPhase = attrs.installPhase + ''
         rm "$out/bin/firefox"
         ln -s "$prefix/usr/lib/${attrs.name}/firefox" "$out/bin/firefox-nightly"
