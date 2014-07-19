@@ -17,3 +17,5 @@ else
     nix-env -if (pwd)/btsync/btsync-bin.nix
 end
 
+mkdir -p ~/.sync
+
