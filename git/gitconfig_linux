@@ -7,20 +7,16 @@
     excludesfile = ~/.gitignore
 
 [diff]
-    guitool = p4
-    tool    = p4
+    guitool = kdiff3
+    tool    = kdiff3
 [difftool]
     prompt = false
-[difftool "p4"]
-    cmd = "p4merge $LOCAL $REMOTE"
 
 [merge]
-    tool = p4
+    tool = kdiff3
 [mergetool]
     keepBackup = false
     prompt     = false
-[mergetool "p4"]
-    cmd = "p4merge $BASE $LOCAL $REMOTE $MERGED"
 
 #[url "https://"]
 #  insteadOf = git://
