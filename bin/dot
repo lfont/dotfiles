@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 #
-# Run all dotfiles updaters.
 
 # Humm, this is equivalent to cd (dirname (status -f)) in fish.
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
@@ -15,7 +14,16 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 cd $DIR/..
 . ./script/env.sh
 
-if [ $1 ]
+if [[ $1 = "-i" ]]
+then
+  if [ $2 ]
+  then
+    fish ./$2/install.fish
+  else
+    # find the installers and run them iteratively
+    find . -name install.fish | while read installer ; do fish "${installer}" ; done
+  fi
+elif [ $1 ]
 then
   fish ./$1/update.fish
 else
