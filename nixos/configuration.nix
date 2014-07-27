@@ -50,6 +50,7 @@
     gtk-engine-murrine
 
     vimHugeX
+    emacs
 
     git
     kde4.kdiff3
@@ -68,6 +69,8 @@
 
     bitcoin
     electrum
+
+    libreoffice
   ];
 
   environment.shells = [
@@ -118,6 +121,7 @@
   nixpkgs.config.packageOverrides = pkgs: rec {
     # new kdiff3 version
     kde4 = {
+        kdelibs = pkgs.kde4.kdelibs;
         qt4 = pkgs.kde4.qt4;
         kdiff3 = (pkgs.lib.overrideDerivation pkgs.kde4.kdiff3 (attrs: rec {
             name = "kdiff3-0.9.98";
