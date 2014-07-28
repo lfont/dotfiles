@@ -5,6 +5,7 @@ Plugin 'marijnh/tern_for_vim'
 
 " YouCompleteMe config
 "let g:ycm_allow_changing_updatetime = 0
+let g:ycm_auto_trigger = 0
 Plugin 'Valloric/YouCompleteMe'
 
 " vim-bufonly
