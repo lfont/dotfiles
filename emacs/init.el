@@ -12,7 +12,9 @@
                      tern
                      auto-complete
                      tern-auto-complete
-                     fill-column-indicator))
+                     fill-column-indicator
+                     multiple-cursors
+                     highlight-chars))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
@@ -44,27 +46,35 @@
 (transient-mark-mode 1) ;; No region when it is not highlighted
 (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
 
-;; no backup
-(setq make-backup-files nil)
+(setq make-backup-files nil) ; stop creating those backup~ files
+(setq auto-save-default nil) ; stop creating those #autosave# files
 
 ;; General UI stuff
 (global-linum-mode t)
 (global-hl-line-mode t)
-(setq default-tab-width 2)
+(column-number-mode 1)
+
+;(define-key text-mode-map (kbd "<tab>") 'tab-to-tab-stop)
+(setq-default indent-tabs-mode nil)
+(setq tab-stop-list (number-sequence 2 120 2))
+(setq tab-width 2)
+
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
+
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (unless (display-graphic-p) (menu-bar-mode -1))
+
 ;(setq x-underline-at-descent-line t)
 ;(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 ;(setq mouse-wheel-progressive-speed nil)
 ;(setq mouse-wheel-follow-mouse 't)
 ;(setq scroll-step 1)
 
-(add-hook 'window-configuration-change-hook
-          (lambda ()
-            (set-window-margins (car (get-buffer-window-list (current-buffer) nil t)) 2 2)))
+;(add-hook 'window-configuration-change-hook
+;          (lambda ()
+;            (set-window-margins (car (get-buffer-window-list (current-buffer) nil t)) 2 2)))
 
 (load-theme 'zenburn t)
 (set-default-font "Inconsolata 11")
@@ -98,3 +108,14 @@
 (setq fci-rule-color "grey")
 (add-hook 'prog-mode-hook 'fci-mode)
 
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+(require 'highlight-chars)
+(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+
+;; background color bug https://github.com/bbatsov/solarized-emacs/issues/18
+(custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
