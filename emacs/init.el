@@ -8,15 +8,15 @@
 (setq package-list '(projectile
                      flx-ido
                      magit
-                     git-gutter
-                     solarized-theme
+;                     git-gutter
+;                     solarized-theme
                      zenburn-theme
                      tern
-                     auto-complete
                      tern-auto-complete
                      fill-column-indicator
                      multiple-cursors
-                     highlight-chars))
+                     highlight-chars
+                     rainbow-delimiters))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
@@ -56,10 +56,12 @@
 (global-hl-line-mode t)
 (column-number-mode 1)
 
-;(define-key text-mode-map (kbd "<tab>") 'tab-to-tab-stop)
-(setq-default indent-tabs-mode nil)
-(setq tab-stop-list (number-sequence 2 120 2))
-(setq tab-width 2)
+;; Tab behavior
+(add-hook 'text-mode-hook (lambda ()
+    (setq indent-tabs-mode nil)
+    (setq tab-width 4)
+    (setq tab-stop-list (number-sequence 4 200 4))
+    (setq indent-line-function 'insert-tab)))
 
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
@@ -80,6 +82,9 @@
 
 (load-theme 'zenburn t)
 (set-default-font "Inconsolata 11")
+
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+(add-hook 'prog-mode-hook 'electric-pair-mode)
 
 (require 'auto-complete)
 (global-auto-complete-mode t)
@@ -102,8 +107,8 @@
       (require 'tern-auto-complete)
       (tern-ac-setup)))
 
-(require 'git-gutter)
-(global-git-gutter-mode t)
+;(require 'git-gutter)
+;(global-git-gutter-mode t)
 
 (require 'fill-column-indicator)
 (setq fci-rule-width 3)
@@ -111,15 +116,18 @@
 (add-hook 'prog-mode-hook 'fci-mode)
 
 (require 'multiple-cursors)
-(global-set-key (kbd "C-c C-<down>") 'mc/mmlte--down)
-(global-set-key (kbd "C-c C-<up>") 'mc/mmlte--up)
-(global-set-key (kbd "C-c C-l") 'mc/edit-lines)
-(global-set-key (kbd "C-c C-d") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c C-k") 'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-c C-u") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-c <down>") 'mc/mmlte--down)
+(global-set-key (kbd "C-c <up>") 'mc/mmlte--up)
+(global-set-key (kbd "C-c l") 'mc/edit-lines)
+(global-set-key (kbd "C-c d") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-c k") 'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-c u") 'mc/unmark-next-like-this)
 
 (require 'highlight-chars)
 (add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
 ;; background color bug https://github.com/bbatsov/solarized-emacs/issues/18
 (custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
