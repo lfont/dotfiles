@@ -3,7 +3,7 @@
     name  = Loïc Fontaine
 
 [core]
-    editor       = vim
+    editor       = e
     excludesfile = ~/.gitignore
 
 [diff]

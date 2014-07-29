@@ -16,6 +16,3 @@ set -Ux TERM xterm-256color
 if test ! (which vi 2>/dev/null)
     alias vi=vim
 end
-
-alias e="emacs -nw"
-

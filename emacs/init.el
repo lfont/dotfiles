@@ -1,6 +1,8 @@
 ;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 ;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 
+(server-start)
+
 (require 'package)
 ;; list the packages you want
 (setq package-list '(projectile
