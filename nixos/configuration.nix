@@ -48,6 +48,8 @@
     unzipNLS
     xarchiver
     gtk-engine-murrine
+    inconsolata
+    xclip
 
     vimHugeX
     emacs

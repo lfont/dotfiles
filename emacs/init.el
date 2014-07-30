@@ -17,7 +17,8 @@
                      rainbow-delimiters
                      smex
                      php-mode
-                     flycheck))
+                     flycheck
+                     xclip))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
@@ -70,17 +71,6 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (unless (display-graphic-p) (menu-bar-mode -1))
-
-(setq x-underline-at-descent-line t)
-
-;(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-;(setq mouse-wheel-progressive-speed nil)
-;(setq mouse-wheel-follow-mouse 't)
-;(setq scroll-step 1)
-
-;(add-hook 'window-configuration-change-hook
-;          (lambda ()
-;            (set-window-margins (car (get-buffer-window-list (current-buffer) nil t)) 2 2)))
 
 (load-theme 'zenburn t)
 (set-frame-font "Inconsolata 11")
@@ -142,6 +132,9 @@
 (smex-initialize) ; Can be omitted. This might cause a (minimal) delay
                   ; when Smex is auto-initialized on its first run.
 (global-set-key (kbd "M-x") 'smex)
+
+;; Use xclip to copy/paste to the terminal from X.
+(xclip-mode 1)
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
