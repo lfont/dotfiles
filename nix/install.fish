@@ -19,6 +19,7 @@ end
 
 nix-env -iA nixpkgs.chromiumDev
 nix-env -iA nixpkgs.kde4.kdiff3
+nix-env -iA nixpkgs.emacs
 
 exit 0
 
