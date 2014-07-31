@@ -50,6 +50,10 @@
     gtk-engine-murrine
     inconsolata
     xclip
+    gnupg
+    gnupg1orig
+    gnutls
+    libnotify
 
     vimHugeX
     emacs

@@ -27,25 +27,9 @@
 ;; Automatically refresh gnus mail groups
 (require 'gnus-demon)
 (setq gnus-use-demon t)
+(gnus-demon-add-handler 'gnus-group-get-new-news 5 t)
 
-(defun gnus-demon-scan-mail-or-news-and-update ()
-  "Scan for new mail/news and update the *Group* buffer"
-  (message "Scanning new for new mail...done.")
-  (when (gnus-alive-p)    
-    (save-window-excursion
-      (save-excursion
-    (set-buffer gnus-group-buffer)
-    (gnus-group-get-new-news)))))
- 
-(defun gnus-demon-scan-and-update ()
-  (interactive)
-  (gnus-demon-scan-mail-or-news-and-update))
- 
-;; Initialize the Gnus daemon, check new mail every one minute.
-(gnus-demon-add-handler 'gnus-demon-scan-and-update 1 1)
-(gnus-demon-init)
-
-; Notify user when new messages are available
+;; Display notification on new news
 (require 'gnus-desktop-notify)
 (gnus-desktop-notify-mode)
 (gnus-demon-add-scanmail)
@@ -65,7 +49,7 @@
               (nnimap-stream starttls)
               (nnir-search-engine imap))
       (nnimap "home"
-              (nnimap-address "imap.google.com")
+              (nnimap-address "imap.gmail.com")
               (nnimap-server-port 993)
               (nnimap-stream tls)
               (nnir-search-engine imap))))
