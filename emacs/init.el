@@ -18,7 +18,9 @@
                      smex
                      php-mode
                      flycheck
-                     xclip))
+                     xclip
+                     bbdb
+                     gnus-desktop-notify))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
