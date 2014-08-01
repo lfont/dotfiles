@@ -5,6 +5,9 @@
 (setq gnus-permanently-visible-groups ".*")
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 
+;; don't ask how many emails to download
+(setq gnus-large-newsgroup nil)
+
 ;; Don't hide messages that have been read
 (setq gnus-fetch-old-headers t)
 

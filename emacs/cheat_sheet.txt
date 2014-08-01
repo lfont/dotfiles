@@ -1,0 +1,38 @@
+GNUS
+----
+
+Search mail
+-----------
+
+    Group Buffer
+    ------------
+
+        G G  search mail server side
+        #    mark the group included in the search
+        M-#  umark the group
+        
+    Summary Buffer
+    --------------
+
+        / s limit the emails by subject
+        / a limit the emails by author
+        / w cancel the current filter
+
+Reply mail
+----------
+
+     Summary Buffer
+     --------------
+
+         R   reply with quoted text
+         r   reply without quoted text
+         S W reply all with quoted text
+         S w reply all without quoted text
+
+Mark mail
+---------
+
+     Summary Buffer
+     --------------
+
+        c  mark all emails read
