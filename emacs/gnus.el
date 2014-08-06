@@ -5,6 +5,18 @@
 (setq gnus-permanently-visible-groups ".*")
 (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 
+;; Threads!  I hate reading un-threaded email -- especially mailing
+;; lists.  This helps a ton!
+(setq gnus-summary-thread-gathering-function
+      'gnus-gather-threads-by-subject)
+
+;; Also, I prefer to see only the top level message.  If a message has
+;; several replies or is part of a thread, only show the first
+;; message.  'gnus-thread-ignore-subject' will ignore the subject and
+;; look at 'In-Reply-To:' and 'References:' headers.
+(setq gnus-thread-hide-subtree t)
+(setq gnus-thread-ignore-subject t)
+
 ;; don't ask how many emails to download
 (setq gnus-large-newsgroup nil)
 
@@ -16,16 +28,19 @@
 (setq gnus-thread-sort-functions
       '(gnus-thread-sort-by-most-recent-date))
 
+;; Use w3m to read HTML mail
+(setq mm-text-html-renderer 'w3m)
+
 ;; The Insidious Big Brother Database.
 (require 'bbdb)
-(bbdb-initialize 'gnus 'message)
-(bbdb-insinuate-message)
+(bbdb-initialize 'message 'gnus 'sendmail)
+(setq bbdb-file "~/bbdb.db")
 (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-(setq bbdb-always-add-addresses t)
-(setq bbdb-send-mail-style 'gnus)
-(setq bbdb-complete-name-full-completion t)
-(setq bbdb-completion-type 'primary-or-name)
-(setq bbdb-complete-name-allow-cycling t)
+(setq bbdb/mail-auto-create-p t
+      bbdb/news-auto-create-p t
+      bbdb-complete-name-full-completion t
+      bbdb-completion-type               'primary-or-name
+      bbdb-complete-name-allow-cycling   t)
 
 ;; Automatically refresh gnus mail groups
 (require 'gnus-demon)

@@ -1,5 +1,5 @@
-;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
-;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
+;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
+;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 
 (require 'package)
 ;; list the packages you want
@@ -20,7 +20,9 @@
                      flycheck
                      xclip
                      bbdb
-                     gnus-desktop-notify))
+                     gnus-desktop-notify
+                     w3m
+                     less-css-mode))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
@@ -57,6 +59,8 @@
 
 ;; General UI stuff
 (when (display-graphic-p) (global-linum-mode t))
+;(setq linum-format "%d ")
+
 (global-hl-line-mode t)
 (column-number-mode 1)
 
@@ -78,9 +82,39 @@
 (set-frame-font "Inconsolata 11")
 
 (add-hook 'prog-mode-hook (lambda ()
-    ;(add-hook 'prog-mode-hook 'electric-indent-mode)
-    (add-hook 'prog-mode-hook 'electric-pair-mode)
-    (add-hook 'prog-mode-hook 'flycheck-mode)))
+    ;(electric-indent-mode)
+    (electric-pair-mode)
+    (flycheck-mode)
+    (flyspell-prog-mode)))
+
+(dolist (hook '(text-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode -1))))
+
+(setq ispell-program-name "/usr/bin/aspell"
+      ispell-list-command "--list")
+
+(let ((langs '("american" "francais")))
+(setq lang-ring (make-ring (length langs)))
+(dolist (elem langs) (ring-insert lang-ring elem)))
+
+(defun ispell-cycle-languages ()
+    (interactive)
+    (let ((lang (ring-ref lang-ring -1)))
+    (ring-insert lang-ring lang)
+    (ispell-change-dictionary lang)))
+
+(defun flyspell-check-next-highlighted-word ()
+    "Custom function to spell check next highlighted word"
+    (interactive)
+    (flyspell-goto-next-error)
+    (ispell-word))
+
+(global-set-key (kbd "<f5>")     'ispell-word)
+(global-set-key (kbd "M-<f5>")   'ispell-cycle-languages)
+(global-set-key (kbd "C-S-<f5>") 'flyspell-check-previous-highlighted-word)
+(global-set-key (kbd "C-<f5>")   'flyspell-check-next-highlighted-word)
 
 (require 'auto-complete)
 (global-auto-complete-mode t)
@@ -107,8 +141,7 @@
 (global-git-gutter-mode t)
 (when (display-graphic-p) (git-gutter:linum-setup))
 (unless (display-graphic-p)
-    (custom-set-variables
-        '(git-gutter:separator-sign "|"))
+    (custom-set-variables '(git-gutter:separator-sign "|"))
     (set-face-foreground 'git-gutter:separator "grey"))
 
 (require 'fill-column-indicator)
@@ -118,14 +151,17 @@
 
 (require 'multiple-cursors)
 (global-set-key (kbd "C-c <down>") 'mc/mmlte--down)
-(global-set-key (kbd "C-c <up>") 'mc/mmlte--up)
-(global-set-key (kbd "C-c l") 'mc/edit-lines)
-(global-set-key (kbd "C-c d") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-c k") 'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-c u") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-c <up>")   'mc/mmlte--up)
+(global-set-key (kbd "C-c l")      'mc/edit-lines)
+(global-set-key (kbd "C-c d")      'mc/mark-next-like-this)
+(global-set-key (kbd "C-c k")      'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-c u")      'mc/unmark-next-like-this)
 
 (require 'highlight-chars)
-(add-hook 'font-lock-mode-hook 'hc-highlight-tabs)
+(add-hook 'font-lock-mode-hook
+    (lambda ()
+        (hc-highlight-tabs)
+        (hc-highlight-trailing-whitespace)))
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
@@ -183,4 +219,3 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; background color bug https://github.com/bbatsov/solarized-emacs/issues/18
 (custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
-
