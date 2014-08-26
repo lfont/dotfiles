@@ -22,6 +22,8 @@ function install_archive
 
   if test (ls $tmp_dir/extract | wc -l) -eq 1
     mv $tmp_dir/extract/*/* $install_dir/
+  else if test (ls -a $tmp_dir/extract | wc -l) -eq 3
+    mv $tmp_dir/extract/.*/* $install_dir/
   else
     mv $tmp_dir/extract/* $install_dir/
   end
