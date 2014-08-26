@@ -22,7 +22,8 @@
                      bbdb
                      gnus-desktop-notify
                      w3m
-                     less-css-mode))
+                     less-css-mode
+                     jabber))
 
 ;; list the repositories containing them
 (add-to-list 'package-archives
@@ -116,6 +117,10 @@
 (global-set-key (kbd "C-S-<f5>") 'flyspell-check-previous-highlighted-word)
 (global-set-key (kbd "C-<f5>")   'flyspell-check-next-highlighted-word)
 
+(setq starttls-use-gnutls t
+      starttls-gnutls-program "gnutls-cli"
+      starttls-extra-arguments '("--starttls" "--insecure"))
+
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
@@ -170,6 +175,12 @@
 (smex-initialize) ; Can be omitted. This might cause a (minimal) delay
                   ; when Smex is auto-initialized on its first run.
 (global-set-key (kbd "M-x") 'smex)
+
+(require 'jabber)
+(setq jabber-account-list '(("lfontaine@mappyim"
+                              (:network-server . "mappyim")
+                              (:port . 5223)
+                              (:connection-type . ssl))))
 
 ;; Use xclip to copy/paste to the terminal from X.
 (xclip-mode 1)
