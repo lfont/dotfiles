@@ -1,28 +1,45 @@
 ;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 ;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
 (require 'package)
 ;; list the packages you want
-(setq package-list '(projectile
+(setq package-list '(
                      flx-ido
+                     ido-vertical-mode
+                     ;smex
+
+                     helm
+                     projectile
+                     helm-projectile
+
                      magit
                      git-gutter
-                     zenburn-theme
+
                      auto-complete
                      tern
                      tern-auto-complete
+
+                     flycheck
+                     php-mode
+                     less-css-mode
+
+                     zenburn-theme
+                     molokai-theme
+                     monokai-theme
+
                      fill-column-indicator
                      multiple-cursors
                      highlight-chars
                      rainbow-delimiters
-                     smex
-                     php-mode
-                     flycheck
+
                      xclip
+
                      bbdb
                      gnus-desktop-notify
                      w3m
-                     less-css-mode
+
                      jabber))
 
 ;; list the repositories containing them
@@ -70,7 +87,8 @@
     (setq indent-tabs-mode nil)
     (setq tab-width 4)
     (setq tab-stop-list (number-sequence 4 200 4))
-    (setq indent-line-function 'insert-tab)))
+    ;(setq indent-line-function 'insert-tab)
+))
 
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
@@ -79,7 +97,7 @@
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (unless (display-graphic-p) (menu-bar-mode -1))
 
-(load-theme 'zenburn t)
+(load-theme 'molokai t)
 (set-frame-font "Inconsolata 11")
 
 (add-hook 'prog-mode-hook (lambda ()
@@ -117,24 +135,103 @@
 (global-set-key (kbd "C-S-<f5>") 'flyspell-check-previous-highlighted-word)
 (global-set-key (kbd "C-<f5>")   'flyspell-check-next-highlighted-word)
 
+;; Window Resize
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 (setq starttls-use-gnutls t
       starttls-gnutls-program "gnutls-cli"
       starttls-extra-arguments '("--starttls" "--insecure"))
 
-(require 'auto-complete)
-(global-auto-complete-mode t)
+(require 'helm)
 
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching 0)
+;; must set before helm-config,  otherwise helm use default
+;; prefix "C-x c", which is inconvenient because you can
+;; accidentially pressed "C-x C-c"
+;(setq helm-command-prefix-key "C-c h")
+
+(require 'helm-config)
+(require 'helm-eshell)
+(require 'helm-files)
+(require 'helm-grep)
+
+;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
+;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+;(define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
+;(define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
+;(define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
+
+(setq
+  ;helm-google-suggest-use-curl-p t
+  ;helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
+  ;helm-quick-update t ; do not display invisible candidates
+  ;helm-idle-delay 0.01 ; be idle for this many seconds, before updating in delayed sources.
+  ;helm-input-idle-delay 0.01 ; be idle for this many seconds, before updating candidate buffer
+  ;helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
+
+  helm-split-window-default-side 'other ;; open helm buffer in another window
+  helm-split-window-in-side-p t ;; open helm buffer inside current window, not occupy whole other window
+  ;helm-buffers-favorite-modes (append helm-buffers-favorite-modes
+                                      ;'(picture-mode artist-mode))
+  ;helm-candidate-number-limit 200 ; limit the number of displayed canidates
+  ;helm-M-x-requires-pattern 0     ; show all candidates when set to 0
+  ;helm-boring-file-regexp-list
+  ;'("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$") ; do not show these files in helm buffer
+  ;helm-ff-file-name-history-use-recentf t
+  ;helm-move-to-line-cycle-in-source t ; move to end or beginning of source
+                                      ; when reaching top or bottom of source.
+  ;ido-use-virtual-buffers t      ; Needed in helm-buffers-list
+  ;helm-buffers-fuzzy-matching t  ; fuzzy matching buffer names when non--nil
+                                 ; useful in helm-mini that lists buffers
+ )
+
+;; Save current position to mark ring when jumping to a different place
+;(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
+
+(helm-mode 1)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
 (require 'flx-ido)
-(ido-mode 1)
-(ido-everywhere 1)
+;(ido-mode 1)
+;(ido-everywhere 1)
 (flx-ido-mode 1)
 ;; disable ido faces to see flx highlights.
 (setq ido-enable-flex-matching t)
 (setq ido-use-faces nil)
+
+(require 'ido-vertical-mode)
+(ido-vertical-mode 1)
+
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching -1)
+
+(require 'helm-projectile)
+
+(defun helm-projectile-switch-buffer ()
+  "Use Helm instead of ido to switch buffer in projectile."
+  (interactive)
+  (helm :sources helm-source-projectile-buffers-list
+        :buffer "*helm projectile buffers*"
+        :prompt (projectile-prepend-project-name "Switch to buffer: ")))
+
+;; Override some projectile keymaps
+(eval-after-load 'projectile
+  '(progn
+     (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
+     (define-key projectile-command-map (kbd "f") 'helm-projectile)
+     (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
+
+(require 'auto-complete)
+(global-auto-complete-mode t)
 
 (add-hook 'js-mode-hook (lambda () (tern-mode t)))
 (eval-after-load 'tern
@@ -152,6 +249,7 @@
 (require 'fill-column-indicator)
 (setq fci-rule-width 3)
 (setq fci-rule-color "grey")
+(setq fci-rule-column 80)
 (add-hook 'prog-mode-hook 'fci-mode)
 
 (require 'multiple-cursors)
@@ -171,19 +269,40 @@
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
-(require 'smex) ; Not needed if you use package.el
-(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
-                  ; when Smex is auto-initialized on its first run.
-(global-set-key (kbd "M-x") 'smex)
-
 (require 'jabber)
 (setq jabber-account-list '(("lfontaine@mappyim"
                               (:network-server . "mappyim")
                               (:port . 5223)
                               (:connection-type . ssl))))
 
+(setq jabber-history-enabled t
+      jabber-use-global-history nil
+      jabber-backlog-number 40
+      jabber-backlog-days 30)
+
+(setq jabber-alert-presence-message-function (lambda (who oldstatus newstatus statustext) nil))
+
+(load-library "notify")
+(require 'notify)
+
+(defun notify-jabber-notify (from buf text proposed-alert)
+  "(jabber.el hook) Notify of new Jabber chat messages via notify.el"
+  (when (or jabber-message-alert-same-buffer
+            (not (memq (selected-window) (get-buffer-window-list buf))))
+    (if (jabber-muc-sender-p from)
+        (notify (format "(PM) %s"
+                       (jabber-jid-displayname (jabber-jid-user from)))
+               (format "%s: %s" (jabber-jid-resource from) text)))
+      (notify (format "%s" (jabber-jid-displayname from))
+             text)))
+
+(add-hook 'jabber-alert-message-hooks 'notify-jabber-notify)
+
 ;; Use xclip to copy/paste to the terminal from X.
 (xclip-mode 1)
+
+;; Enable semantic mode globally
+(semantic-mode 1)
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
@@ -227,6 +346,3 @@ point reaches the beginning or end of the buffer, stop there."
         (replace-match "")))))
 
 (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
-
-;; background color bug https://github.com/bbatsov/solarized-emacs/issues/18
-(custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))

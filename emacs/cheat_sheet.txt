@@ -10,7 +10,7 @@ Search mail
         G G  search mail server side
         #    mark the group included in the search
         M-#  umark the group
-        
+
     Summary Buffer
     --------------
 
