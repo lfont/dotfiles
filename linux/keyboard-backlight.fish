@@ -5,7 +5,7 @@ set increment 15
 
 function set_backlight
     set -l value $argv[1]
-    sudo fish -c "echo "$value" > /sys/class/leds/smc::kbd_backlight/brightness"
+    echo $value > /sys/class/leds/smc::kbd_backlight/brightness
 end
 
 switch (echo $argv[1])
