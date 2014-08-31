@@ -1,4 +1,4 @@
 #!/usr/bin/env fish
 
-exec emacsclient -nw --alternate-editor="" -c $argv
+exec emacsclient --alternate-editor="" -nw $argv
 

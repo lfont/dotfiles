@@ -54,7 +54,7 @@
 
 ;; Configure accounts
 (setq user-full-name    "Loïc Fontaine"
-      user-mail-address "ljph.fontaine@gmail.com")
+      user-mail-address "loicfontaine@fastmail.fm")
 
 (setq gnus-select-method
     '(nntp "news.gmane.org"))
@@ -67,7 +67,7 @@
               (nnimap-stream starttls)
               (nnir-search-engine imap))
       (nnimap "home"
-              (nnimap-address "imap.gmail.com")
+              (nnimap-address "mail.messagingengine.com")
               (nnimap-server-port 993)
               (nnimap-stream tls)
               (nnir-search-engine imap))))
@@ -77,7 +77,7 @@
     '(("home"
         (display . all)
         (posting-style
-            (address "ljph.fontaine@gmail.com")))
+            (address "loicfontaine@fastmail.fm")))
       ("work"
         (display . all)
         (posting-style
@@ -88,8 +88,8 @@
 ;; port - login name - password. You can leave the password field
 ;; as NIL and emacs will ask every time
 (defvar smtp-accounts
-    '((ssl "ljph.fontaine@gmail.com"     "smtp.gmail.com" 587 "ljph.fontaine@gmail.com" nil)
-      (ssl "loic.fontaine.ext@mappy.com" "smtp.mappy.com" 587 "lfontaine"               nil)))
+    '((ssl "loicfontaine@fastmail.fm"    "mail.messagingengine.com" 465 "loicfontaine@fastmail.fm" nil)
+      (ssl "loic.fontaine.ext@mappy.com" "smtp.mappy.com"           587 "lfontaine"                nil)))
 
 ;; Now lets configure smtpmail.el with your name and functions to send
 ;; mail using your smtp accounts by changing the from field
