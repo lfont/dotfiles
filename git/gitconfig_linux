@@ -1,5 +1,5 @@
 [user]
-    email = ljph.fontaine@gmail.com
+    email = loicfontaine@fastmail.fm
     name  = Loïc Fontaine
 
 [core]
@@ -7,14 +7,15 @@
     excludesfile = ~/.gitignore
 
 [diff]
-    guitool = kdiff3
-    tool    = kdiff3
-[difftool]
+    tool = ediff
+[difftool "ediff"]
+    cmd    = emacs -nw -diff $LOCAL $REMOTE
     prompt = false
 
 [merge]
-    tool = kdiff3
-[mergetool]
+    tool = ediff
+[mergetool "ediff"]
+    cmd        = emacs -nw -merge $LOCAL $REMOTE $BASE $MERGED
     keepBackup = false
     prompt     = false
 

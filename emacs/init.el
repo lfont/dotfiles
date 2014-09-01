@@ -304,6 +304,30 @@
 ;; Enable semantic mode globally
 (semantic-mode 1)
 
+;; saner ediff default
+(setq ediff-diff-options "-w")
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;(add-hook 'ediff-before-setup-hook 'new-frame)
+;(add-hook 'ediff-quit-hook 'delete-frame)
+
+;; ediff command line
+(defun command-line-diff (switch)
+  (let ((file1 (pop command-line-args-left))
+        (file2 (pop command-line-args-left)))
+    (ediff file1 file2)))
+
+(add-to-list 'command-switch-alist '("diff" . command-line-diff))
+
+(defun command-line-merge (switch)
+  (let ((file1 (pop command-line-args-left))
+        (file2 (pop command-line-args-left))
+        (file3 (pop command-line-args-left))
+        (file4 (pop command-line-args-left)))
+    (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
+
+(add-to-list 'command-switch-alist '("merge" . command-line-merge))
+
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
     "Move point back to indentation of beginning of line.
