@@ -24,6 +24,8 @@
                      flycheck
                      php-mode
                      less-css-mode
+                     rust-mode
+                     flycheck-rust
 
                      zenburn-theme
                      molokai-theme
