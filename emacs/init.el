@@ -22,10 +22,11 @@
                      tern-auto-complete
 
                      flycheck
+                     flycheck-rust
+
                      php-mode
                      less-css-mode
                      rust-mode
-                     flycheck-rust
 
                      zenburn-theme
                      molokai-theme
@@ -92,6 +93,13 @@
     ;(setq indent-line-function 'insert-tab)
 ))
 
+(add-hook 'prog-mode-hook (lambda ()
+    ;(electric-indent-mode)
+    (electric-pair-mode)
+    (flycheck-mode)
+    (flyspell-prog-mode)
+    (hs-minor-mode)))
+
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
 
@@ -101,12 +109,6 @@
 
 (load-theme 'molokai t)
 (set-frame-font "Inconsolata 11")
-
-(add-hook 'prog-mode-hook (lambda ()
-    ;(electric-indent-mode)
-    (electric-pair-mode)
-    (flycheck-mode)
-    (flyspell-prog-mode)))
 
 (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
