@@ -10,7 +10,7 @@ if test ! (which nix-env)
   . ./functions/link_application_icon.fish
 
   set NAME    firefox-nightly
-  set VERSION 34.0a1
+  set VERSION 35.0a1
   set ARCH    linux-x86_64
   set PKG     firefox-$VERSION.en-US.$ARCH.tar.bz2
 
