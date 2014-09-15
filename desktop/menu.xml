@@ -5,9 +5,6 @@
         xsi:schemaLocation="http://openbox.org/
                 file:///usr/share/openbox/menu.xsd">
 
-        <menu id="openbox-menu" label="All Applications"
-                execute="/usr/bin/openbox-menu lxde-applications.menu" />
-
         <menu id="root-menu" label="Openbox 3">
                 <item label="Run Program">
                         <action name="Execute">
@@ -253,7 +250,7 @@
                         </item>
                 </menu>
                 <separator/>
-                <menu id="openbox-menu" />
+                <menu id="/Debian" />
                 <separator/>
                 <menu execute="cb-places-pipemenu" id="pipe-placesmenu" label="Places"/>
                 <menu execute="cb-recent-files-pipemenu" id="pipe-recentfilesmenu" label="Recent Files"/>
