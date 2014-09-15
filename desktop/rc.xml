@@ -127,8 +127,6 @@
       -->
       <name>1</name>
       <name>2</name>
-      <name>3</name>
-      <name>4</name>
     </names>
     <popupTime>875</popupTime>
     <!-- The number of milliseconds to show the popup for when switching
@@ -251,6 +249,17 @@
     </keybind>
     <keybind key="W-d">
       <action name="ToggleShowDesktop"/>
+    </keybind>
+    <!-- Keybindings for monitor switching -->
+    <keybind key="C-S-A-Left">
+      <action name="MoveResizeTo">
+        <monitor>1</monitor>
+      </action>
+    </keybind>
+    <keybind key="C-S-A-Right">
+      <action name="MoveResizeTo">
+        <monitor>2</monitor>
+      </action>
     </keybind>
     <!-- Keybindings for windows -->
     <keybind key="A-F4">
@@ -779,7 +788,7 @@
       </mousebind>
     </context>
     <context name="Desktop">
-      <!--
+<!--
     <mousebind button="Up" action="Click">
       <action name="GoToDesktop"><to>previous</to></action>
     </mousebind>
