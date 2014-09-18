@@ -1,4 +1,5 @@
 . ./functions/link_command.fish
+. ./functions/install_repository.fish
 
 set -l ROOT (pwd)/desktop
 
@@ -38,6 +39,15 @@ ln -sf $ROOT/tint2rc ~/.config/tint2/
 # terminator
 mkdir -p ~/.config/terminator
 ln -sf $ROOT/config ~/.config/terminator/
+
+# pytyle2
+mkdir -p ~/.config/pytyle2
+ln -sf $ROOT/config.ini ~/.config/pytyle2/
+sudo apt install python-xpyb
+hg clone https://code.google.com/p/pytyle/ $DOTFILES_INSTALL_DIR/pytyle2
+cd $DOTFILES_INSTALL_DIR/pytyle2
+sudo python2 setup.py install
+cd -
 
 exit 0
 

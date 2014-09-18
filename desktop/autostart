@@ -86,3 +86,6 @@ conky -q &
 
 ## Run Dropbox
 dropbox start &
+
+## Run pytyle2
+pytyle2 &
