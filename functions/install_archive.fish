@@ -16,8 +16,10 @@ function install_archive
 
   if bzip2 -t $tmp_dir/download/*
     tar -C $tmp_dir/extract -xjvf $tmp_dir/download/* > $DOTFILES_TMP_DIR/{$name}-extract.log
-  else
+  else if gzip -t $tmp_dir/download/*
     tar -C $tmp_dir/extract -xzvf $tmp_dir/download/* > $DOTFILES_TMP_DIR/{$name}-extract.log
+  else
+    unzip $tmp_dir/download/* -d $tmp_dir/extract > $DOTFILES_TMP_DIR/{$name}-extract.log
   end
 
   if test (ls $tmp_dir/extract | wc -l) -eq 1
