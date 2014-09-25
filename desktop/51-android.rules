@@ -1,0 +1,15 @@
+# Geeksphone Peak
+SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="8012",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="8013",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="d00d",MODE="0660",GROUP="plugdev"
+
+# Google Galaxy Nexus
+SUBSYSTEM=="usb",ATTR{idVendor}=="04e8",ATTR{idProduct}=="685c",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="04e8",ATTR{idProduct}=="6860",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="4e30",MODE="0660",GROUP="plugdev"
+
+# Sony Xperia Z1 Compact
+SUBSYSTEM=="usb",ATTR{idVendor}=="0fce",ATTR{idProduct}=="01a7",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="0fce",ATTR{idProduct}=="51a7",MODE="0660",GROUP="plugdev"
+SUBSYSTEM=="usb",ATTR{idVendor}=="0fce",ATTR{idProduct}=="adde",MODE="0660",GROUP="plugdev"
+

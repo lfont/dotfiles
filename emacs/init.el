@@ -61,6 +61,12 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+;; treat asc file like gpg file
+(require 'epa-file)
+(setq epa-armor t)
+(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
+(epa-file-name-regexp-update)
+
 ;; Always ALWAYS use UTF-8
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)

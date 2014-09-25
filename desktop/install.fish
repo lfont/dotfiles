@@ -49,5 +49,8 @@ cd $DOTFILES_INSTALL_DIR/pytyle2
 sudo python2 setup.py install
 cd -
 
+# udev rules
+sudo ln -sf $ROOT/51-android.rules /etc/udev/rules.d/
+
 exit 0
 
