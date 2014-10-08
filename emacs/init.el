@@ -24,6 +24,8 @@
                      flycheck
                      flycheck-rust
 
+                     fish-mode
+                     js2-mode
                      php-mode
                      less-css-mode
                      rust-mode
@@ -243,7 +245,9 @@
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (eval-after-load 'tern
    '(progn
       (require 'tern-auto-complete)
@@ -297,14 +301,12 @@
 
 (defun notify-jabber-notify (from buf text proposed-alert)
   "(jabber.el hook) Notify of new Jabber chat messages via notify.el"
-  (when (or jabber-message-alert-same-buffer
-            (not (memq (selected-window) (get-buffer-window-list buf))))
+  ;(when (or jabber-message-alert-same-buffer
+  ;          (not (memq (selected-window) (get-buffer-window-list buf))))
     (if (jabber-muc-sender-p from)
-        (notify (format "(PM) %s"
-                       (jabber-jid-displayname (jabber-jid-user from)))
-               (format "%s: %s" (jabber-jid-resource from) text)))
-      (notify (format "%s" (jabber-jid-displayname from))
-             text)))
+        (notify (format "(PM) %s" (jabber-jid-displayname (jabber-jid-user from)))
+                (format "%s: %s" (jabber-jid-resource from) text))
+        (notify (format "%s" (jabber-jid-displayname from)) text)))
 
 (add-hook 'jabber-alert-message-hooks 'notify-jabber-notify)
 
@@ -312,7 +314,7 @@
 (xclip-mode 1)
 
 ;; Enable semantic mode globally
-(semantic-mode 1)
+;(semantic-mode 1)
 
 ;; saner ediff default
 (setq ediff-diff-options "-w")
