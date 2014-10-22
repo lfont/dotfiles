@@ -93,6 +93,10 @@
 (global-hl-line-mode t)
 (column-number-mode 1)
 
+;; scroll line by line
+(setq scroll-step           1
+      scroll-conservatively 10000)
+
 ;; Tab behavior
 (add-hook 'prog-mode-hook (lambda ()
     (setq indent-tabs-mode nil)
