@@ -1,116 +1,83 @@
-;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
-;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
+;;; init.el --- user settings
+;;; Commentary:
+;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 
+;;; Code:
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
+;; Packages settings
 (require 'package)
-;; list the packages you want
-(setq package-list '(
-                     flx-ido
-                     ido-vertical-mode
-                     ;smex
+(let ((package-list '(flx-ido
+                      ido-vertical-mode
 
-                     helm
-                     projectile
-                     helm-projectile
+                      helm
+                      projectile
+                      helm-projectile
 
-                     magit
-                     git-gutter
+                      magit
+                      git-gutter
 
-                     auto-complete
-                     tern
-                     tern-auto-complete
+                      auto-complete
+                      tern
+                      tern-auto-complete
 
-                     flycheck
-                     flycheck-rust
+                      flycheck
+                      flycheck-rust
 
-                     fish-mode
-                     js2-mode
-                     php-mode
-                     less-css-mode
-                     rust-mode
+                      fish-mode
+                      js2-mode
+                      php-mode
+                      less-css-mode
+                      rust-mode
 
-                     zenburn-theme
-                     molokai-theme
-                     monokai-theme
+                      zenburn-theme
+                      molokai-theme
+                      monokai-theme
 
-                     fill-column-indicator
-                     multiple-cursors
-                     highlight-chars
-                     rainbow-delimiters
+                      fill-column-indicator
+                      multiple-cursors
+                      highlight-chars
+                      rainbow-delimiters
 
-                     xclip
+                      xclip
 
-                     bbdb
-                     gnus-desktop-notify
-                     w3m
+                      bbdb
+                      gnus-desktop-notify
+                      w3m
 
-                     jabber))
+                      jabber)))
 
-;; list the repositories containing them
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  ;; list the repositories containing them
+  (add-to-list 'package-archives
+               '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;; activate all the packages (in particular autoloads)
-(package-initialize)
+  ;; activate all the packages (in particular autoloads)
+  (package-initialize)
 
-;; fetch the list of packages available
-(unless package-archive-contents
-  (package-refresh-contents))
+  ;; fetch the list of packages available
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-;; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
-;; treat asc file like gpg file
-(require 'epa-file)
-(setq epa-armor t)
-(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
-(epa-file-name-regexp-update)
-
-;; Always ALWAYS use UTF-8
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(require 'iso-transl)
+  ;; install the missing packages
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package))))
 
 ;; Always ask for y/n keypress instead of typing out 'yes' or 'no'
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;(cua-mode t)
-;(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
-;(transient-mark-mode 1) ;; No region when it is not highlighted
-;(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+;; Use xclip to copy/paste to the terminal from X.
+(xclip-mode 1)
 
+;; Backups
 (setq make-backup-files nil) ; stop creating those backup~ files
 (setq auto-save-default nil) ; stop creating those #autosave# files
 
 ;; General UI stuff
 (when (display-graphic-p) (global-linum-mode t))
-;(setq linum-format "%d ")
 
 (global-hl-line-mode t)
-(column-number-mode 1)
-
-;; scroll line by line
-(setq scroll-step           1
-      scroll-conservatively 10000)
-
-;; Tab behavior
-(add-hook 'prog-mode-hook (lambda ()
-    (setq indent-tabs-mode nil)
-    (setq tab-width 4)
-    (setq tab-stop-list (number-sequence 4 200 4))
-    ;(setq indent-line-function 'insert-tab)
-))
-
-(add-hook 'prog-mode-hook (lambda ()
-    (electric-indent-mode)
-    (electric-pair-mode)
-    (flycheck-mode)
-    (flyspell-prog-mode)
-    (hs-minor-mode)))
+(column-number-mode t)
 
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
@@ -122,23 +89,104 @@
 (load-theme 'molokai t)
 (set-frame-font "Inconsolata 11")
 
-(dolist (hook '(text-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-    (add-hook hook (lambda () (flyspell-mode -1))))
+;; Scroll line by line
+(setq scroll-step           1
+      scroll-conservatively 10000)
 
+;; Window Resize
+(global-set-key (kbd "S-C-<left>")  'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>")  'shrink-window)
+(global-set-key (kbd "S-C-<up>")    'enlarge-window)
+
+;; Smarter move
+;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+(defun smarter-move-beginning-of-line (arg)
+    "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+    (interactive "^p")
+    (setq arg (or arg 1))
+
+    ;; Move lines first
+    (when (/= arg 1)
+      (let ((line-move-visual nil))
+        (forward-line (1- arg))))
+
+    (let ((orig-point (point)))
+      (back-to-indentation)
+      (when (= orig-point (point))
+        (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'smarter-move-beginning-of-line)
+
+;; Tab behavior
+(add-hook 'prog-mode-hook (lambda ()
+                            (setq indent-tabs-mode nil)
+                            (setq tab-width 4)
+                            (setq tab-stop-list (number-sequence 4 200 4))))
+
+;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
+(defun un-indent-by-removing-4-spaces ()
+  "remove 4 spaces from beginning of of line"
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (beginning-of-line)
+      ;; get rid of tabs at beginning of line
+      (when (looking-at "^\\s-+")
+        (untabify (match-beginning 0) (match-end 0)))
+      (when (looking-at "^    ")
+        (replace-match "")))))
+
+(global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+
+;; Folding
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
+;; Auto indent
+(add-hook 'prog-mode-hook 'electric-indent-mode)
+
+;; ({[ Pairing
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+
+;; Syntax checking
+(add-hook 'prog-mode-hook 'flycheck-mode)
+
+;; Treat asc file like gpg file
+(require 'epa-file)
+(setq epa-armor t)
+(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
+(epa-file-name-regexp-update)
+
+;; Always ALWAYS use UTF-8
+(require 'iso-transl)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+;; Spell checking
+(require 'ispell)
 (setq ispell-program-name "/usr/bin/aspell"
       ispell-list-command "--list")
 
-(let ((langs '("american" "francais")))
-  (setq lang-ring (make-ring (length langs)))
-  (dolist (elem langs) (ring-insert lang-ring elem)))
+(let* ((langs '("american" "francais"))
+      (lang-ring (make-ring (length langs))))
+  (dolist (elem langs) (ring-insert lang-ring elem))
 
-(defun ispell-cycle-languages ()
+  (defun ispell-cycle-languages ()
     (interactive)
     (let ((lang (ring-ref lang-ring -1)))
-    (ring-insert lang-ring lang)
-    (ispell-change-dictionary lang)))
+      (ring-insert lang-ring lang)
+      (ispell-change-dictionary lang))))
 
 (defun flyspell-check-next-highlighted-word ()
     "Custom function to spell check next highlighted word"
@@ -146,74 +194,44 @@
     (flyspell-goto-next-error)
     (ispell-word))
 
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+(add-hook 'text-mode-hook 'flyspell-mode)
+
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode nil))))
+
 (global-set-key (kbd "<f5>")     'ispell-word)
 (global-set-key (kbd "M-<f5>")   'ispell-cycle-languages)
 (global-set-key (kbd "C-S-<f5>") 'flyspell-check-previous-highlighted-word)
 (global-set-key (kbd "C-<f5>")   'flyspell-check-next-highlighted-word)
 
-;; Window Resize
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
+;; Accept self signed certificates
+(require 'starttls)
 (setq starttls-use-gnutls t
-      starttls-gnutls-program "gnutls-cli"
+      starttls-gnutls-program  "gnutls-cli"
       starttls-extra-arguments '("--starttls" "--insecure"))
 
-(require 'helm)
+;; Saner ediff default
+(require 'ediff)
+(setq ediff-diff-options "-w")
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; must set before helm-config,  otherwise helm use default
-;; prefix "C-x c", which is inconvenient because you can
-;; accidentially pressed "C-x C-c"
-;(setq helm-command-prefix-key "C-c h")
+(defun command-line-diff (switch)
+  (let ((file1 (pop command-line-args-left))
+        (file2 (pop command-line-args-left)))
+    (ediff file1 file2)))
 
-(require 'helm-config)
-(require 'helm-eshell)
-(require 'helm-files)
-(require 'helm-grep)
+(add-to-list 'command-switch-alist '("diff" . command-line-diff))
 
-;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
-;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+(defun command-line-merge (switch)
+  (let ((file1 (pop command-line-args-left))
+        (file2 (pop command-line-args-left))
+        (file3 (pop command-line-args-left))
+        (file4 (pop command-line-args-left)))
+    (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
 
-;(define-key helm-grep-mode-map (kbd "<return>")  'helm-grep-mode-jump-other-window)
-;(define-key helm-grep-mode-map (kbd "n")  'helm-grep-mode-jump-other-window-forward)
-;(define-key helm-grep-mode-map (kbd "p")  'helm-grep-mode-jump-other-window-backward)
-
-(setq
-  ;helm-google-suggest-use-curl-p t
-  ;helm-scroll-amount 4 ; scroll 4 lines other window using M-<next>/M-<prior>
-  ;helm-quick-update t ; do not display invisible candidates
-  ;helm-idle-delay 0.01 ; be idle for this many seconds, before updating in delayed sources.
-  ;helm-input-idle-delay 0.01 ; be idle for this many seconds, before updating candidate buffer
-  ;helm-ff-search-library-in-sexp t ; search for library in `require' and `declare-function' sexp.
-
-  helm-split-window-default-side 'other ;; open helm buffer in another window
-  helm-split-window-in-side-p t ;; open helm buffer inside current window, not occupy whole other window
-  ;helm-buffers-favorite-modes (append helm-buffers-favorite-modes
-                                      ;'(picture-mode artist-mode))
-  ;helm-candidate-number-limit 200 ; limit the number of displayed canidates
-  ;helm-M-x-requires-pattern 0     ; show all candidates when set to 0
-  ;helm-boring-file-regexp-list
-  ;'("\\.git$" "\\.hg$" "\\.svn$" "\\.CVS$" "\\._darcs$" "\\.la$" "\\.o$" "\\.i$") ; do not show these files in helm buffer
-  ;helm-ff-file-name-history-use-recentf t
-  ;helm-move-to-line-cycle-in-source t ; move to end or beginning of source
-                                      ; when reaching top or bottom of source.
-  ;ido-use-virtual-buffers t      ; Needed in helm-buffers-list
-  ;helm-buffers-fuzzy-matching t  ; fuzzy matching buffer names when non--nil
-                                 ; useful in helm-mini that lists buffers
- )
-
-;; Save current position to mark ring when jumping to a different place
-;(add-hook 'helm-goto-line-before-hook 'helm-save-current-pos-to-mark-ring)
-
-(helm-mode 1)
-
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(add-to-list 'command-switch-alist '("merge" . command-line-merge))
 
 (require 'flx-ido)
 ;(ido-mode 1)
@@ -226,26 +244,7 @@
 (require 'ido-vertical-mode)
 (ido-vertical-mode 1)
 
-(require 'projectile)
-(projectile-global-mode)
-(setq projectile-enable-caching -1)
-
-(require 'helm-projectile)
-
-(defun helm-projectile-switch-buffer ()
-  "Use Helm instead of ido to switch buffer in projectile."
-  (interactive)
-  (helm :sources helm-source-projectile-buffers-list
-        :buffer "*helm projectile buffers*"
-        :prompt (projectile-prepend-project-name "Switch to buffer: ")))
-
-;; Override some projectile keymaps
-(eval-after-load 'projectile
-  '(progn
-     (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
-     (define-key projectile-command-map (kbd "f") 'helm-projectile)
-     (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
-
+;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
@@ -253,16 +252,16 @@
 
 (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
 (eval-after-load 'tern
-   '(progn
-      (require 'tern-auto-complete)
-      (tern-ac-setup)))
+  '(progn
+     (require 'tern-auto-complete)
+     (tern-ac-setup)))
 
 (require 'git-gutter)
 (global-git-gutter-mode t)
 (when (display-graphic-p) (git-gutter:linum-setup))
 (unless (display-graphic-p)
-    (custom-set-variables '(git-gutter:separator-sign "|"))
-    (set-face-foreground 'git-gutter:separator "grey"))
+  (custom-set-variables '(git-gutter:separator-sign "|"))
+  (set-face-foreground 'git-gutter:separator "grey"))
 
 (require 'fill-column-indicator)
 (setq fci-rule-width 3)
@@ -298,8 +297,8 @@
       jabber-backlog-number 40
       jabber-backlog-days 30)
 
-;(setq jabber-alert-presence-message-function
-;      (lambda (who oldstatus newstatus statustext) nil))
+(setq jabber-alert-presence-message-function
+      (lambda (who oldstatus newstatus statustext) nil))
 
 (load-library "notify")
 (require 'notify)
@@ -327,75 +326,56 @@
 
 (add-hook 'jabber-alert-muc-hooks 'notify-jabber-alert-muc)
 
-;; Use xclip to copy/paste to the terminal from X.
-(xclip-mode 1)
+(require 'helm)
+(require 'helm-config)
+(require 'helm-eshell)
+(require 'helm-files)
+(require 'helm-grep)
 
-;; Enable semantic mode globally
-;(semantic-mode 1)
+(setq
+ ;; open helm buffer in another window
+ helm-split-window-default-side 'other
+ ;; open helm buffer inside current window, not occupy whole other window
+ helm-split-window-in-side-p t)
 
-;; saner ediff default
-(setq ediff-diff-options "-w")
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-;(add-hook 'ediff-before-setup-hook 'new-frame)
-;(add-hook 'ediff-quit-hook 'delete-frame)
+(helm-mode 1)
 
-;; ediff command line
-(defun command-line-diff (switch)
-  (let ((file1 (pop command-line-args-left))
-        (file2 (pop command-line-args-left)))
-    (ediff file1 file2)))
+(global-set-key (kbd "M-x")     'helm-M-x)
+(global-set-key (kbd "M-y")     'helm-show-kill-ring)
+(global-set-key (kbd "C-x b")   'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
-(add-to-list 'command-switch-alist '("diff" . command-line-diff))
-
-(defun command-line-merge (switch)
-  (let ((file1 (pop command-line-args-left))
-        (file2 (pop command-line-args-left))
-        (file3 (pop command-line-args-left))
-        (file4 (pop command-line-args-left)))
-    (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
-
-(add-to-list 'command-switch-alist '("merge" . command-line-merge))
-
-;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
-(defun smarter-move-beginning-of-line (arg)
-    "Move point back to indentation of beginning of line.
-
-Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line.
-
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
-    (interactive "^p")
-    (setq arg (or arg 1))
-
-    ;; Move lines first
-    (when (/= arg 1)
-      (let ((line-move-visual nil))
-        (forward-line (1- arg))))
-
-    (let ((orig-point (point)))
-      (back-to-indentation)
-      (when (= orig-point (point))
-        (move-beginning-of-line 1))))
-
-;; remap C-a to `smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                                'smarter-move-beginning-of-line)
-
-;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
-(defun un-indent-by-removing-4-spaces ()
-  "remove 4 spaces from beginning of of line"
+(require 'helm-projectile)
+(defun helm-projectile-switch-buffer ()
+  "Use Helm instead of ido to switch buffer in projectile."
   (interactive)
-  (save-excursion
-    (save-match-data
-      (beginning-of-line)
-      ;; get rid of tabs at beginning of line
-      (when (looking-at "^\\s-+")
-        (untabify (match-beginning 0) (match-end 0)))
-      (when (looking-at "^    ")
-        (replace-match "")))))
+  (helm :sources helm-source-projectile-buffers-list
+        :buffer "*helm projectile buffers*"
+        :prompt (projectile-prepend-project-name "Switch to buffer: ")))
 
-(global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+(require 'projectile)
+(projectile-global-mode)
+(setq projectile-enable-caching -1)
+
+;; Override some projectile keymaps
+(eval-after-load 'projectile
+  '(progn
+     (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
+     (define-key projectile-command-map (kbd "f") 'helm-projectile)
+     (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+)
+
+;;; init.el ends here
+
