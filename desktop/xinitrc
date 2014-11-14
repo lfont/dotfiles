@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -e ./.xprofile ]
+then
+    . ./.xprofile
+fi
+
+exec ./.xsession
+

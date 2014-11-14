@@ -1,1 +1,6 @@
-setxkbmap -layout us -variant intl -option ctrl:nocaps
+#!/bin/sh
+
+QTILE=~/.config/qtile/
+
+exec qtile -c $QTILE/config.py
+

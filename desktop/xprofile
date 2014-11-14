@@ -1,0 +1,57 @@
+## Launches a session dbus instance
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
+  eval $(dbus-launch --sh-syntax --exit-with-session)
+fi
+
+## GNOME PolicyKit and Keyring
+eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &
+
+## Remaps CapsLock
+setxkbmap -layout us -variant intl -option ctrl:nocaps
+
+## Set keyboard settings - 250 ms delay and 25 cps (characters per second) repeat rate.
+## Adjust the values according to your preferances.
+xset r rate 250 25 &
+
+## Detect and configure touchpad. See 'man synclient' for more info.
+if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices; then
+    #synclient VertEdgeScroll=1 &
+    #synclient TapButton1=1 &
+    synclient VertTwoFingerScroll=1 &
+    synclient HorizTwoFingerScroll=1 &
+    synclient VertScrollDelta=-111 &
+    synclient HorizScrollDelta=-111 &
+fi
+
+## Turn on/off system beep
+xset b off &
+
+## Restore screen layout
+if [ -e ./.screenlayout/default.sh ]
+then
+    ./.screenlayout/default.sh &
+fi
+
+## Set root window colour
+hsetroot -solid "#2E3436" &
+
+## Restore wallpaper
+nitrogen --restore &
+
+## Volume keys daemon
+xfce4-volumed &
+
+## Enable power management
+xfce4-power-manager &
+
+## Start Thunar Daemon
+thunar --daemon &
+
+## Start xscreensaver
+xscreensaver -no-splash &
+
+## Start Clipboard manager
+clipit &
+
+## Run network-manager applet
+nm-applet &
