@@ -14,6 +14,8 @@
                       projectile
                       helm-projectile
 
+                      neotree
+
                       magit
                       git-gutter
 
@@ -67,7 +69,7 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Use xclip to copy/paste to the terminal from X.
-(xclip-mode 1)
+(xclip-mode t)
 
 ;; Backups
 (setq make-backup-files nil) ; stop creating those backup~ files
@@ -178,21 +180,21 @@ point reaches the beginning or end of the buffer, stop there."
 (setq ispell-program-name "/usr/bin/aspell"
       ispell-list-command "--list")
 
-(let* ((langs '("american" "francais"))
-      (lang-ring (make-ring (length langs))))
-  (dolist (elem langs) (ring-insert lang-ring elem))
+(let ((langs '("american" "francais")))
+  (setq lang-ring (make-ring (length langs)))
+  (dolist (elem langs) (ring-insert lang-ring elem)))
 
-  (defun ispell-cycle-languages ()
-    (interactive)
-    (let ((lang (ring-ref lang-ring -1)))
-      (ring-insert lang-ring lang)
-      (ispell-change-dictionary lang))))
+(defun ispell-cycle-languages ()
+  (interactive)
+  (let ((lang (ring-ref lang-ring -1)))
+    (ring-insert lang-ring lang)
+    (ispell-change-dictionary lang)))
 
 (defun flyspell-check-next-highlighted-word ()
-    "Custom function to spell check next highlighted word"
-    (interactive)
-    (flyspell-goto-next-error)
-    (ispell-word))
+  "Custom function to spell check next highlighted word"
+  (interactive)
+  (flyspell-goto-next-error)
+  (ispell-word))
 
 (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 (add-hook 'text-mode-hook 'flyspell-mode)
@@ -232,6 +234,9 @@ point reaches the beginning or end of the buffer, stop there."
     (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
 
 (add-to-list 'command-switch-alist '("merge" . command-line-merge))
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
 
 (require 'flx-ido)
 ;(ido-mode 1)
@@ -338,7 +343,7 @@ point reaches the beginning or end of the buffer, stop there."
  ;; open helm buffer inside current window, not occupy whole other window
  helm-split-window-in-side-p t)
 
-(helm-mode 1)
+(helm-mode t)
 
 (global-set-key (kbd "M-x")     'helm-M-x)
 (global-set-key (kbd "M-y")     'helm-show-kill-ring)
@@ -355,7 +360,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 (require 'projectile)
 (projectile-global-mode)
-(setq projectile-enable-caching -1)
 
 ;; Override some projectile keymaps
 (eval-after-load 'projectile
