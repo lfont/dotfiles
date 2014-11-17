@@ -35,6 +35,9 @@ fi
 ## Set root window colour
 hsetroot -solid "#2E3436" &
 
+## Impersonate LG3D so java swing apps work in qtile
+wmname LG3D
+
 ## Restore wallpaper
 nitrogen --restore &
 
