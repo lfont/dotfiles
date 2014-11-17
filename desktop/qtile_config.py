@@ -153,7 +153,9 @@ for i in groups:
 
 layouts = [
     layout.Max(),
-    layout.Stack(num_stacks=2)
+    layout.Stack(
+        num_stacks=2
+    )
 ]
 
 widget_defaults = dict(
@@ -166,26 +168,42 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(),
+                widget.GroupBox(
+                    margin_x=2,
+                    margin_y=2
+                ),
                 widget.Sep(),
                 widget.CurrentLayout(),
                 widget.Sep(),
                 widget.Prompt(),
                 widget.WindowTabs(),
                 widget.CPUGraph(
-                    border_width=2,
+                    border_width=1,
                     line_width=1,
-                    width=50
+                    width=26,
+                    margin_x=2,
+                    margin_y=2
                 ),
                 widget.MemoryGraph(
-                    border_width=2,
+                    border_width=1,
                     line_width=1,
-                    width=50
+                    width=26,
+                    margin_x=2,
+                    margin_y=2
+                ),
+                widget.HDDBusyGraph(
+                    border_width=1,
+                    line_width=1,
+                    width=26,
+                    margin_x=2,
+                    margin_y=2
                 ),
                 widget.NetGraph(
-                    border_width=2,
+                    border_width=1,
                     line_width=1,
-                    width=50
+                    width=26,
+                    margin_x=2,
+                    margin_y=2
                 ),
                 widget.Systray(),
                 widget.Clock(
@@ -193,19 +211,22 @@ screens = [
                 ),
                 widget.Volume()
             ],
-            28,
+            26,
         )
     ),
     Screen(
         top=bar.Bar(
             [
-                widget.GroupBox(),
+                widget.GroupBox(
+                    margin_x=2,
+                    margin_y=2
+                ),
                 widget.Sep(),
                 widget.CurrentLayout(),
                 widget.Sep(),
                 widget.WindowTabs(),
             ],
-            28,
+            26,
         )
     ),
 ]
