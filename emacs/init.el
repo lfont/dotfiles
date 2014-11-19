@@ -31,6 +31,7 @@
                       php-mode
                       less-css-mode
                       rust-mode
+                      fsharp-mode
 
                       zenburn-theme
                       molokai-theme
@@ -96,10 +97,10 @@
       scroll-conservatively 10000)
 
 ;; Window Resize
-(global-set-key (kbd "S-C-<left>")  'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>")  'shrink-window)
-(global-set-key (kbd "S-C-<up>")    'enlarge-window)
+(global-set-key (kbd "C-c C-<left>")  'shrink-window-horizontally)
+(global-set-key (kbd "C-c C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-c C-<up>")    'shrink-window)
+(global-set-key (kbd "C-c C-<down>")  'enlarge-window)
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
@@ -131,7 +132,7 @@ point reaches the beginning or end of the buffer, stop there."
                 'smarter-move-beginning-of-line)
 
 ;; Tab behavior
-(add-hook 'prog-mode-hook (lambda ()
+(add-hook 'text-mode-hook (lambda ()
                             (setq indent-tabs-mode nil)
                             (setq tab-width 4)
                             (setq tab-stop-list (number-sequence 4 200 4))))
@@ -367,6 +368,11 @@ point reaches the beginning or end of the buffer, stop there."
      (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
      (define-key projectile-command-map (kbd "f") 'helm-projectile)
      (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
+
+(require 'fsharp-mode)
+(eval-after-load 'fsharp-mode
+  '(progn
+     (define-key fsharp-mode-map (kbd "C-c C-SPC") 'fsharp-ac/complete-at-point)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
