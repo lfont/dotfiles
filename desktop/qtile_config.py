@@ -119,19 +119,22 @@ keys = [
 groups = [
     Group(
         "a",
-        matches=[Match(wm_class=['Firefox', 'google-chrome', 'Google-chrome'])]
+        matches=[Match(wm_class=['Firefox', 'Google-chrome'])]
     ),
-    Group("s"),
+    Group(
+        "s",
+        layout="stack",
+        matches=[Match(wm_class=['Mail', 'Thunderbird'])]
+    ),
     Group("d"),
-    Group("f"),
+    Group(
+        "f",
+        matches=[Match(wm_class=['keepass2', 'KeePass2'])]
+    ),
     Group("u"),
     Group("i"),
     Group("o"),
-    Group(
-        "p",
-        layout="stack",
-        matches=[Match(wm_class=['keepass2', 'KeePass2'])]
-    ),
+    Group("p"),
 ]
 
 for i in groups:
