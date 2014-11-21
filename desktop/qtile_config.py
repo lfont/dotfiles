@@ -107,12 +107,29 @@ keys = [
         lazy.restart()
     ),
     Key(
-        [mod, "control"], "q",
+        [mod, "control"], "l",
+        lazy.spawn("xscreensaver-command -lock")
+    ),
+
+    Key(
+        [mod, "control", "shift"], "q",
         lazy.shutdown()
     ),
     Key(
-        [mod, "control"], "l",
-        lazy.spawn("xscreensaver-command -lock")
+        [mod, "control", "shift"], "s",
+        lazy.spawn("systemctl suspend")
+    ),
+    Key(
+        [mod, "control", "shift"], "h",
+        lazy.spawn("systemctl hibernate")
+    ),
+    Key(
+        [mod, "control", "shift"], "r",
+        lazy.spawn("systemctl reboot")
+    ),
+    Key(
+        [mod, "control", "shift"], "o",
+        lazy.spawn("systemctl halt")
     ),
 ]
 
