@@ -229,6 +229,11 @@ screens = [
                 widget.Clock(
                     format="%a %d %b %H:%M"
                 ),
+                widget.Battery(
+                    format="{char}{percent:2.0%}",
+                    charge_char="+",
+                    discharge_char="-"
+                ),
                 widget.Volume()
             ],
             26,

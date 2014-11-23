@@ -58,3 +58,6 @@ clipit &
 
 ## Run network-manager applet
 nm-applet &
+
+## Run bittorrent sync
+btsync &
