@@ -6,8 +6,8 @@ end
 
 set PATH ~/bin $PATH
 
-if test -f ~/.autojump/etc/profile.d/autojump.fish
-  . ~/.autojump/etc/profile.d/autojump.fish
+if test -f ~/.autojump/share/autojump/autojump.fish
+  . ~/.autojump/share/autojump/autojump.fish
 end
 
 set -e TERM

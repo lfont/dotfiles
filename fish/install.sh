@@ -10,7 +10,7 @@ then
         echo $(which fish) >> /etc/shells
     elif test ! $(which nixos-install)
     then
-        sudo apt-add-repository ppa:fish-shell/release-2
+        #sudo apt-add-repository ppa:fish-shell/release-2
         sudo apt-get update
         sudo apt-get install fish
     fi
