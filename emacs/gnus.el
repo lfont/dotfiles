@@ -33,13 +33,12 @@
 
 ;; The Insidious Big Brother Database.
 (require 'bbdb)
-(bbdb-initialize 'message 'gnus 'sendmail)
-(setq bbdb-file "~/bbdb.db")
-(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+(bbdb-initialize 'gnus 'message)
+(setq bbdb-file "~/.emacs.d/bbdb")
 (setq bbdb/mail-auto-create-p t
       bbdb/news-auto-create-p t
-      bbdb-complete-name-full-completion t
       bbdb-completion-type               'primary-or-name
+      bbdb-complete-name-full-completion t
       bbdb-complete-name-allow-cycling   t)
 
 ;; Automatically refresh gnus mail groups
@@ -81,7 +80,11 @@
       ("work"
         (display . all)
         (posting-style
-          (address "loic.fontaine.ext@mappy.com")))))
+         (address "loic.fontaine.ext@mappy.com")
+         (gcc "nnimap+work:Sent")))))
+
+;; Archive sent mails
+(setq gnus-message-archive-group "nnimap:INBOX.Sent")
 
 ;; Available SMTP accounts. The format is
 ;; type of connection - account in the from field - smtp server -

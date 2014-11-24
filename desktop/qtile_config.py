@@ -77,11 +77,15 @@ keys = [
     ),
     Key(
         [mod, "control"], "m",
-        lazy.spawn("thunderbird")
+        lazy.spawn("emacs -T gnus -f gnus")
+    ),
+    Key(
+        [mod, "control"], "c",
+        lazy.spawn("emacs -T jabber -f jabber-display-roster -f jabber-connect-all")
     ),
     Key(
         [mod, "control"], "f",
-        lazy.spawn("thunar")
+        lazy.spawn("pcmanfm")
     ),
     Key(
         [mod, "control"], "p",
@@ -141,7 +145,7 @@ groups = [
     Group(
         "s",
         layout="stack",
-        matches=[Match(wm_class=['Mail', 'Thunderbird'])]
+        matches=[Match(wm_class=['emacs', 'Emacs24'], title=['gnus', 'jabber'])]
     ),
     Group("d"),
     Group(

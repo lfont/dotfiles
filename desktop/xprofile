@@ -47,8 +47,8 @@ xfce4-volumed &
 ## Enable power management
 xfce4-power-manager &
 
-## Start Thunar Daemon
-thunar --daemon &
+## Start PCManFM Daemon
+pcmanfm --daemon-mode &
 
 ## Start xscreensaver
 xscreensaver -no-splash &
