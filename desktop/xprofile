@@ -35,6 +35,12 @@ fi
 ## Set root window colour
 hsetroot -solid "#2E3436" &
 
+## Desktop vars
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export BROWSER="firefox-developer"
+export EDITOR="emacs"
+
 ## Impersonate LG3D so java swing apps work in qtile
 wmname LG3D
 
