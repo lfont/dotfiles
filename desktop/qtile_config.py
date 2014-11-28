@@ -68,7 +68,7 @@ keys = [
 
     # Some apps shortcuts
     Key(
-        [mod, "control"], "t",
+        [mod], "Return",
         lazy.spawn("terminator")
     ),
     Key(
@@ -95,15 +95,11 @@ keys = [
     # Some WM shortcuts
     Key(
         [mod], "r",
-        lazy.spawncmd()
+        lazy.spawn("~/.config/dmenu/dmenu-bind.sh")
     ),
     Key(
         [mod], "w",
         lazy.window.kill()
-    ),
-    Key(
-        [mod], "x",
-        lazy.spawn("~/.config/dmenu/dmenu-bind.sh")
     ),
 
     Key(
@@ -199,7 +195,6 @@ screens = [
                 widget.Sep(),
                 widget.CurrentLayout(),
                 widget.Sep(),
-                widget.Prompt(),
                 widget.WindowTabs(),
                 widget.CPUGraph(
                     border_width=1,

@@ -1,3 +1,9 @@
+## Desktop vars
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export BROWSER="firefox-developer"
+export EDITOR="emacs"
+
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
   eval $(dbus-launch --sh-syntax --exit-with-session)
@@ -35,14 +41,8 @@ fi
 ## Set root window colour
 hsetroot -solid "#2E3436" &
 
-## Desktop vars
-export DE="lxde"
-export DESKTOP_SESSION="LXDE"
-export BROWSER="firefox-developer"
-export EDITOR="emacs"
-
 ## Impersonate LG3D so java swing apps work in qtile
-wmname LG3D
+wmname LG3D &
 
 ## Restore wallpaper
 nitrogen --restore &
