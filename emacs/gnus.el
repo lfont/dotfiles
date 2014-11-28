@@ -1,3 +1,5 @@
+(require 'gnus)
+
 ;; Choose plaintext every time this is possible.
 (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 
@@ -18,7 +20,8 @@
 (setq gnus-thread-ignore-subject t)
 
 ;; don't ask how many emails to download
-(setq gnus-large-newsgroup nil)
+(setq gnus-large-newsgroup 50)
+(setq gnus-auto-select-first "unread")
 
 ;; Don't hide messages that have been read
 (setq gnus-fetch-old-headers t)
@@ -30,16 +33,17 @@
 
 ;; Use w3m to read HTML mail
 (setq mm-text-html-renderer 'w3m)
+(setq gnus-inhibit-images nil)
 
 ;; The Insidious Big Brother Database.
 (require 'bbdb)
 (bbdb-initialize 'gnus 'message)
-(setq bbdb-file "~/.emacs.d/bbdb")
-(setq bbdb/mail-auto-create-p t
+(setq bbdb-file "~/.emacs.d/bbdb"
+      bbdb/mail-auto-create-p t
       bbdb/news-auto-create-p t
-      bbdb-completion-type               'primary-or-name
+      bbdb-completion-type 'primary-or-name
       bbdb-complete-name-full-completion t
-      bbdb-complete-name-allow-cycling   t)
+      bbdb-complete-name-allow-cycling t)
 
 ;; Automatically refresh gnus mail groups
 (require 'gnus-demon)
@@ -64,11 +68,13 @@
               (nnimap-address "imap.mappy.com")
               (nnimap-server-port 143)
               (nnimap-stream starttls)
+              (nnimap-fetch-partial-articles t)
               (nnir-search-engine imap))
       (nnimap "home"
               (nnimap-address "mail.messagingengine.com")
               (nnimap-server-port 993)
               (nnimap-stream tls)
+              (nnimap-fetch-partial-articles t)
               (nnir-search-engine imap))))
 
 ;; Let Gnus change the "From:" line by looking at current group we are in

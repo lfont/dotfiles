@@ -132,10 +132,14 @@ point reaches the beginning or end of the buffer, stop there."
                 'smarter-move-beginning-of-line)
 
 ;; Tab behavior
-(add-hook 'text-mode-hook (lambda ()
-                            (setq indent-tabs-mode nil)
-                            (setq tab-width 4)
-                            (setq tab-stop-list (number-sequence 4 200 4))))
+(defun set-custom-tab-behavior ()
+  (setq indent-tabs-mode nil)
+  (setq tab-width 4)
+  (setq tab-stop-list (number-sequence 4 200 4)))
+
+(add-hook 'text-mode-hook 'set-custom-tab-behavior)
+(add-hook 'prog-mode-hook 'set-custom-tab-behavior)
+(add-hook 'css-mode-hook  'set-custom-tab-behavior)
 
 ;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
 (defun un-indent-by-removing-4-spaces ()
