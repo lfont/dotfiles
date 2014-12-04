@@ -69,7 +69,7 @@ keys = [
     # Some apps shortcuts
     Key(
         [mod], "Return",
-        lazy.spawn("terminator")
+        lazy.spawn("urxvt")
     ),
     Key(
         [mod, "control"], "w",
@@ -286,4 +286,4 @@ wmname = "qtile"
 @hook.subscribe.startup
 def startup():
     import subprocess
-    subprocess.Popen(["terminator"])
+    subprocess.Popen(["urxvt"])

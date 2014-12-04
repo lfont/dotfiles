@@ -53,6 +53,9 @@ xfce4-volumed &
 ## Enable power management
 xfce4-power-manager &
 
+## Set urxvt settings
+xrdb -merge ~/.Xresources &
+
 ## Start PCManFM Daemon
 pcmanfm --daemon-mode &
 
