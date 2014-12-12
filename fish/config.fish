@@ -10,9 +10,6 @@ if test -f ~/.autojump/share/autojump/autojump.fish
   . ~/.autojump/share/autojump/autojump.fish
 end
 
-set -e TERM
-set -Ux TERM xterm-256color
-
 if test ! (which vi 2>/dev/null)
     alias vi=vim
 end
