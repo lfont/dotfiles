@@ -141,7 +141,7 @@ groups = [
     Group(
         "s",
         layout="stack",
-        matches=[Match(wm_class=['emacs', 'Emacs24'], title=['gnus', 'jabber'])]
+        matches=[Match(title=['gnus', 'jabber'])]
     ),
     Group("d"),
     Group(
