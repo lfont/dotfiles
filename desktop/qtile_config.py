@@ -73,7 +73,7 @@ keys = [
     ),
     Key(
         [mod, "control"], "w",
-        lazy.spawn("firefox-developer")
+        lazy.spawn("firefox")
     ),
     Key(
         [mod, "control"], "m",
@@ -283,7 +283,21 @@ floating_layout = layout.Floating()
 auto_fullscreen = True
 wmname = "qtile"
 
+import subprocess, re
+
+def is_running(process):
+    s = subprocess.Popen(["ps", "axuw"], stdout=subprocess.PIPE)
+    for x in s.stdout:
+        if re.search(process, x):
+            return True
+    return False
+
+def execute_once(process):
+    if not is_running(process):
+        return subprocess.Popen(process.split())
+
 @hook.subscribe.startup
 def startup():
-    import subprocess
-    subprocess.Popen(["urxvt"])
+    execute_once("keepass2")
+    execute_once("firefox")
+    execute_once("urxvt")
