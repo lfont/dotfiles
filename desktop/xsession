@@ -1,6 +1,4 @@
 #!/bin/sh
 
-QTILE=~/.config/qtile/
-
-exec qtile -c $QTILE/config.py
+exec qtile -c ~/.config/qtile/config.py
 

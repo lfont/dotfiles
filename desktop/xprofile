@@ -1,16 +1,18 @@
 ## Desktop vars
 export DE="lxde"
 export DESKTOP_SESSION="LXDE"
-export BROWSER="firefox-developer"
+export BROWSER="firefox"
 export EDITOR="emacs"
 
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
-  eval $(dbus-launch --sh-syntax --exit-with-session)
+  eval $(/usr/bin/dbus-launch --sh-syntax --exit-with-session)
 fi
 
 ## GNOME PolicyKit and Keyring
-eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+export SSH_AUTH_SOCK
+export GPG_AGENT_INFO
 
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
