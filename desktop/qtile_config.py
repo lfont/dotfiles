@@ -112,6 +112,11 @@ keys = [
     ),
 
     Key(
+        [], "XF86Eject",
+        lazy.spawn("eject")
+    ),
+
+    Key(
         [mod, "control", "shift"], "q",
         lazy.shutdown()
     ),
