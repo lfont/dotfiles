@@ -1,0 +1,1 @@
+ACTION=="add",SUBSYSTEM=="usb",ENV{ID_VENDOR_ID}=="0fce",ENV{ID_MODEL_ID}=="51a7",RUN+="/home/loic/bin/mtp-up"
