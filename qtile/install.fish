@@ -10,6 +10,7 @@ ln -sf (pwd)/x11/xinitrc        ~/.xinitrc
 ln -sf (pwd)/x11/xprofile       ~/.xprofile
 ln -sf (pwd)/x11/Xresources     ~/.Xresources
 ln -sf (pwd)/x11/qtile-xsession ~/.xsession
+sudo ln -sf (pwd)/x11/custom.desktop /usr/share/xsessions/
 
 # qtile
 mkdir -p ~/.config/qtile
