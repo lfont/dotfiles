@@ -1,14 +1,14 @@
 [Desktop Entry]
 Version=1.0
-Name=Firefox Nightly Web Browser
+Name=Firefox Aurora Web Browser
 Comment=Browse the World Wide Web
 GenericName=Web Browser
 Keywords=Internet;WWW;Browser;Web;Explorer
-Exec=firefox-nightly %u
+Exec=firefox-aurora %u
 Terminal=false
 X-MultipleArgs=false
 Type=Application
-Icon=firefox-nightly
+Icon=firefox-aurora
 Categories=GNOME;GTK;Network;WebBrowser;
 MimeType=text/html;text/xml;application/xhtml+xml;application/xml;application/rss+xml;application/rdf+xml;image/gif;image/jpeg;image/png;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ftp;x-scheme-handler/chrome;video/webm;application/x-xpinstall;
 StartupNotify=true
@@ -16,10 +16,10 @@ Actions=NewWindow;NewPrivateWindow;
 
 [Desktop Action NewWindow]
 Name=Open a New Window
-Exec=firefox-nightly -new-window
+Exec=firefox-aurora -new-window
 OnlyShowIn=Unity;
 
 [Desktop Action NewPrivateWindow]
 Name=Open a New Private Window
-Exec=firefox-nightly -private-window
+Exec=firefox-aurora -private-window
 OnlyShowIn=Unity;

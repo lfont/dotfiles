@@ -1,10 +1,10 @@
 with import <nixpkgs> {};
 
 let
-    version = "1.3.106";
+    version = "1.4.106";
     source = {
         arch = "linux-x64";
-        sha256 = "c2f6efb35b420d1f436bfd17841321318ac94d3965b176f1b3bed5a9315cc7f1";
+        sha256 = "1prs3r6xcxq31xfdp3w2wdi3d7r6lw5r4d4zay2cwphmp4kpg3qg";
     };
 
 in
