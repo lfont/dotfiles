@@ -20,5 +20,11 @@ ln -sf (pwd)/xmonad/xmonad.hs ~/.xmonad/
 mkdir -p ~/.config/dmenu
 ln -sf (pwd)/dmenu/dmenu-bind.sh ~/.config/dmenu/
 
+# xmobar
+ln -sf (pwd)/xmobar/xmobarrc ~/.xmobarrc
+
+# stalonetray
+ln -sf (pwd)/stalonetray/stalonetrayrc ~/.stalonetrayrc
+
 exit 0
 
