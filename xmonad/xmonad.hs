@@ -18,19 +18,22 @@ import System.IO
 myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:other" ]
 
 -- Layout
-myLayouts = avoidStruts $ layoutHook defaultConfig
+myLayout = avoidStruts $ layoutHook defaultConfig
 
 -- Windows management
 myManageHook = composeAll . concat $
     [
         -- Applications that go to web
-        [ className =? b --> viewShift "web" | b <- myClassWebShifts  ],
+        [ className =? b --> viewShift "1:web"  | b  <- myClassWebShifts  ],
+        -- Applications that go to chat
+        [ title     =? c --> viewShift "2:chat" | c <- myTitleChatShifts  ],
         -- Applications to ignore
-        [ resource  =? i --> doIgnore        | i <- myResourceIgnores ]
+        [ resource  =? i --> doIgnore           | i  <- myResourceIgnores ]
     ]
     where
       viewShift         = doF . liftM2 (.) W.greedyView W.shift
       myClassWebShifts  = [ "Firefox", "Chromium" ]
+      myTitleChatShifts = [ "gnus", "jabber" ]
       myResourceIgnores = [ "stalonetray" ]
 
 -- Define keys to add
@@ -43,7 +46,11 @@ keysToAdd x =
         -- File Browser
         (((modMask x .|. controlMask), xK_f), spawn "pcmanfm"),
         -- Web Browser
-        (((modMask x .|. controlMask), xK_w), spawn "firefox")
+        (((modMask x .|. controlMask), xK_w), spawn "firefox"),
+        -- gnus
+        (((modMask x .|. controlMask), xK_m), spawn "emacs -T gnus -f gnus"),
+        -- jabber
+        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f jabber-display-roster -f jabber-connect-all")
     ]
 
 -- Define keys to remove
@@ -74,20 +81,21 @@ myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 myPrettyPrinter h = xmobarPP
     {
         ppOutput = hPutStrLn h,
-        ppTitle = xmobarColor "green" "" . shorten 100
+        ppTitle = xmobarColor "green" "" . shorten 80
     }
 
 -- Run XMonad
 main = do
     workspaceBar <- spawnPipe "xmobar"
 
-    xmonad $ defaultConfig {
-       manageHook = manageDocks <+> myManageHook,
-       layoutHook = myLayouts,
-       logHook = myLogHook workspaceBar,
-       modMask = mod4Mask, -- Rebind mod to windows key
-       keys = myKeys,
-       terminal = myTerminal,
-       workspaces = myWorkspaces,
-       startupHook = myStartupHook
-    }
+    xmonad $ defaultConfig
+        {
+            manageHook = manageDocks <+> myManageHook,
+            layoutHook = myLayout,
+            logHook = myLogHook workspaceBar,
+            modMask = mod4Mask, -- Rebind mod to windows key
+            keys = myKeys,
+            terminal = myTerminal,
+            workspaces = myWorkspaces,
+            startupHook = myStartupHook
+        }

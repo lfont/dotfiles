@@ -1,6 +1,6 @@
-Config { font = "xft:Inconsolata-11"
+Config { font = "xft:Inconsolata-11:Regular"
         , borderColor = "black"
-        , border = TopB
+        , border = FullB
         , bgColor = "black"
         , fgColor = "grey"
         , position = TopW L 100
@@ -11,11 +11,11 @@ Config { font = "xft:Inconsolata-11"
           , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
           , Run Memory ["-t","Mem: <usedratio>%"] 10
           , Run Swap [] 10
-          , Run BatteryP [ "BAT0" ] [] 10
+          , Run BatteryP [ "BAT0" ] [] 50
           , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
           , Run StdinReader
         ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %wlan0% | %battery% | <fc=#ee9a00>%date%</fc> | %KPRG%            "
+        , template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %wlan0% | %battery% | <fc=#ee9a00>%date%</fc> | %KPRG%               "
 }

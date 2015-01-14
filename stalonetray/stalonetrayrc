@@ -7,8 +7,8 @@ max_geometry 5x1-1280+0
 background "#000000"
 # Doesn't appear in a task bar (not a problem for us?)
 skip_taskbar
-# Icons are 12 pixels high
-icon_size 12
+# Icons are 20 pixels high
+icon_size 20
 kludges force_icons_size
 # Tell xmonad "Stand back, I got this"
 window_strut none
