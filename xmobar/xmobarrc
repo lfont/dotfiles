@@ -1,21 +1,27 @@
-Config { font = "xft:Inconsolata-11:Regular"
-        , borderColor = "black"
-        , border = FullB
-        , bgColor = "black"
-        , fgColor = "grey"
-        , position = TopW L 100
-        , commands = [
-          Run Weather "KPRG" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
-          , Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-          , Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-          , Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10
-          , Run Memory ["-t","Mem: <usedratio>%"] 10
-          , Run Swap [] 10
-          , Run BatteryP [ "BAT0" ] [] 50
-          , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
-          , Run StdinReader
-        ]
-        , sepChar = "%"
-        , alignSep = "}{"
-        , template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %wlan0% | %battery% | <fc=#ee9a00>%date%</fc> | %KPRG%               "
+Config {
+    font = "xft:Inconsolata-11:Regular",
+    borderColor = "black",
+    border = FullB,
+    bgColor = "black",
+    fgColor = "grey",
+    position = TopW L 100,
+    commands = [
+        Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10,
+        Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10,
+        Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10,
+        Run Memory ["-t","Mem: <usedratio>%"] 10,
+        Run Swap [] 10,
+        Run Battery [
+            "-t", "Batt: <acstatus><watts> (<left>%)",
+            "-L", "10", "-H", "80", "-p", "3",
+            "--", "-O", "<fc=green>On</fc> - ", "-i", "",
+            "-L", "-15", "-H", "-5",
+            "-l", "red", "-m", "blue", "-h", "green"
+        ] 600,
+        Run Date "%a %b %_d %Y %H:%M:%S" "date" 10,
+        Run StdinReader
+    ],
+    sepChar = "%",
+    alignSep = "}{",
+    template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %wlan0% | %battery% | <fc=#ee9a00>%date%</fc> |              "
 }
