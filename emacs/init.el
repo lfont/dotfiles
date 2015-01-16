@@ -69,9 +69,6 @@
 ;; Always ask for y/n keypress instead of typing out 'yes' or 'no'
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Use xclip to copy/paste to the terminal from X.
-(xclip-mode t)
-
 ;; Backups
 (setq make-backup-files nil) ; stop creating those backup~ files
 (setq auto-save-default nil) ; stop creating those #autosave# files
@@ -167,6 +164,11 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Syntax checking
 (add-hook 'prog-mode-hook 'flycheck-mode)
+
+;; Use xclip to copy/paste to the terminal from X.
+(require 'xclip)
+(xclip-mode t)
+(turn-on-xclip) ;; this function is not call in rxvt
 
 ;; Treat asc file like gpg file
 (require 'epa-file)
