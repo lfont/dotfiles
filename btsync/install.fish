@@ -14,7 +14,7 @@ if test ! (which nix-env)
 
     link_command $install_dir/$NAME $NAME
 else
-    nix-env -if (pwd)/btsync/btsync-bin.nix
+    nix-env -i btsync
 end
 
 mkdir -p ~/.sync
