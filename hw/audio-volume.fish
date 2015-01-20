@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-set card 0
+set card 1
 set increment 5
 
 switch (echo $argv[1])
