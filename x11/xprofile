@@ -6,13 +6,15 @@ export EDITOR="emacs"
 
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
-  eval $(/usr/bin/dbus-launch --sh-syntax --exit-with-session)
+  eval $(dbus-launch --sh-syntax --exit-with-session)
 fi
 
 ## GNOME PolicyKit and Keyring
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
+eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
 export SSH_AUTH_SOCK
 export GPG_AGENT_INFO
+
+deskopen /var/run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
@@ -23,8 +25,8 @@ xset r rate 250 25 &
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
 if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices; then
-    #synclient VertEdgeScroll=1 &
-    #synclient TapButton1=1 &
+    synclient FingerLow=50 &
+    synclient FingerHigh=55 &
     synclient VertTwoFingerScroll=1 &
     synclient HorizTwoFingerScroll=1 &
     synclient VertScrollDelta=-111 &
@@ -46,9 +48,6 @@ hsetroot -solid "#2E3436" &
 ## Restore wallpaper
 nitrogen --restore &
 
-## Volume keys daemon
-xfce4-volumed &
-
 ## Enable power management
 xfce4-power-manager &
 
@@ -60,6 +59,9 @@ pcmanfm --daemon-mode &
 
 ## Start xscreensaver
 xscreensaver -no-splash &
+
+## Pulse Audio volume control
+pasystray &
 
 ## Start Clipboard manager
 clipit &
