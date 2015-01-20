@@ -50,7 +50,10 @@ keysToAdd x =
         -- gnus
         (((modMask x .|. controlMask), xK_m), spawn "emacs -T gnus -f gnus"),
         -- jabber
-        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f jabber-display-roster -f jabber-connect-all")
+        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f jabber-display-roster -f jabber-connect-all"),
+        -- Audio volume
+        ((0, 0x1008FF13), spawn "audio-volume up"),
+        ((0, 0x1008FF11), spawn "audio-volume down")
     ]
 
 -- Define keys to remove
