@@ -4,6 +4,7 @@
 
 ;;; Code:
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+(add-to-list 'load-path "~/.nix-profile/share/emacs/site-lisp/mu4e/")
 
 ;; Packages settings
 (require 'package)
@@ -33,20 +34,13 @@
                       rust-mode
                       fsharp-mode
 
-                      zenburn-theme
                       molokai-theme
-                      monokai-theme
 
                       fill-column-indicator
                       multiple-cursors
-                      highlight-chars
                       rainbow-delimiters
 
                       xclip
-
-                      bbdb
-                      gnus-desktop-notify
-                      w3m
 
                       jabber)))
 
@@ -74,7 +68,7 @@
 (setq auto-save-default nil) ; stop creating those #autosave# files
 
 ;; General UI stuff
-(when (display-graphic-p) (global-linum-mode t))
+;(global-linum-mode t)
 
 (global-hl-line-mode t)
 (column-number-mode t)
@@ -94,10 +88,10 @@
       scroll-conservatively 10000)
 
 ;; Window Resize
-(global-set-key (kbd "C-c C-<left>")  'shrink-window-horizontally)
-(global-set-key (kbd "C-c C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-c C-<up>")    'shrink-window)
-(global-set-key (kbd "C-c C-<down>")  'enlarge-window)
+(global-set-key (kbd "C-c <left>")  'shrink-window-horizontally)
+(global-set-key (kbd "C-c <right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-c <up>")    'shrink-window)
+(global-set-key (kbd "C-c <down>")  'enlarge-window)
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
@@ -184,7 +178,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Spell checking
 (require 'ispell)
-(setq ispell-program-name "/usr/bin/aspell"
+(setq ispell-program-name "aspell"
       ispell-list-command "--list")
 
 (let ((langs '("american" "francais")))
@@ -289,54 +283,12 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "C-c k")      'mc/skip-to-next-like-this)
 (global-set-key (kbd "C-c u")      'mc/unmark-next-like-this)
 
-(require 'highlight-chars)
-(add-hook 'font-lock-mode-hook
-    (lambda ()
-        (hc-highlight-tabs)
-        (hc-highlight-trailing-whitespace)))
+(require 'whitespace)
+(setq whitespace-style '(face empty lines-tail tabs tab-mark trailing))
+(add-hook 'prog-mode-hook 'whitespace-mode)
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-(require 'jabber)
-(setq jabber-account-list '(("lfontaine@mappyim"
-                              (:network-server . "mappyim")
-                              (:port . 5223)
-                              (:connection-type . ssl))))
-
-(setq jabber-history-enabled t
-      jabber-use-global-history nil
-      jabber-backlog-number 40
-      jabber-backlog-days 30)
-
-(setq jabber-alert-presence-message-function
-      (lambda (who oldstatus newstatus statustext) nil))
-
-(load-library "notify")
-(require 'notify)
-
-(defun notify-jabber-alert-message (from buf text proposed-alert)
-  "(jabber.el hook) Notify of new Jabber chat messages via notify.el"
-  (when (or jabber-message-alert-same-buffer
-            (not (memq (selected-window) (get-buffer-window-list buf))))
-    (if (jabber-muc-sender-p from)
-        (notify (format "(PM) %s" (jabber-jid-displayname (jabber-jid-user from)))
-                (format "%s: %s" (jabber-jid-resource from) text))
-        (notify (format "%s" (jabber-jid-displayname from)) text))))
-
-(add-hook 'jabber-alert-message-hooks 'notify-jabber-alert-message)
-
-(defun notify-jabber-alert-muc (nick group buffer text proposed-alert)
-  "(jabber.el hook) Notify of new Jabber chat group messages via notify.el"
-  (when (or jabber-message-alert-same-buffer
-            (not (memq (selected-window) (get-buffer-window-list buffer))))
-    (if nick
-        (when (or jabber-muc-alert-self
-                  (not (string= nick (cdr (assoc group *jabber-active-groupchats*)))))
-          (notify (format "%s@%s" nick (jabber-jid-displayname group)) text))
-        (notify (format "%s" (jabber-jid-displayname group)) text))))
-
-(add-hook 'jabber-alert-muc-hooks 'notify-jabber-alert-muc)
 
 (require 'helm)
 (require 'helm-config)
@@ -380,18 +332,22 @@ point reaches the beginning or end of the buffer, stop there."
   '(progn
      (define-key fsharp-mode-map (kbd "C-c C-SPC") 'fsharp-ac/complete-at-point)))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-)
+;; Loads some user's files
+(defconst user-init-dir
+  (cond ((boundp 'user-emacs-directory)
+         user-emacs-directory)
+        ((boundp 'user-init-directory)
+         user-init-directory)
+        (t "~/.emacs.d/")))
+
+(defun load-user-file (file)
+  (interactive "f")
+  "Load a file in current user's configuration directory"
+  (load-file (expand-file-name file user-init-dir)))
+
+(load-library "notify")
+(load-user-file "jabber.el")
+(load-user-file "offlineimap.el")
+(load-user-file "mu4e.el")
 
 ;;; init.el ends here
-

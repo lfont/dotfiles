@@ -33,7 +33,7 @@ myManageHook = composeAll . concat $
     where
       viewShift         = doF . liftM2 (.) W.greedyView W.shift
       myClassWebShifts  = [ "Firefox", "Chromium" ]
-      myTitleChatShifts = [ "gnus", "jabber" ]
+      myTitleChatShifts = [ "mail", "jabber" ]
       myResourceIgnores = [ "stalonetray" ]
 
 -- Define keys to add
@@ -48,9 +48,9 @@ keysToAdd x =
         -- Web Browser
         (((modMask x .|. controlMask), xK_w), spawn "firefox"),
         -- gnus
-        (((modMask x .|. controlMask), xK_m), spawn "emacs -T gnus -f gnus"),
+        (((modMask x .|. controlMask), xK_m), spawn "emacs --no-splash -T mail -f lfo-mu4e-start"),
         -- jabber
-        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f jabber-display-roster -f jabber-connect-all"),
+        (((modMask x .|. controlMask), xK_j), spawn "emacs --no-splash -T jabber -f lfo-jabber-start"),
         -- Audio volume
         ((0, 0x1008FF13), spawn "audio-volume up"),
         ((0, 0x1008FF11), spawn "audio-volume down")
