@@ -15,7 +15,7 @@
 
 (require 'notify)
 
-(defun notify-jabber-alert-message (from buf text proposed-alert)
+(defun my/jabber-notify-alert-message (from buf text proposed-alert)
   "(jabber.el hook) Notify of new Jabber chat messages via notify.el"
   (when (or jabber-message-alert-same-buffer
             (not (memq (selected-window) (get-buffer-window-list buf))))
@@ -24,9 +24,9 @@
                 (format "%s: %s" (jabber-jid-resource from) text))
         (notify (format "%s" (jabber-jid-displayname from)) text))))
 
-(add-hook 'jabber-alert-message-hooks 'notify-jabber-alert-message)
+(add-hook 'jabber-alert-message-hooks 'my/jabber-notify-alert-message)
 
-(defun notify-jabber-alert-muc (nick group buffer text proposed-alert)
+(defun my/jabber-notify-alert-muc (nick group buffer text proposed-alert)
   "(jabber.el hook) Notify of new Jabber chat group messages via notify.el"
   (when (or jabber-message-alert-same-buffer
             (not (memq (selected-window) (get-buffer-window-list buffer))))
@@ -36,9 +36,10 @@
           (notify (format "%s@%s" nick (jabber-jid-displayname group)) text))
         (notify (format "%s" (jabber-jid-displayname group)) text))))
 
-(add-hook 'jabber-alert-muc-hooks 'notify-jabber-alert-muc)
+(add-hook 'jabber-alert-muc-hooks 'my/jabber-notify-alert-muc)
 
-(defun lfo-jabber-start ()
+;;; function to start jabber
+(defun my/jabber-start ()
   (setq initial-buffer-choice (lambda ()
                                 (jabber-display-roster)
                                 (get-buffer "*-jabber-roster-*")))

@@ -7,221 +7,214 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      /etc/nixos/hardware-configuration.nix
     ];
 
-  hardware.pulseaudio.enable = true;
+  time.timeZone = "Europe/Paris";
 
-  # Use the gummiboot efi boot loader.
-  boot.loader.gummiboot.enable = true;
-  boot.loader.gummiboot.timeout = 4;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.kernelPackages = pkgs.linuxPackages_3_14;
-  boot.extraModprobeConfig = ''
-    options hid_apple fnmode=2
-  '';
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # Define on which hard drive you want to install Grub.
+  boot.loader.grub.device = "/dev/sda";
+  boot.kernelPackages = pkgs.linuxPackages_3_18;
 
-  networking.hostName = "loics-macbook-pro"; # Define your hostname.
+  networking.hostName = "loics-laptop"; # Define your hostname.
+  networking.hostId = "2d128811";
+  # networking.wireless.enable = true;  # Enables wireless.
   networking.networkmanager.enable = true;
   networking.extraHosts = ''
-    192.168.0.18 bibimbap
+     192.168.0.18 bibimbap
   '';
 
   # Select internationalisation properties.
   i18n = {
-    consoleFont = "lat9w-16";
-    consoleKeyMap = "us-acentos";
-    defaultLocale = "en_US.UTF-8";
+     consoleFont = "lat9w-16";
+     consoleKeyMap = "us-acentos";
+     defaultLocale = "en_US.UTF-8";
+  };
+
+  # Fonts
+  fonts = {
+      enableFontDir = true;
+      enableGhostscriptFonts = true;
+      fonts = with pkgs; [
+          dejavu_fonts
+          inconsolata
+      ];
   };
 
   # List packages installed in system profile. To search by name, run:
-  # -env -qaP | grep wget
+  # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
-    wget
-    htop
-    fish
-    tmux
+     wget
+     htop
+     fish
+     tmux
+     psmisc
+     which
+     hdparm
+     unzip
 
-    networkmanagerapplet
-    gvfs
-    xdg-user-dirs
-    unzipNLS
-    xarchiver
-    gtk-engine-murrine
-    inconsolata
-    xclip
-    gnupg
-    gnupg1orig
-    gnutls
-    libnotify
+     gnupg
+     gnupg1orig
+     gnutls
 
-    vimHugeX
-    emacs
+     xclip
+     xfontsel
+     hsetroot
+     xlibs.xev
+     xlibs.xbacklight
+     xlibs.xf86inputsynaptics
+     xlibs.xkill
+     glxinfo
+     rxvt_unicode
 
-    git
-    kde4.kdiff3
+     aspell
+     aspellDicts.en
+     aspellDicts.fr
 
-    python
-    nodejs
+     libnotify
+     notify-osd
+     
+     stalonetray
+     #clipit
+     pasystray
+     networkmanagerapplet
 
-    chromiumDev
-    pidgin
+     xfce.xfconf
+     xfce.xfce4_power_manager
 
-    keepassx2
+     dmenu2
+     xscreensaver
+     nitrogen
+     xarchiver
+     pavucontrol
+     bittorrentSync
 
-    dropbox
+     gtk # To get GTK+'s themes.
+     gtk-engine-murrine
+     hicolor_icon_theme
+     gnome.gnomeicontheme
+     #lxappearance
 
-    shotwell
+     haskellPackages.xmobar
+     haskellPackages.ghc
+     haskellPackages.xmonadContrib
+     haskellPackages.xmonadExtras
 
-    bitcoin
-    electrum
+     gnome.gnome_keyring
+     polkit_gnome
+     gvfs
+     libfm
+     #pcmanfm
+     menu-cache
+     #lxmenu-data
+     desktop_file_utils
+     shared_mime_info
+     xdg-user-dirs
+     xdg_utils
+  ];
 
-    libreoffice
+  environment.variables.GIO_EXTRA_MODULES = [
+     "${pkgs.gvfs}/lib/gio/modules"
   ];
 
   environment.shells = [
-    "/run/current-system/sw/bin/fish"
+     "/run/current-system/sw/bin/fish"
   ];
 
-  # There is no way to define better sudo rules in 14.04
-  # This is needed for the keyboard-backlight script
-  security.sudo.wheelNeedsPassword = false;
+  environment.pathsToLink = [
+     "/share/themes"
+     "/share/mime"
+     "/share/desktop-directories"
+  ];
+
+  powerManagement.enable = true;
+  powerManagement.cpuFreqGovernor = "powersave";
+
+  hardware.enableAllFirmware = true;
+  hardware.pulseaudio.enable = true;
+
+  security.polkit.extraConfig = ''
+    polkit.addRule(function (action, subject) {
+      if ((action.id === 'org.freedesktop.policykit.exec' ||
+           action.id === 'org.freedesktop.systemd1.manage-units') &&
+          subject.local &&
+          subject.isInGroup('wheel')) {
+        return polkit.Result.YES;
+      }
+    });
+  '';
 
   # List services that you want to enable:
+
+  services.upower.enable = true;
+  services.upower.package = pkgs.upower-old;
+  services.udev.packages = [
+      pkgs.gvfs
+      pkgs.libmtp
+  ];
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.autorun = true;
+  services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
   services.xserver.layout = "us";
-  services.xserver.xkbOptions = "";
+  services.xserver.xkbOptions = "eurosign:e, ctrl:nocaps";
   services.xserver.xkbVariant = "intl";
+  services.xserver.synaptics = {
+    enable = true;
+    twoFingerScroll = true;
+    buttonsMap = [ 1 3 2 ];
+    tapButtons = false;
+    palmDetect = true;
+    additionalOptions = ''
+      Option "FingerHigh"       "55"
+      Option "FingerLow"        "50"
+      Option "VertHysteresis"   "0"
+      Option "HorizHysteresis"  "0"
+      Option "VertScrollDelta"  "-111"
+      Option "HorizScrollDelta" "-111"
+    '';
+  };
 
-  # Enable the Desktop Environment.
+  # Enable the xmonad session.
   services.xserver.displayManager.slim.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
-  services.xserver.synaptics.enable = true;
-  services.xserver.synaptics.twoFingerScroll = true;
-  services.xserver.synaptics.buttonsMap = [ 1 3 2 ];
+  services.xserver.displayManager.slim.defaultUser = "loic";
+
+  services.xserver.desktopManager.default = "none";
+  services.xserver.desktopManager.xterm.enable = false;
+
+  services.xserver.windowManager.default = "none";
+  services.xserver.windowManager.xmonad.enable = true;
+  services.xserver.windowManager.xmonad.enableContribAndExtras = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.extraUsers.loic = {
-    name = "loic";
-    description = "Loïc Fontaine";
-    group = "users";
-    extraGroups = [ "wheel" "networkmanager" ];
-    uid = 1000;
-    createHome = true;
-    home = "/home/loic";
-    shell = "/run/current-system/sw/bin/fish";
+     isNormalUser = true;
+     uid = 1000;
+     name = "loic";
+     description = "Loïc Fontaine";
+     extraGroups = [ "wheel" "networkmanager" ];
+     useDefaultShell = false;
+     shell = "/run/current-system/sw/bin/fish";
   };
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.chromium.enablePepperFlash = true;
-  nixpkgs.config.chromium.enablePepperPDF = true;
-  nixpkgs.config.packageOverrides = pkgs: rec {
-    # new kdiff3 version
-    kde4 = {
-        kdelibs = pkgs.kde4.kdelibs;
-        qt4 = pkgs.kde4.qt4;
-        kdiff3 = (pkgs.lib.overrideDerivation pkgs.kde4.kdiff3 (attrs: rec {
-            name = "kdiff3-0.9.98";
-            src = pkgs.fetchurl {
-                url = "mirror://sourceforge/kdiff3/${name}.tar.gz";
-                sha256 = "0s6n1whkf5ck2r8782a9l8b736cj2p05and1vjjh7d02pax1lb40";
-            };
-        }));
-    };
-    # smb support
-    gvfs = pkgs.gvfs.override { lightWeight = false; };
-    # svg support
-    xfce = {
-     libxfce4util = pkgs.xfce.libxfce4util;
-     xinitrc = pkgs.xfce.xinitrc;
-     xfce4_power_manager = pkgs.xfce.xfce4_power_manager;
-     xfce4notifyd = pkgs.xfce.xfce4notifyd;
-     tumbler = (pkgs.lib.overrideDerivation pkgs.xfce.tumbler (attrs: {
-        buildInputs = attrs.buildInputs ++ (with pkgs; [ makeWrapper ]);
-        librsvg = pkgs.librsvg;
-        preFixup = ''
-          cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-          wrapProgram "$out/lib/tumbler-1/tumblerd" \
-            --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-        '';
-     }));
-     xfce4_appfinder = pkgs.xfce.xfce4_appfinder;
-     thunar_volman = pkgs.xfce.thunar_volman;
-     garcon = pkgs.xfce.garcon;
-     libxfce4ui = pkgs.xfce.libxfce4ui;
-     xfwm4 = pkgs.xfce.xfwm4;
-     xfdesktop = (pkgs.lib.overrideDerivation pkgs.xfce.xfdesktop (attrs: {
-       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
-       librsvg = pkgs.librsvg;
-       preFixup = ''
-         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-         wrapProgram "$out/bin/xfdesktop" \
-           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-       '' + attrs.preFixup;
-     }));
-     xfconf = pkgs.xfce.xfconf;
-     xfce4screenshooter = pkgs.xfce.xfce4screenshooter;
-     xfce4mixer = pkgs.xfce.xfce4mixer;
-     xfce4settings = pkgs.xfce.xfce4settings;
-     xfce4session = (pkgs.lib.overrideDerivation pkgs.xfce.xfce4session (attrs: {
-       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
-       librsvg = pkgs.librsvg;
-       preFixup = ''
-        cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-        wrapProgram "$out/bin/xfce4-session" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-       '' + attrs.preFixup;
-     }));
-     xfce4icontheme = pkgs.xfce.xfce4icontheme;
-     thunar = (pkgs.lib.overrideDerivation pkgs.xfce.thunar (attrs: {
-       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
-       librsvg = pkgs.librsvg;
-       preFixup = ''
-         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-         wrapProgram "$out/bin/thunar" \
-           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-       '' + attrs.preFixup;
-     }));
-     terminal = pkgs.xfce.terminal;
-     ristretto = (pkgs.lib.overrideDerivation pkgs.xfce.ristretto (attrs: {
-       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
-       librsvg = pkgs.librsvg;
-       preFixup = ''
-         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-         wrapProgram "$out/bin/ristretto" \
-           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-       '' + attrs.preFixup;
-     }));
-     mousepad = pkgs.xfce.mousepad;
-     libxfcegui4 = pkgs.xfce.libxfcegui4;
-     gtk_xfce_engine = pkgs.xfce.gtk_xfce_engine;
-     exo = pkgs.xfce.exo;
-     gvfs = gvfs;
-     xfce4panel = (pkgs.lib.overrideDerivation pkgs.xfce.xfce4panel (attrs: {
-       buildInputs = attrs.buildInputs ++ (with pkgs; [ gdk_pixbuf makeWrapper ]);
-       librsvg = pkgs.librsvg;
-       preFixup = ''
-         cat "$librsvg/lib/gdk-pixbuf/loaders.cache" >> "$GDK_PIXBUF_MODULE_FILE"
-
-         wrapProgram "$out/bin/xfce4-panel" \
-           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-       '' + attrs.preFixup;
-      }));
-    };
-  };
+  #nixpkgs.config.packageOverrides = pkgs: {
+  #  upower = (pkgs.lib.overrideDerivation pkgs.upower (attrs: rec {
+  #    name = "upower-0.9.23";
+  #    src = pkgs.fetchurl {
+  #      url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
+  #      sha256 = "06wqhab2mn0j4biiwh7mn4kxbxnfnzjkxvhpgvnlpaz9m2q54cj3";
+  #    };
+  #  }));
+  #};
 }
-

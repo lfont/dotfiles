@@ -23,16 +23,6 @@ setxkbmap -layout us -variant intl -option ctrl:nocaps
 ## Adjust the values according to your preferances.
 xset r rate 250 25 &
 
-## Detect and configure touchpad. See 'man synclient' for more info.
-if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices; then
-    synclient FingerLow=50 &
-    synclient FingerHigh=55 &
-    synclient VertTwoFingerScroll=1 &
-    synclient HorizTwoFingerScroll=1 &
-    synclient VertScrollDelta=-111 &
-    synclient HorizScrollDelta=-111 &
-fi
-
 ## Turn on/off system beep
 xset b off &
 
@@ -71,3 +61,6 @@ nm-applet &
 
 ## Run bittorrent sync
 btsync &
+
+## Run an emacs instance
+emacs --daemon

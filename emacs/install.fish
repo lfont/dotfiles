@@ -8,8 +8,7 @@ ln -sf (pwd)/emacs/mu4e.el        ~/.emacs.d/
 
 mkdir -p ~/.emacs.d/lisp
 ln -s (pwd)/emacs/notify.el ~/.emacs.d/lisp/
-
-#ln -sf (pwd)/emacs/gnus.el ~/.gnus.el
+emacs --batch -f batch-byte-compile ~/.emacs.d/lisp/notify.el
 
 ln -sf (pwd)/offlineimap/offlineimaprc  ~/.offlineimaprc
 ln -sf (pwd)/offlineimap/offlineimap.py ~/.offlineimap.py

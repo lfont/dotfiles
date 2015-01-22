@@ -2,24 +2,20 @@
 
 (require 'mu4e)
 
-;; the next are relative to `mu4e-maildir'
-;; instead of strings, they can be functions too, see
-;; their docstring or the chapter 'Dynamic folders'
-(setq mu4e-sent-folder   "/fastmail/INBOX.Sent Items"
-      mu4e-drafts-folder "/fastmail/INBOX.Drafts"
-      mu4e-trash-folder  "/fastmail/INBOX.Trash")
-
-;; the maildirs you use frequently; access them with 'j' ('jump')
-(setq mu4e-maildir-shortcuts
-      '(("/fastmail/INBOX"            . ?i)
-        ("/fastmail/INBOX.Archive"    . ?a)
-        ("/fastmail/INBOX.Sent Items" . ?s)
-        ("/fastmail/INBOX.Notes"      . ?n)))
+;; basic user information
+(setq user-full-name  "Loïc Fontaine")
 
 ;; a  list of user's e-mail addresses
 (setq mu4e-user-mail-address-list '("loicfontaine@fastmail.fm"
                                     "ljph.fontaine@gmail.com"
-                                    "loicfontaine@valtech.fr"))
+                                    "channary.loic@gmail.com"
+                                    "loic.fontaine@valtech.fr"))
+
+;; custom bookmarks
+(add-to-list 'mu4e-bookmarks
+             '("NOT maildir:/fastmail/INBOX.Trash AND flag:unread AND NOT flag:trashed"
+               "Unread and not trashed messages"
+               ?n))
 
 ;; the headers to show in the headers list -- a pair of a field
 ;; and its width, with `nil' meaning 'unlimited'
@@ -37,8 +33,8 @@
       mu4e-update-interval 300) ;; update every 5 minutes
 
 (add-hook 'mu4e-index-updated-hook
-  (defun lfo-mu4e-new-mail ()
-    (start-process "mail-notify" nil "check-new-mails")))
+          (defun my/mu4e-index-updated ()
+            (start-process "mail-notify" nil "check-new-mails")))
 
 ;; set this to nil so signature is not included by default
 ;; you can include in message with C-c C-w
@@ -62,17 +58,39 @@
 (when (fboundp 'imagemagick-register-types)
   (imagemagick-register-types))
 
+;; custom move to trash
+;; https://groups.google.com/forum/#!topic/mu-discuss/m4ORymDlf0E
+(defun my/mu4e-move-to-trash ()
+  (interactive)
+  (mu4e-mark-set 'move mu4e-trash-folder))
+
+(define-key mu4e-headers-mode-map (kbd "d") 'my/mu4e-move-to-trash)
+(define-key mu4e-view-mode-map (kbd "d") 'my/mu4e-move-to-trash)
+
 (require 'smtpmail)
 
-(defun lfo-mu4e-account-personal ()
+(defun my/mu4e-account-personal ()
   (interactive)
+  (message "Switching to personnal account...")
+
+  ;; the next are relative to `mu4e-maildir'
+  ;; instead of strings, they can be functions too, see
+  ;; their docstring or the chapter 'Dynamic folders'
+  (setq mu4e-sent-folder   "/fastmail/INBOX.Sent Items"
+        mu4e-drafts-folder "/fastmail/INBOX.Drafts"
+        mu4e-trash-folder  "/fastmail/INBOX.Trash")
+
+  ;; the maildirs you use frequently; access them with 'j' ('jump')
+  (setq mu4e-maildir-shortcuts
+        '(("/fastmail/INBOX"            . ?i)
+          ("/fastmail/INBOX.Archive"    . ?a)
+          ("/fastmail/INBOX.Sent Items" . ?s)
+          ("/fastmail/INBOX.Notes"      . ?n)))
+
   ;; general emacs mail settings; used when composing e-mail
   ;; the non-mu4e-* stuff is inherited from emacs/message-mode
-  (setq user-full-name  "Loïc Fontaine"
-        user-mail-address "loicfontaine@fastmail.fm")
-
-  (setq mu4e-compose-signature
-        "Loïc Fontaine\nloicfontaine@fastmail.fm\n")
+  (setq user-mail-address "loicfontaine@fastmail.fm"
+        mu4e-compose-signature "Loïc Fontaine\nloicfontaine@fastmail.fm\n")
 
   ;; smtp mail setting
   (setq message-send-mail-function 'smtpmail-send-it
@@ -80,40 +98,29 @@
         smtpmail-stream-type 'ssl
         smtpmail-smtp-service 465))
 
-(defun lfo-mu4e-account-work ()
+(defun my/mu4e-account-valtech ()
   (interactive)
-  ;; general emacs mail settings; used when composing e-mail
-  ;; the non-mu4e-* stuff is inherited from emacs/message-mode
-  (setq user-full-name  "Loïc Fontaine"
-        user-mail-address "loicfontaine@valtech.fr")
 
-  (setq mu4e-compose-signature
-        "Loïc Fontaine\nloicfontaine@valtech.fr\n")
+  ;; use common settings
+  (my/mu4e-account-personal)
 
-  ;; smtp mail setting
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-smtp-server "mail.messagingengine.com"
-        smtpmail-stream-type 'ssl
-        smtpmail-smtp-service 465))
+  (message "Switching to valtech account...")
+
+  ;; overrides some stuffs
+  (setq user-mail-address "loic.fontaine@valtech.fr"
+        mu4e-compose-signature "Loïc Fontaine\nloic.fontaine@valtech.fr\n"))
 
 ;; quickly change account
-(define-key mu4e-main-mode-map (kbd "<f1>") 'lfo-mu4e-account-personal)
-(define-key mu4e-main-mode-map (kbd "<f2>") 'lfo-mu4e-account-work)
-(define-key mu4e-headers-mode-map (kbd "<f1>") 'lfo-mu4e-account-personal)
-(define-key mu4e-headers-mode-map (kbd "<f2>") 'lfo-mu4e-account-work)
+(defun my/mu4e-bind-account (key account)
+  (define-key mu4e-main-mode-map (kbd key) account)
+  (define-key mu4e-headers-mode-map (kbd key) account))
 
-;; custom move to trash for fastmail
-;; https://groups.google.com/forum/#!topic/mu-discuss/m4ORymDlf0E
-(defun lfo-mu4e-move-to-trash ()
-  (interactive)
-  (mu4e-mark-set 'move "/fastmail/INBOX.Trash"))
-
-(define-key mu4e-headers-mode-map (kbd "d") 'lfo-mu4e-move-to-trash)
-(define-key mu4e-view-mode-map (kbd "d") 'lfo-mu4e-move-to-trash)
+(my/mu4e-bind-account "<f1>" 'my/mu4e-account-personal)
+(my/mu4e-bind-account "<f2>" 'my/mu4e-account-valtech)
 
 ;; when you reply to a message, use the identity that the mail was sent to
 ;; -- function that checks to, cc and bcc fields
-(defun lfo-mu4e-is-message-to (msg rx)
+(defun my/mu4e-is-message-to (msg rx)
   "Check if to, cc or bcc field in MSG has any address in RX."
   (or (mu4e-message-contact-field-matches msg :to rx)
       (mu4e-message-contact-field-matches msg :cc rx)
@@ -121,19 +128,23 @@
 
 ;; we only do something if we recognize something (i.e. no stupid default)
 (add-hook 'mu4e-compose-pre-hook
-          (defun lfo-mu4e-set-from-address ()
+          (defun my/mu4e-set-from-address ()
             "Set current identity based on to, cc, bcc of original."
             (let ((msg mu4e-compose-parent-message)) ;; msg is shorter...
               (if msg
                   (cond
-                   ((lfo-mu4e-is-message-to msg (list "loicfontaine@fastmail.fm"
-                                                      "ljph.fontaine@gmail.com"))
-                    (lfo-mu4e-account-personal))
-                   ((lfo-mu4e-is-message-to msg (list "loicfontaine@valtech.fr"))
-                    (lfo-mu4e-account-work)))
-                (lfo-mu4e-account-personal)))))
+                   ((my/mu4e-is-message-to msg (list "loicfontaine@fastmail.fm"
+                                                     "ljph.fontaine@gmail.com"
+                                                     "channary.loic@gmail.com"))
+                    (my/mu4e-account-personal))
+                   ((my/mu4e-is-message-to msg (list "loic.fontaine@valtech.fr"))
+                    (my/mu4e-account-valtech)))))))
 
-(defun lfo-mu4e-start ()
-  (setq server-name "mail")
-  (server-start)
+;; set default account
+(my/mu4e-account-personal)
+
+;; function to start mu4e
+(defun my/mu4e-start ()
+  (setq server-name "mail") ;; the server is used by offlineimap to request
+  (server-start)            ;; the authinfo password
   (mu4e))
