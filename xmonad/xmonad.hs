@@ -15,7 +15,7 @@ import qualified XMonad.StackSet as W
 import System.IO
 
 -- Define the names of all workspaces
-myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:other" ]
+myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:media", "5:other" ]
 
 -- Layout
 myLayout = avoidStruts $ layoutHook defaultConfig
@@ -24,17 +24,20 @@ myLayout = avoidStruts $ layoutHook defaultConfig
 myManageHook = composeAll . concat $
     [
         -- Applications that go to web
-        [ className =? b --> viewShift "1:web"  | b  <- myClassWebShifts  ],
+        [ className =? b --> viewShift "1:web"   | b  <- myClassWebShifts   ],
         -- Applications that go to chat
-        [ title     =? c --> viewShift "2:chat" | c <- myTitleChatShifts  ],
+        [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts   ],
+	-- Applications that go to media
+        [ className =? d --> viewShift "4:media" | d  <- myClassMediaShifts ],
         -- Applications to ignore
-        [ resource  =? i --> doIgnore           | i  <- myResourceIgnores ]
+        [ resource  =? i --> doIgnore            | i  <- myResourceIgnores  ]
     ]
     where
-      viewShift         = doF . liftM2 (.) W.greedyView W.shift
-      myClassWebShifts  = [ "Firefox", "Chromium" ]
-      myTitleChatShifts = [ "mail", "jabber" ]
-      myResourceIgnores = [ "stalonetray" ]
+      viewShift          = doF . liftM2 (.) W.greedyView W.shift
+      myClassWebShifts   = [ "Firefox", "Chromium" ]
+      myTitleChatShifts  = [ "mail", "jabber" ]
+      myClassMediaShifts = [ "Vlc", ".spotify-wrapped" ]
+      myResourceIgnores  = [ "stalonetray" ]
 
 -- Define keys to add
 keysToAdd x =
@@ -48,9 +51,9 @@ keysToAdd x =
         -- Web Browser
         (((modMask x .|. controlMask), xK_w), spawn "firefox"),
         -- gnus
-        (((modMask x .|. controlMask), xK_m), spawn "emacs --no-splash -T mail -f lfo-mu4e-start"),
+        (((modMask x .|. controlMask), xK_m), spawn "emacs -T mail -f my/mu4e-start"),
         -- jabber
-        (((modMask x .|. controlMask), xK_j), spawn "emacs --no-splash -T jabber -f lfo-jabber-start"),
+        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f my/jabber-start"),
         -- Audio volume
         ((0, 0x1008FF13), spawn "audio-volume up"),
         ((0, 0x1008FF11), spawn "audio-volume down")
