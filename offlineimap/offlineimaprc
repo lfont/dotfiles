@@ -1,5 +1,5 @@
 [general]
-accounts = fastmail
+accounts = fastmail,mappy
 pythonfile = ~/.offlineimap.py
 
 [Account fastmail]
@@ -19,3 +19,21 @@ remoteuser = loicfontaine@fastmail.fm
 remotepasseval = get_password_emacs("mail.messagingengine.com", "993")
 ssl = yes
 cert_fingerprint = 958b1601563aef92607a41eb5bad22e3cace8431
+
+[Account mappy]
+localrepository = mappy-local
+remoterepository = mappy-remote
+# Status cache. Default is plain, which eventually becomes huge and slow.
+status_backend = sqlite
+
+[Repository mappy-local]
+type = Maildir
+localfolders = ~/Maildir/mappy
+
+[Repository mappy-remote]
+type = IMAP
+remotehost = exch01.mappy.priv
+remoteuser = lfontaine
+remotepasseval = get_password_emacs("exch01.mappy.priv", "143")
+ssl = yes
+cert_fingerprint = 51def2a26ae4865edfcf9ddee99cf62270c6a656

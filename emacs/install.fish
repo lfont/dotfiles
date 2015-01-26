@@ -14,4 +14,4 @@ ln -sf (pwd)/offlineimap/offlineimaprc  ~/.offlineimaprc
 ln -sf (pwd)/offlineimap/offlineimap.py ~/.offlineimap.py
 
 link_command (pwd)/emacs/e.fish e
-link_command (pwd)/emacs/check-new-mails.fish check-new-mails
+link_command (pwd)/emacs/mail-notify.fish mail-notify

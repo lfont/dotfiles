@@ -9,7 +9,8 @@
 (setq mu4e-user-mail-address-list '("loicfontaine@fastmail.fm"
                                     "ljph.fontaine@gmail.com"
                                     "channary.loic@gmail.com"
-                                    "loic.fontaine@valtech.fr"))
+                                    "loic.fontaine@valtech.fr"
+                                    "loic.fontaine.ext@mappy.com"))
 
 ;; custom bookmarks
 (add-to-list 'mu4e-bookmarks
@@ -34,7 +35,9 @@
 
 (add-hook 'mu4e-index-updated-hook
           (defun my/mu4e-index-updated ()
-            (start-process "mail-notify" nil "check-new-mails")))
+            (start-process "mail-notify" nil "mail-notify"
+                           (concat (getenv "HOME") "/Maildir/fastmail/INBOX")
+                           (concat (getenv "HOME") "/Maildir/mappy/INBOX"))))
 
 ;; set this to nil so signature is not included by default
 ;; you can include in message with C-c C-w
@@ -68,6 +71,7 @@
 (define-key mu4e-view-mode-map (kbd "d") 'my/mu4e-move-to-trash)
 
 (require 'smtpmail)
+(setq message-send-mail-function 'smtpmail-send-it)
 
 (defun my/mu4e-account-personal ()
   (interactive)
@@ -93,8 +97,7 @@
         mu4e-compose-signature "Loïc Fontaine\nloicfontaine@fastmail.fm\n")
 
   ;; smtp mail setting
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-smtp-server "mail.messagingengine.com"
+  (setq smtpmail-smtp-server "mail.messagingengine.com"
         smtpmail-stream-type 'ssl
         smtpmail-smtp-service 465))
 
@@ -110,6 +113,28 @@
   (setq user-mail-address "loic.fontaine@valtech.fr"
         mu4e-compose-signature "Loïc Fontaine\nloic.fontaine@valtech.fr\n"))
 
+(defun my/mu4e-account-mappy ()
+  (interactive)
+  (message "Switching to mappy account...")
+
+  (setq mu4e-sent-folder   "/mappy/Sent"
+        mu4e-drafts-folder "/mappy/Drafts"
+        mu4e-trash-folder  "/mappy/Trash")
+
+  (setq mu4e-maildir-shortcuts
+        '(("/mappy/INBOX"               . ?i)
+          ("/mappy/Archives"            . ?a)
+          ("/mappy/Archives.jira"       . ?j)
+          ("/mappy/Archives.confluence" . ?c)
+          ("/mappy/Sent"                . ?s)))
+
+  (setq user-mail-address "loic.fontaine.ext@mappy.com"
+        mu4e-compose-signature "Loïc Fontaine\nloic.fontaine.ext@mappy.com\n")
+
+  (setq smtpmail-smtp-server "exch01.mappy.priv"
+        smtpmail-stream-type 'starttls
+        smtpmail-smtp-service 587))
+
 ;; quickly change account
 (defun my/mu4e-bind-account (key account)
   (define-key mu4e-main-mode-map (kbd key) account)
@@ -117,6 +142,7 @@
 
 (my/mu4e-bind-account "<f1>" 'my/mu4e-account-personal)
 (my/mu4e-bind-account "<f2>" 'my/mu4e-account-valtech)
+(my/mu4e-bind-account "<f3>" 'my/mu4e-account-mappy)
 
 ;; when you reply to a message, use the identity that the mail was sent to
 ;; -- function that checks to, cc and bcc fields
@@ -138,7 +164,9 @@
                                                      "channary.loic@gmail.com"))
                     (my/mu4e-account-personal))
                    ((my/mu4e-is-message-to msg (list "loic.fontaine@valtech.fr"))
-                    (my/mu4e-account-valtech)))))))
+                    (my/mu4e-account-valtech))
+                   ((my/mu4e-is-message-to msg (list "loic.fontaine.ext@mappy.com"))
+                    (my/mu4e-account-mappy)))))))
 
 ;; set default account
 (my/mu4e-account-personal)
