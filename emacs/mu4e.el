@@ -117,16 +117,16 @@
   (interactive)
   (message "Switching to mappy account...")
 
-  (setq mu4e-sent-folder   "/mappy/Sent"
-        mu4e-drafts-folder "/mappy/Drafts"
-        mu4e-trash-folder  "/mappy/Trash")
+  (setq mu4e-sent-folder   "/mappy/Éléments envoyés"
+        mu4e-drafts-folder "/mappy/Brouillons"
+        mu4e-trash-folder  "/mappy/Éléments supprimés")
 
   (setq mu4e-maildir-shortcuts
         '(("/mappy/INBOX"               . ?i)
           ("/mappy/Archives"            . ?a)
           ("/mappy/Archives.jira"       . ?j)
           ("/mappy/Archives.confluence" . ?c)
-          ("/mappy/Sent"                . ?s)))
+          ("/mappy/Éléments envoyés"    . ?s)))
 
   (setq user-mail-address "loic.fontaine.ext@mappy.com"
         mu4e-compose-signature "Loïc Fontaine\nloic.fontaine.ext@mappy.com\n")

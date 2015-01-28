@@ -1,5 +1,5 @@
 [general]
-accounts = fastmail,mappy
+accounts = fastmail, mappy
 pythonfile = ~/.offlineimap.py
 
 [Account fastmail]
@@ -29,6 +29,7 @@ status_backend = sqlite
 [Repository mappy-local]
 type = Maildir
 localfolders = ~/Maildir/mappy
+nametrans = lambda foldername: foldername.decode('utf-8').encode('imap4-utf-7')
 
 [Repository mappy-remote]
 type = IMAP
@@ -37,3 +38,4 @@ remoteuser = lfontaine
 remotepasseval = get_password_emacs("exch01.mappy.priv", "143")
 ssl = yes
 cert_fingerprint = 51def2a26ae4865edfcf9ddee99cf62270c6a656
+nametrans = lambda foldername: foldername.decode('imap4-utf-7').encode('utf-8')
