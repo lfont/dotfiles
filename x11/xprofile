@@ -10,11 +10,14 @@ if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
   eval $(dbus-launch --sh-syntax --exit-with-session)
 fi
 
-## GNOME PolicyKit and Keyring
-eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
-export SSH_AUTH_SOCK
-export GPG_AGENT_INFO
+## GNUPG agent
+eval $(gpg-agent -s --daemon --enable-ssh-support)
+. ~/.gpg-agent-info
 
+GPG_TTY=$(tty)
+export GPG_TTY
+
+## Gnome polkit
 deskopen /var/run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
 
 ## Remaps CapsLock
@@ -28,9 +31,9 @@ xset r rate 250 25 &
 xset b off &
 
 ## Restore screen layout
-if [ -e ./.screenlayout/default.sh ]
+if [ -e ~/.screenlayout/default.sh ]
 then
-    ./.screenlayout/default.sh &
+    ~/.screenlayout/default.sh &
 fi
 
 ## Set root window colour
