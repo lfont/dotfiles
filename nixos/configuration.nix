@@ -54,10 +54,12 @@
      psmisc
      which
      hdparm
+     smartmontools
      unzip
 
      gnupg
      gnupg1orig
+     pinentry
      gnutls
 
      xclip
@@ -103,7 +105,6 @@
      haskellPackages.xmonadContrib
      haskellPackages.xmonadExtras
 
-     gnome.gnome_keyring
      polkit_gnome
      gvfs
      libfm
@@ -149,10 +150,15 @@
 
   # List services that you want to enable:
 
+  services.tlp.enable = true;
   services.upower.enable = true;
   services.upower.package = pkgs.upower-old;
-  services.udev.packages = [
+
+  services.dbus.packages = [
       pkgs.gvfs
+  ];
+
+  services.udev.packages = [
       pkgs.libmtp
   ];
 
