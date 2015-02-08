@@ -1,13 +1,13 @@
 Config {
-    font = "xft:Inconsolata-11:Regular",
+    font = "xft:Inconsolata-12:Regular",
     borderColor = "black",
     border = FullB,
     bgColor = "black",
     fgColor = "grey",
     position = TopW L 100,
     commands = [
-        Run Network "enp0s25" ["-L","0","-H","32","--normal","green","--high","red"] 10,
-        Run Network "wlp3s0" ["-L","0","-H","32","--normal","green","--high","red"] 10,
+        Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10,
+        Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10,
         Run Cpu ["-L","3","-H","50","--normal","green","--high","red"] 10,
         Run Memory ["-t","Mem: <usedratio>%"] 10,
         Run Swap [] 10,
@@ -23,5 +23,5 @@ Config {
     ],
     sepChar = "%",
     alignSep = "}{",
-    template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %enp0s25% - %wlp3s0% | %battery% | <fc=#ee9a00>%date%</fc> |              "
+    template = " %StdinReader% }{ %cpu% | %memory% * %swap% | %eth0% - %wlan0% | %battery% | <fc=#ee9a00>%date%</fc> |                "
 }
