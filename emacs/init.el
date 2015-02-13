@@ -33,6 +33,7 @@
                       less-css-mode
                       rust-mode
                       fsharp-mode
+                      haskell-mode
 
                       molokai-theme
 
@@ -68,8 +69,6 @@
 (setq auto-save-default nil) ; stop creating those #autosave# files
 
 ;; General UI stuff
-;(global-linum-mode t)
-
 (global-hl-line-mode t)
 (column-number-mode t)
 
@@ -262,12 +261,15 @@ point reaches the beginning or end of the buffer, stop there."
      (require 'tern-auto-complete)
      (tern-ac-setup)))
 
+;(require 'linum)
+;(setq linum-format " %4d |")
+;(global-linum-mode)
+
 (require 'git-gutter)
-(global-git-gutter-mode t)
-(when (display-graphic-p) (git-gutter:linum-setup))
-(unless (display-graphic-p)
-  (custom-set-variables '(git-gutter:separator-sign "|"))
-  (set-face-foreground 'git-gutter:separator "grey"))
+(global-git-gutter-mode)
+(custom-set-variables '(git-gutter:separator-sign "|"))
+(set-face-foreground 'git-gutter:separator "grey")
+;(git-gutter:linum-setup)
 
 (require 'fill-column-indicator)
 (setq fci-rule-width 3)
