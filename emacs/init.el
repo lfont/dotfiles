@@ -80,7 +80,7 @@
 (unless (display-graphic-p) (menu-bar-mode -1))
 
 (load-theme 'molokai t)
-(set-frame-font "Inconsolata 11")
+(set-frame-font "Inconsolata 13")
 
 ;; Scroll line by line
 (setq scroll-step           1
