@@ -18,7 +18,7 @@ GPG_TTY=$(tty)
 export GPG_TTY
 
 ## Gnome polkit
-deskopen /var/run/current-system/sw/etc/xdg/autostart/polkit-gnome-authentication-agent-1.desktop
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
@@ -29,6 +29,14 @@ xset r rate 250 25 &
 
 ## Turn on/off system beep
 xset b off &
+
+## Synaptics touchpad
+synclient ClickFinger2=3
+synclient ClickFinger3=2
+synclient RightButtonAreaLeft=0
+synclient RightButtonAreaTop=0
+synclient VertScrollDelta=-111
+synclient HorizScrollDelta=-111
 
 ## Restore screen layout
 if [ -e ~/.screenlayout/default.sh ]
@@ -62,6 +70,9 @@ clipit &
 
 ## Run network-manager applet
 nm-applet &
+
+## Run blueman applet
+blueman-applet &
 
 ## Run bittorrent sync
 btsync --config .config/btsync/sync.conf &
