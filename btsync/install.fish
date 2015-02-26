@@ -18,4 +18,5 @@ else
 end
 
 mkdir -p ~/.sync
-
+mkdir -p ~/.config/btsync
+ln -s (pwd)/btsync/sync.conf ~/.config/btsync/
