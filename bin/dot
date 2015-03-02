@@ -14,20 +14,26 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 cd $DIR/..
 . ./script/env.sh
 
-if [[ $1 = "-i" ]]
-then
-  if [ $2 ]
-  then
-    fish ./$2/install.fish
+if [[ $1 = "-i" ]]; then
+  if [ $2 ]; then
+      if [ -e ./$2/install.fish ]; then
+          fish ./$2/install.fish
+      else
+          bash ./$2/install.sh
+      fi
   else
     # find the installers and run them iteratively
-    find . -name install.fish | while read installer ; do fish "${installer}" ; done
+    find . -name install.fish -print0 | xargs -0 fish
+    find . -name install.sh -print0 | xargs -0 bash
   fi
-elif [ $1 ]
-then
-  fish ./$1/update.fish
+elif [ $1 ]; then
+    if [ -e ./$1/update.fish ]; then
+        fish ./$1/update.fish
+    else
+        bash ./$2/install.sh
+    fi
 else
   # find the updaters and run them iteratively
-  find . -name update.fish | while read updater ; do fish "${updater}" ; done
+  find . -name update.fish -print0 | xargs -0 fish
+  find . -name install.sh -print0 | xargs -0 bash
 fi
-

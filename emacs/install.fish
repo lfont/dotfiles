@@ -13,5 +13,8 @@ emacs --batch -f batch-byte-compile ~/.emacs.d/lisp/notify.el
 ln -sf (pwd)/offlineimap/offlineimaprc  ~/.offlineimaprc
 ln -sf (pwd)/offlineimap/offlineimap.py ~/.offlineimap.py
 
-link_command (pwd)/emacs/e.fish e
+link_command (pwd)/emacs/e.sh e
+link_command (pwd)/emacs/ew.sh ew
 link_command (pwd)/emacs/mail-notify.fish mail-notify
+
+sudo cp (pwd)/emacs/e.sh /root/bin/e

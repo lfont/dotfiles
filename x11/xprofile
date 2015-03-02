@@ -1,9 +1,8 @@
 ## Desktop vars
 export DE="lxde"
 export DESKTOP_SESSION="LXDE"
-export BROWSER="firefox"
-export EDITOR="emacs"
 export XDG_MENU_PREFIX="lxde-"
+export BROWSER="firefox"
 
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then

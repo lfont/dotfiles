@@ -20,6 +20,10 @@ fi
 mkdir -p ~/.config/fish
 ln -sf $(pwd)/fish/config.fish ~/.config/fish/
 
+# link some usefull functions
+mkdir -p ~/.config/fish/functions/
+ln -sf $(pwd)/functions/root.fish ~/.config/fish/functions/
+
 # set fish as the default shell
 if [ $SHELL != $(which fish) ]
 then
@@ -30,4 +34,3 @@ fi
 fish ./fish/install-autojump.fish
 
 exit 0
-

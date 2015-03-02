@@ -7,10 +7,10 @@ cd "$(dirname $0)"/..
 
 # create the user's bin directory
 mkdir -p ~/bin
+sudo mkdir -p /root/bin
 
 # link dot
 ln -sf $(pwd)/bin/dot ~/bin/
 
 # find the installers and run them iteratively
 find . -name install.sh | while read installer ; do bash "${installer}" ; done
-
