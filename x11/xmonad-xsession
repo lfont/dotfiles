@@ -1,7 +1,0 @@
-#!/bin/sh
-
-stalonetray &
-firefox &
-urxvt &
-exec xmonad
-

@@ -2,17 +2,18 @@
 . ./functions/install_repository.fish
 
 # udev rules
-sudo ln -sf (pwd)/udev/51-android.rules        /etc/udev/rules.d/
-sudo ln -sf (pwd)/udev/100-android-mount.rules /etc/udev/rules.d/
+sudo ln -sf (pwd)/udev/51-android.rules /etc/udev/rules.d/
 
 # X
-ln -sf (pwd)/x11/xinitrc         ~/.xinitrc
-ln -sf (pwd)/x11/xprofile        ~/.xprofile
-ln -sf (pwd)/x11/Xresources      ~/.Xresources
-ln -sf (pwd)/x11/xmonad-xsession ~/.xsession
-sudo ln -sf (pwd)/x11/custom.desktop /usr/share/xsessions/
+ln -sf (pwd)/x11/Xresources ~/.Xresources
+ln -sf (pwd)/x11/xinitrc    ~/.xinitrc
+ln -sf (pwd)/x11/xsession   ~/.xsession
 
-# qtile
+if ! test -e /usr/share/xsessions/xsession.desktop
+    sudo cp (pwd)/x11/xsession.desktop /usr/share/xsessions/
+end
+
+# xmonad
 mkdir -p ~/.xmonad
 ln -sf (pwd)/xmonad/xmonad.hs ~/.xmonad/
 
@@ -27,4 +28,3 @@ ln -sf (pwd)/xmobar/xmobarrc ~/.xmobarrc
 ln -sf (pwd)/stalonetray/stalonetrayrc ~/.stalonetrayrc
 
 exit 0
-

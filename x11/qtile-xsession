@@ -1,4 +1,0 @@
-#!/bin/sh
-
-exec qtile -c ~/.config/qtile/config.py
-

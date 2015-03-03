@@ -1,9 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-if [ -e ./.xprofile ]
-then
-    . ./.xprofile
-fi
-
-exec ./.xsession
-
+exec fish -l ~/dotfiles/x11/xinitrc.fish

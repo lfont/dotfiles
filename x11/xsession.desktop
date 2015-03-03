@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Custom
-Comment=Custom Session
+Name=xsession
+Comment=Launch user's xsession
 Exec=/etc/X11/Xsession
 Type=Application

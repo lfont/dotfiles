@@ -1,20 +1,26 @@
 ## Desktop vars
-export DE="lxde"
-export DESKTOP_SESSION="LXDE"
-export XDG_MENU_PREFIX="lxde-"
-export BROWSER="firefox"
+set -gx DE "lxde"
+set -gx DESKTOP_SESSION "LXDE"
+set -gx XDG_MENU_PREFIX "lxde-"
+set -gx BROWSER "firefox"
+
+function export-sh-vars
+    for i in $argv
+        set -gx  (echo $i | sed 's/=.*//') (echo $i | sed 's/\w*=//')
+    end
+end
 
 ## Launches a session dbus instance
-if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && type dbus-launch >/dev/null; then
-  eval $(dbus-launch --sh-syntax --exit-with-session)
-fi
+if not set -q DBUS_SESSION_BUS_ADDRESS
+    export-sh-vars (dbus-launch --exit-with-session)
+end
 
 ## GNUPG agent
-eval $(gpg-agent -s --daemon --enable-ssh-support)
-. ~/.gpg-agent-info
-
-GPG_TTY=$(tty)
-export GPG_TTY
+if not set -q GPG_AGENT_INFO
+    eval (gpg-agent --sh --daemon --enable-ssh-support)
+    export-sh-vars (cat ~/.gpg-agent-info)
+    set -gx GPG_TTY (tty)
+end
 
 ## Gnome polkit
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
@@ -38,10 +44,9 @@ synclient VertScrollDelta=-111
 synclient HorizScrollDelta=-111
 
 ## Restore screen layout
-if [ -e ~/.screenlayout/default.sh ]
-then
+if test -e ~/.screenlayout/default.sh
     ~/.screenlayout/default.sh &
-fi
+end
 
 ## Set root window colour
 hsetroot -solid "#2E3436" &
