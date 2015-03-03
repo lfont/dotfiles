@@ -16,11 +16,9 @@ if not set -q DBUS_SESSION_BUS_ADDRESS
 end
 
 ## GNUPG agent
-if not set -q GPG_AGENT_INFO
-    eval (gpg-agent --sh --daemon --enable-ssh-support)
-    export-sh-vars (cat ~/.gpg-agent-info)
-    set -gx GPG_TTY (tty)
-end
+eval (gpg-agent --sh --daemon --enable-ssh-support)
+export-sh-vars (cat ~/.gpg-agent-info)
+set -gx GPG_TTY (tty)
 
 ## Gnome polkit
 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
