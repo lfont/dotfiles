@@ -1,5 +1,5 @@
 Config {
-    font = "xft:Inconsolata-12:Regular",
+    font = "xft:Terminus-12:Regular",
     borderColor = "black",
     border = FullB,
     bgColor = "black",
