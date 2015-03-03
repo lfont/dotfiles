@@ -39,7 +39,7 @@ myManageHook = composeAll . concat $
         [ className =? b --> viewShift "1:web"   | b  <- myClassWebShifts   ],
         -- Applications that go to chat
         [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts   ],
-	-- Applications that go to media
+        -- Applications that go to media
         [ className =? d --> viewShift "4:media" | d  <- myClassMediaShifts ],
         -- Applications to ignore
         [ resource  =? i --> doIgnore            | i  <- myResourceIgnores  ]
@@ -92,6 +92,8 @@ myTerminal = "urxvt"
 -- Startup
 myStartupHook = do
     setWMName "LG3D"
+    spawn "xfce4-power-manager"
+    spawn "nm-applet"
 
 -- Workspace bar
 myLogHook h = dynamicLogWithPP $ myPrettyPrinter h

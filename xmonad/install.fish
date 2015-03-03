@@ -9,7 +9,7 @@ ln -sf (pwd)/x11/Xresources ~/.Xresources
 ln -sf (pwd)/x11/xinitrc    ~/.xinitrc
 ln -sf (pwd)/x11/xsession   ~/.xsession
 
-if ! test -e /usr/share/xsessions/xsession.desktop
+if not test -e /usr/share/xsessions/xsession.desktop
     sudo cp (pwd)/x11/xsession.desktop /usr/share/xsessions/
 end
 

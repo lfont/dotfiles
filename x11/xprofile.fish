@@ -40,6 +40,12 @@ synclient RightButtonAreaLeft=0
 synclient RightButtonAreaTop=0
 synclient VertScrollDelta=-111
 synclient HorizScrollDelta=-111
+synclient VertHysteresis=40
+synclient HorizHysteresis=40
+synclient TapButton1=0
+synclient TapButton2=0
+synclient TapButton3=0
+synclient PalmDetect=1
 
 ## Restore screen layout
 if test -e ~/.screenlayout/default.sh
@@ -51,9 +57,6 @@ hsetroot -solid "#2E3436" &
 
 ## Restore wallpaper
 nitrogen --restore &
-
-## Enable power management
-xfce4-power-manager &
 
 ## Set urxvt settings
 xrdb -merge ~/.Xresources &
@@ -69,9 +72,6 @@ pasystray &
 
 ## Start Clipboard manager
 clipit &
-
-## Run network-manager applet
-nm-applet &
 
 ## Run blueman applet
 blueman-applet &
