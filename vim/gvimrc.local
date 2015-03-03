@@ -1,9 +1,0 @@
-" font
-set guifont=Inconsolata\ Medium\ 11
-
-" default directory
-"cd /home/loic/Projects/
-
-" NERDTree config
-"autocmd vimenter * NERDTree
-

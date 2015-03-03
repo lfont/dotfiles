@@ -1,3 +1,0 @@
-" spf13 config
-let g:spf13_bundle_groups = ['general', 'programming', 'php', 'twig', 'javascript', 'html', 'misc']
-
