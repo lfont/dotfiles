@@ -30,19 +30,21 @@ xset r rate 250 25
 ## Turn on/off system beep
 xset b off
 
-## Synaptics touchpad
-synclient ClickFinger2=3
-synclient ClickFinger3=2
-synclient RightButtonAreaLeft=0
-synclient RightButtonAreaTop=0
-synclient VertScrollDelta=-111
-synclient HorizScrollDelta=-111
-synclient VertHysteresis=40
-synclient HorizHysteresis=40
-synclient TapButton1=0
-synclient TapButton2=0
-synclient TapButton3=0
-synclient PalmDetect=1
+## Detect and configure touchpad. See 'man synclient' for more info.
+if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices
+    synclient ClickFinger2=3
+    synclient ClickFinger3=2
+    synclient RightButtonAreaLeft=0
+    synclient RightButtonAreaTop=0
+    synclient VertScrollDelta=-111
+    synclient HorizScrollDelta=-111
+    synclient VertHysteresis=40
+    synclient HorizHysteresis=40
+    synclient TapButton1=0
+    synclient TapButton2=0
+    synclient TapButton3=0
+    synclient PalmDetect=1
+end
 
 ## Restore screen layout
 if test -e ~/.screenlayout/default.sh
@@ -62,7 +64,7 @@ xscreensaver -no-splash &
 xrdb -merge ~/.Xresources &
 
 ## Start PCManFM Daemon
-pcmanfm --daemon-mode &
+pcmanfm --daemon-mode
 
 ## Run bittorrent sync
 btsync --config .config/btsync/sync.conf &
