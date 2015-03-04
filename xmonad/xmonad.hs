@@ -92,8 +92,7 @@ myTerminal = "urxvt"
 -- Startup
 myStartupHook = do
     setWMName "LG3D"
-    spawn "xfce4-power-manager"
-    spawn "nm-applet"
+    spawn "x11-autostart"
 
 -- Workspace bar
 myLogHook h = dynamicLogWithPP $ myPrettyPrinter h

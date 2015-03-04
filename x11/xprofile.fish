@@ -20,18 +20,15 @@ eval (gpg-agent --sh --daemon --enable-ssh-support)
 export-sh-vars (cat ~/.gpg-agent-info)
 set -gx GPG_TTY (tty)
 
-## Gnome polkit
-/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
-
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
 
 ## Set keyboard settings - 250 ms delay and 25 cps (characters per second) repeat rate.
 ## Adjust the values according to your preferances.
-xset r rate 250 25 &
+xset r rate 250 25
 
 ## Turn on/off system beep
-xset b off &
+xset b off
 
 ## Synaptics touchpad
 synclient ClickFinger2=3
@@ -58,23 +55,14 @@ hsetroot -solid "#2E3436" &
 ## Restore wallpaper
 nitrogen --restore &
 
+## Start xscreensaver
+xscreensaver -no-splash &
+
 ## Set urxvt settings
 xrdb -merge ~/.Xresources &
 
 ## Start PCManFM Daemon
 pcmanfm --daemon-mode &
-
-## Start xscreensaver
-xscreensaver -no-splash &
-
-## Pulse Audio volume control
-pasystray &
-
-## Start Clipboard manager
-clipit &
-
-## Run blueman applet
-blueman-applet &
 
 ## Run bittorrent sync
 btsync --config .config/btsync/sync.conf &

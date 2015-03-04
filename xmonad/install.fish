@@ -8,6 +8,7 @@ sudo ln -sf (pwd)/udev/51-android.rules /etc/udev/rules.d/
 ln -sf (pwd)/x11/Xresources ~/.Xresources
 ln -sf (pwd)/x11/xinitrc    ~/.xinitrc
 ln -sf (pwd)/x11/xsession   ~/.xsession
+ln -sf (pwd)/x11/x11-autostart.fish ~/bin/x11-autostart
 
 if not test -e /usr/share/xsessions/xsession.desktop
     sudo cp (pwd)/x11/xsession.desktop /usr/share/xsessions/
