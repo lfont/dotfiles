@@ -37,5 +37,5 @@ remotehost = exch01.mappy.priv
 remoteuser = lfontaine
 remotepasseval = get_password_emacs("exch01.mappy.priv", "143")
 ssl = yes
-cert_fingerprint = 51def2a26ae4865edfcf9ddee99cf62270c6a656
+cert_fingerprint = 14ab1ec9503b5205921cefc3406ef4c45c0169bf
 nametrans = lambda foldername: foldername.decode('imap4-utf-7').encode('utf-8')
