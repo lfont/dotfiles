@@ -1,0 +1,24 @@
+export VISUAL="ew"
+export EDITOR="e"
+
+export PATH="$HOME/perl5/bin:$PATH"
+export MANPATH="$HOME/perl5/man/man:/usr/local/man:$MANPATH"
+export PERL_MB_OPT="--install_base \"/home/loic/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=/home/loic/perl5"
+export PERL5LIB=/home/loic/perl5/lib/perl5
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
