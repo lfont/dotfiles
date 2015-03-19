@@ -64,7 +64,7 @@ xscreensaver -no-splash &
 xrdb -merge ~/.Xresources &
 
 ## Start PCManFM Daemon
-pcmanfm --daemon-mode
+pcmanfm --daemon-mode &
 
 ## Run bittorrent sync
 btsync --config .config/btsync/sync.conf &
