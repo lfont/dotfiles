@@ -11,4 +11,9 @@ cpan -T \
     Clipboard \
     Data::Password \
     Sub::Install \
-    Term::ReadLine::Gnu
+    Term::ReadLine::Gnu \
+    Sort::Naturally \
+    Crypt::Rijndael
+
+PATCH=$(pwd)/kpcli/Xclip.patch
+cd ~/perl5/lib/perl5/Clipboard && { patch < $PATCH; cd -; }

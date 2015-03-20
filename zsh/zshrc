@@ -59,7 +59,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias kpcli="$HOME/bin/kpcli-2.8.pl --kdb $HOME/opt/KeePassX/default.kdbx"
+alias kpcli="$HOME/bin/kpcli-2.8.pl --kdb $HOME/AppData/KeePassX/default.kdbx"
 
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up

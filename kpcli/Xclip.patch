@@ -1,0 +1,11 @@
+--- Xclip.pm	2015-03-20 11:19:06.224840917 +0100
++++ Xclip.pm	2015-03-20 11:20:41.824843365 +0100
+@@ -32,7 +32,7 @@
+ }
+ # This ordering isn't officially verified, but so far seems to work the best:
+ sub all_selections { qw(primary buffer clipboard secondary) }
+-sub favorite_selection { my $self = shift; ($self->all_selections)[0] }
++sub favorite_selection { my $self = shift; ($self->all_selections)[2] }
+ {
+   open my $just_checking, 'xclip -o|' or warn <<'EPIGRAPH';
+ 
