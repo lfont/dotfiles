@@ -1,8 +1,8 @@
 # Icons stick to right side of tray
 icon_gravity E
 # Five icons wide, one high, 0 pixels from right, 0 from top
-geometry 6x1-0+0
-max_geometry 6x1-0+0
+geometry 4x1-0+0
+max_geometry 4x1-0+0
 # Black background
 background "#000000"
 # Doesn't appear in a task bar (not a problem for us?)

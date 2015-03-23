@@ -1,0 +1,25 @@
+update_interval 3
+total_run_times 0
+default_color grey
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 2
+use_spacer none
+out_to_x no
+out_to_console yes
+
+
+TEXT
+C: ${cpu cpu0}%\
+ | M: $memperc%\
+ | S: $swapperc%\
+ | D: $diskio\
+${if_up eth0}\
+ | eth0: <fc=red>+</fc>${upspeed eth0} <fc=green>-</fc>${downspeed eth0}\
+$endif\
+${if_up wlan0}\
+ | wlan0: <fc=red>+</fc>${upspeed wlan0} <fc=green>-</fc>${downspeed wlan0}\
+$endif\
+ | Batt: $battery_short\
+ | Vol: $mixer
