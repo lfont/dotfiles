@@ -13,13 +13,25 @@ out_to_console yes
 TEXT
 C: ${cpu cpu0}%\
  | M: $memperc%\
- | S: $swapperc%\
+ * S: $swapperc%\
  | D: $diskio\
 ${if_up eth0}\
  | eth0: <fc=red>+</fc>${upspeed eth0} <fc=green>-</fc>${downspeed eth0}\
 $endif\
 ${if_up wlan0}\
- | wlan0: <fc=red>+</fc>${upspeed wlan0} <fc=green>-</fc>${downspeed wlan0}\
+ ${if_up eth0}*$else|$endif wlan0: <fc=red>+</fc>${upspeed wlan0} <fc=green>-</fc>${downspeed wlan0}\
 $endif\
- | Batt: $battery_short\
- | Vol: $mixer
+${if_up em0}\
+ | em0: <fc=red>+</fc>${upspeed em0} <fc=green>-</fc>${downspeed em0}\
+$endif\
+${if_up iwn0}\
+ ${if_up em0}*$else|$endif iwn0: <fc=red>+</fc>${upspeed iwn0} <fc=green>-</fc>${downspeed iwn0}\
+$endif\
+${if_match ${battery_percent}!=0}\
+ | B: $battery_short\
+$endif\
+${if_running pulseaudio}\
+ | V: ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}'}\
+$else\
+ | V: $mixer\
+$endif
