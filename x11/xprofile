@@ -1,24 +1,18 @@
 ## Desktop vars
-set -gx DE "lxde"
-set -gx DESKTOP_SESSION "LXDE"
-set -gx XDG_MENU_PREFIX "lxde-"
-set -gx BROWSER "firefox"
-
-function export-sh-vars
-    for i in $argv
-        set -gx  (echo $i | sed 's/=.*//') (echo $i | sed 's/\w*=//')
-    end
-end
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export XDG_MENU_PREFIX="lxde-"
+export BROWSER="firefox"
 
 ## Launches a session dbus instance
-if not set -q DBUS_SESSION_BUS_ADDRESS
-    export-sh-vars (dbus-launch --exit-with-session)
-end
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+   eval $(dbus-launch --sh-syntax --exit-with-session)
+fi
 
 ## GNUPG agent
-eval (gpg-agent --sh --daemon --enable-ssh-support)
-export-sh-vars (cat ~/.gpg-agent-info)
-set -gx GPG_TTY (tty)
+eval $(gpg-agent --sh --daemon --enable-ssh-support)
+. ~/.gpg-agent-info
+export GPG_TTY="$(tty)"
 
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
@@ -31,7 +25,7 @@ xset r rate 250 25
 xset b off
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
-if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices
+if [ egrep -iq 'touchpad|trackpad' /proc/bus/input/devices ]; then
     synclient ClickFinger2=3
     synclient ClickFinger3=2
     synclient RightButtonAreaLeft=0
@@ -44,12 +38,12 @@ if egrep -iq 'touchpad|trackpad' /proc/bus/input/devices
     synclient TapButton2=0
     synclient TapButton3=0
     synclient PalmDetect=1
-end
+fi
 
 ## Restore screen layout
-if test -e ~/.screenlayout/default.sh
+if [ -e ~/.screenlayout/default.sh ]; then
     ~/.screenlayout/default.sh &
-end
+fi
 
 ## Set root window colour
 hsetroot -solid "#2E3436" &

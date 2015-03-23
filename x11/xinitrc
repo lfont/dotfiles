@@ -1,3 +1,8 @@
-#!/bin/sh
+. ~/dotfiles/x11/xprofile
 
-exec fish -l ~/dotfiles/x11/xinitrc.fish
+conky-xmobar &
+stalonetray &
+firefox &
+urxvt &
+
+exec ck-launch-session xmonad

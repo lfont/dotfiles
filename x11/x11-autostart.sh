@@ -1,13 +1,13 @@
-#!/usr/bin/env fish
+#!/usr/bin/env bash
 
-function start
-    set -l prog $argv[1]
-    if not test (pidof $prog)
-        if test (which $prog)
+function start {
+    prog="$1"
+    if [ -z $(pidof "$prog") ]; then
+        if [ ! -z $(which "$prog") ]; then
             eval "$prog &"
-        end
-    end
-end
+        fi
+    fi
+}
 
 ## Gnome polkit
 start /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
