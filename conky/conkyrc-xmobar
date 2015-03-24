@@ -1,6 +1,5 @@
-update_interval 3
+update_interval 2
 total_run_times 0
-default_color grey
 no_buffers yes
 uppercase no
 cpu_avg_samples 2
@@ -11,27 +10,77 @@ out_to_console yes
 
 
 TEXT
-C: ${cpu cpu0}%\
- | M: $memperc%\
- * S: $swapperc%\
+${if_match ${cpu cpu0} == 0}\
+C: 0%\
+$else${if_match ${cpu cpu0} < 50}\
+C: <fc=green>${cpu cpu0}</fc>%\
+$else${if_match ${cpu cpu0} < 90}\
+C: <fc=orange>${cpu cpu0}</fc>%\
+$else\
+C: <fc=red>${cpu cpu0}</fc>%\
+$endif$endif$endif\
+\
+${if_match $memperc == 0}\
+ | M: 0%\
+$else${if_match $memperc < 50}\
+ | M: <fc=green>$memperc</fc>%\
+$else${if_match $memperc < 90}\
+ | M: <fc=orange>$memperc</fc>%\
+$else\
+ | M: <fc=red>$memperc</fc>%\
+$endif$endif$endif\
+\
+${if_match $swapperc == 0}\
+ * S: 0%\
+$else${if_match $swapperc < 50}\
+ * S: <fc=green>$swapperc</fc>%\
+$else${if_match $swapperc < 90}\
+ * S: <fc=orange>$swapperc</fc>%\
+$else\
+ * S: <fc=red>$swapperc</fc>%\
+$endif$endif$endif\
+\
  | D: $diskio\
+\
 ${if_up eth0}\
- | eth0: <fc=red>+</fc>${upspeed eth0} <fc=green>-</fc>${downspeed eth0}\
+ | eth0: <fc=red>^</fc>${upspeed eth0} <fc=green>v</fc>${downspeed eth0}\
 $endif\
 ${if_up wlan0}\
- ${if_up eth0}*$else|$endif wlan0: <fc=red>+</fc>${upspeed wlan0} <fc=green>-</fc>${downspeed wlan0}\
+ ${if_up eth0}*$else|$endif wlan0: <fc=red>^</fc>${upspeed wlan0} <fc=green>v</fc>${downspeed wlan0}\
 $endif\
 ${if_up em0}\
- | em0: <fc=red>+</fc>${upspeed em0} <fc=green>-</fc>${downspeed em0}\
+ | em0: <fc=red>^</fc>${upspeed em0} <fc=green>v</fc>${downspeed em0}\
 $endif\
 ${if_up iwn0}\
- ${if_up em0}*$else|$endif iwn0: <fc=red>+</fc>${upspeed iwn0} <fc=green>-</fc>${downspeed iwn0}\
+ ${if_up em0}*$else|$endif iwn0: <fc=red>^</fc>${upspeed iwn0} <fc=green>v</fc>${downspeed iwn0}\
 $endif\
-${if_match ${battery_percent}!=0}\
+\
+${if_match ${battery_percent} != 0}\
  | B: $battery_short\
 $endif\
+\
 ${if_running pulseaudio}\
- | V: ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}'}\
+\
+${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} == 0}\
+ | V: 0%\
+$else${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} < 50}\
+ | V: <fc=green>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
+$else${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} < 90}\
+ | V: <fc=orange>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
 $else\
- | V: $mixer\
+ | V: <fc=red>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
+$endif$endif$endif\
+\
+$else\
+\
+${if_match $mixer == 0}\
+ | V: 0%\
+$else${if_match $mixer < 50}\
+ | V: <fc=green>$mixer</fc>%\
+$else${if_match $mixer < 90}\
+ | V: <fc=orange>$mixer</fc>%\
+$else\
+ | V: <fc=red>$mixer</fc>%\
+$endif$endif$endif\
+\
 $endif
