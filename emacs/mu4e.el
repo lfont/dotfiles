@@ -52,7 +52,7 @@
 (setq message-kill-buffer-on-exit t)
 
 ;; display rich-text messages
-(require 'mu4e-contrib)
+;;(require 'mu4e-contrib)
 ;;(setq mu4e-html2text-command 'mu4e-shr2text)
 (setq mu4e-html2text-command "html2text -utf8 -width 72")
 

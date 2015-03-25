@@ -4,7 +4,6 @@
 
 ;;; Code:
 (add-to-list 'load-path "~/.emacs.d/lisp/")
-(add-to-list 'load-path "~/.nix-profile/share/emacs/site-lisp/mu4e/")
 
 ;; Packages settings
 (require 'package)
