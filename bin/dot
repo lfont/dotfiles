@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-#
 
 # Humm, this is equivalent to cd (dirname (status -f)) in fish.
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+# resolve $SOURCE until the file is no longer a symlink
+while [ -h "$SOURCE" ]; do
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
   SOURCE="$(readlink "$SOURCE")"
-  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
@@ -30,10 +31,10 @@ elif [ $1 ]; then
     if [ -e ./$1/update.fish ]; then
         fish ./$1/update.fish
     else
-        bash ./$2/install.sh
+        bash ./$1/update.sh
     fi
 else
   # find the updaters and run them iteratively
   find . -name update.fish -print0 | xargs -0 fish
-  find . -name install.sh -print0 | xargs -0 bash
+  find . -name update.sh -print0 | xargs -0 bash
 fi

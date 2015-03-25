@@ -25,4 +25,7 @@ ln -sf $(pwd)/xmobar/xmobarrc ~/.xmobarrc
 # stalonetray
 ln -sf $(pwd)/stalonetray/stalonetrayrc ~/.stalonetrayrc
 
+# gtk configuration
+ln -sf $(pwd)/xmonad/gtkrc-2.0 ~/.gtkrc-2.0
+
 exit 0
