@@ -40,7 +40,11 @@ $else\
  * S: <fc=red>$swapperc</fc>%\
 $endif$endif$endif\
 \
+${if_match "$sysname" == "OpenBSD"}\
+ | D: ${exec iostat -d sd1 | tail -n 1 | awk '{print $3}'}MB\
+$else\
  | D: $diskio\
+$endif\
 \
 ${if_up eth0}\
  | eth0: <fc=red>^</fc>${upspeed eth0} <fc=green>v</fc>${downspeed eth0}\
@@ -51,13 +55,25 @@ $endif\
 ${if_up em0}\
  | em0: <fc=red>^</fc>${upspeed em0} <fc=green>v</fc>${downspeed em0}\
 $endif\
-${if_up iwn0}\
- ${if_up em0}*$else|$endif iwn0: <fc=red>^</fc>${upspeed iwn0} <fc=green>v</fc>${downspeed iwn0}\
+${if_up iwm0}\
+ ${if_up em0}*$else|$endif iwm0: <fc=red>^</fc>${upspeed iwm0} <fc=green>v</fc>${downspeed iwm0}\
 $endif\
 \
-${if_match ${battery_percent} != 0}\
+${if_match "$sysname" == "OpenBSD"}\
+ | B: ${if_match ${exec apm -a} == 1}<fc=green>^</fc>$else<fc=red>v</fc>$endif\
+${if_match ${exec apm -l} > 70}\
+ <fc=green>${exec apm -l}</fc>%\
+$else${if_match ${exec apm -l} > 30}\
+ <fc=orange>${exec apm -l}</fc>%\
+$else\
+ <fc=red>${exec apm -l}</fc>%\
+$endif$endif\
+\
+$else\
+\
+${if_match $battery_percent != 0}\
  | B: $battery_short\
-$endif\
+$endif$endif\
 \
 ${if_running pulseaudio}\
 \
