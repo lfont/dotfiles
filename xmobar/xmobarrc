@@ -10,5 +10,5 @@ Config { font = "xft:Terminus-12:Regular"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " %StdinReader% }{ %conky% | <fc=#ee9a00>%date%</fc> |           "
+       , template = " %StdinReader% }{ %conky% | <fc=pink>%date%</fc> |           "
        }

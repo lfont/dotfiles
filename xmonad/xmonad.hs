@@ -100,7 +100,7 @@ myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 myPrettyPrinter h = xmobarPP
     {
         ppOutput = hPutStrLn h,
-        ppTitle = xmobarColor "green" "" . shorten 80
+        ppTitle = xmobarColor "cyan" "" . shorten 55
     }
 
 -- Run XMonad

@@ -16,7 +16,7 @@ $else${if_match ${cpu cpu0} < 50}\
 C: <fc=green>${cpu cpu0}</fc>%\
 $else${if_match ${cpu cpu0} < 90}\
 C: <fc=orange>${cpu cpu0}</fc>%\
-$else\
+${else}\
 C: <fc=red>${cpu cpu0}</fc>%\
 $endif$endif$endif\
 \
