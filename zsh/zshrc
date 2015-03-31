@@ -68,3 +68,5 @@ alias mount_bibimbap="mount_LaCie; mount_IcyBox; mount_Seagate"
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
+
+gpg-connect-agent --quiet /bye >/dev/null
