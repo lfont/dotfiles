@@ -1,8 +1,14 @@
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export XDG_MENU_PREFIX="lxde-"
+
 export VISUAL="ew"
 export EDITOR="e"
+export BROWSER="firefox"
 
 export PATH="$HOME/perl5/bin:$PATH"
 export MANPATH="$HOME/perl5/man/man:/usr/local/man:$MANPATH"
+
 export PERL_MB_OPT="--install_base \"/home/loic/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=/home/loic/perl5"
 export PERL5LIB=/home/loic/perl5/lib/perl5
@@ -22,3 +28,14 @@ export LANG=en_US.UTF-8
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+# gnupg
+export GPG_TTY=$(tty)
+
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+   export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+fi
+
+# OpenBSD's packages
+export PKG_PATH=ftp://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`machine -a`/

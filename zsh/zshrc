@@ -60,6 +60,10 @@ source $ZSH/oh-my-zsh.sh
 alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
 alias kpcli="$HOME/bin/kpcli-2.8.pl --kdb $HOME/AppData/KeePassX/default.kdbx"
+alias mount_LaCie="sudo shlight //bibimbap/LaCie ~/share/LaCie -n -u loic -g loic"
+alias mount_IcyBox="sudo shlight //bibimbap/IcyBox ~/share/IcyBox -n -u loic -g loic"
+alias mount_Seagate="sudo shlight //bibimbap/Seagate ~/share/Seagate -n -u loic -g loic"
+alias mount_bibimbap="mount_LaCie; mount_IcyBox; mount_Seagate"
 
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up

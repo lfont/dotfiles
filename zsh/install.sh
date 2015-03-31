@@ -1,5 +1,6 @@
 ln -sf $(pwd)/zsh/zshenv ~/.zshenv
 ln -sf $(pwd)/zsh/zshrc  ~/.zshrc
+ln -s  ~/.profile        ~/.zprofile
 
 if [ ! -d ~/.oh-my-zsh ]; then
     curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh

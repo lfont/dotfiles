@@ -1,9 +1,3 @@
-## Desktop vars
-export DE="lxde"
-export DESKTOP_SESSION="LXDE"
-export XDG_MENU_PREFIX="lxde-"
-export BROWSER="firefox"
-
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
    eval $(dbus-launch --sh-syntax --exit-with-session)
@@ -11,8 +5,6 @@ fi
 
 ## GNUPG agent
 eval $(gpg-agent --sh --daemon --enable-ssh-support)
-. ~/.gpg-agent-info
-export GPG_TTY="$(tty)"
 
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:nocaps
@@ -25,19 +17,24 @@ xset r rate 250 25
 xset b off
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
-if [ egrep -iq 'touchpad|trackpad' /proc/bus/input/devices ]; then
-    synclient ClickFinger2=3
-    synclient ClickFinger3=2
+if [ -e /usr/X11R6/bin/synclient ]; then
+    synclient ClickFinger1=0
+    synclient ClickFinger2=0
+    synclient ClickFinger3=0
     synclient RightButtonAreaLeft=0
     synclient RightButtonAreaTop=0
     synclient VertScrollDelta=-111
     synclient HorizScrollDelta=-111
-    synclient VertHysteresis=40
-    synclient HorizHysteresis=40
-    synclient TapButton1=0
-    synclient TapButton2=0
-    synclient TapButton3=0
+    #synclient VertHysteresis=40
+    #synclient HorizHysteresis=40
+    synclient TapButton1=1
+    synclient TapButton2=3
+    synclient TapButton3=2
     synclient PalmDetect=1
+    synclient VertTwoFingerScroll=1
+    synclient HorizTwoFingerScroll=1
+
+    syndaemon -t -k -i 2 -d &
 fi
 
 ## Restore screen layout
@@ -46,7 +43,7 @@ if [ -e ~/.screenlayout/default.sh ]; then
 fi
 
 ## Set root window colour
-hsetroot -solid "#2E3436" &
+xsetroot -solid "#2E3436" &
 
 ## Restore wallpaper
 nitrogen --restore &
@@ -60,8 +57,8 @@ xrdb -merge ~/.Xresources &
 ## Start PCManFM Daemon
 pcmanfm --daemon-mode &
 
-## Run bittorrent sync
-btsync --config .config/btsync/sync.conf &
+## Run syncthing sync
+syncthing &
 
 ## Run an emacs instance
-emacs --daemon
+emacs --daemon &
