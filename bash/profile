@@ -8,4 +8,4 @@ export PATH
 
 export EDITOR=e
 
-. .bashrc
+. ~/.bashrc
