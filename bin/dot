@@ -18,9 +18,9 @@ cd $DIR/..
 if [[ $1 = "-i" ]]; then
   if [ $2 ]; then
       if [ -e ./$2/install.fish ]; then
-          fish ./$2/install.fish
+          fish ./$2/install.fish $3
       else
-          bash ./$2/install.sh
+          bash ./$2/install.sh $3
       fi
   else
     # find the installers and run them iteratively
@@ -29,9 +29,9 @@ if [[ $1 = "-i" ]]; then
   fi
 elif [ $1 ]; then
     if [ -e ./$1/update.fish ]; then
-        fish ./$1/update.fish
+        fish ./$1/update.fish $2
     else
-        bash ./$1/update.sh
+        bash ./$1/update.sh $2
     fi
 else
   # find the updaters and run them iteratively
