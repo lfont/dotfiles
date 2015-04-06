@@ -3,6 +3,8 @@ cd ~/bin && { curl -OL http://sourceforge.net/projects/kpcli/files/kpcli-2.8.pl;
 chmod +x ~/bin/kpcli-2.8.pl
 
 cpan -T \
+    Clone \
+    XML::Parser \
     File::KeePass \
     Term::ShellUI \
     Term::ReadKey \
