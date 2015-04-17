@@ -18,6 +18,13 @@ xset r rate 250 25
 ## Turn on/off system beep
 xset b off
 
+## Set screen display settings
+xset s 300 60
+xset dpms 600 700 800
+
+## Lock the screen on inactivity
+xautolock -time 10 -locker slock &
+
 ## Detect and configure touchpad. See 'man synclient' for more info.
 if [ -e /usr/X11R6/bin/synclient ]; then
     synclient ClickFinger1=0
@@ -48,10 +55,7 @@ fi
 xsetroot -solid "#2E3436" &
 
 ## Restore wallpaper
-nitrogen --restore &
-
-## Start xscreensaver
-xscreensaver -no-splash &
+eval $(cat ~/.fehbg)
 
 ## Set urxvt settings
 xrdb -merge ~/.Xresources &

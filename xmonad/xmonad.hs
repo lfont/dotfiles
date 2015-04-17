@@ -57,7 +57,7 @@ keysToAdd x =
         -- Rebind dmenu
         ((modMask x, xK_p), spawn "~/.config/dmenu/dmenu-bind.sh"),
         -- Lock the screen
-        (((modMask x .|. controlMask), xK_l), spawn "xscreensaver-command -lock"),
+        (((modMask x .|. controlMask), xK_l), spawn "slock"),
         -- File Browser
         (((modMask x .|. controlMask), xK_f), spawn "pcmanfm"),
         -- Web Browser
