@@ -12,8 +12,6 @@ import Control.Monad (liftM2)
 import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
-import System.IO
-
 -- Define the names of all workspaces
 myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:media", "5:other" ]
 
@@ -36,13 +34,13 @@ myLayout = avoidStruts $ Full ||| tiled ||| Mirror tiled
 myManageHook = composeAll . concat $
     [
         -- Applications that go to web
-        [ className =? b --> viewShift "1:web"   | b  <- myClassWebShifts   ],
+        [ className =? b --> viewShift "1:web"   | b <- myClassWebShifts   ],
         -- Applications that go to chat
-        [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts   ],
+        [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts  ],
         -- Applications that go to media
-        [ className =? d --> viewShift "4:media" | d  <- myClassMediaShifts ],
+        [ className =? d --> viewShift "4:media" | d <- myClassMediaShifts ],
         -- Applications to ignore
-        [ resource  =? i --> doIgnore            | i  <- myResourceIgnores  ]
+        [ resource  =? i --> doIgnore            | i <- myResourceIgnores  ]
     ]
     where
       viewShift          = doF . liftM2 (.) W.greedyView W.shift
@@ -58,17 +56,18 @@ keysToAdd x =
         ((modMask x, xK_p), spawn "~/.config/dmenu/dmenu-bind.sh"),
         -- Lock the screen
         (((modMask x .|. controlMask), xK_l), spawn "slock"),
-        -- File Browser
-        (((modMask x .|. controlMask), xK_f), spawn "pcmanfm"),
         -- Web Browser
-        (((modMask x .|. controlMask), xK_w), spawn "firefox"),
-        -- gnus
+        (((modMask x .|. controlMask), xK_w), spawn "$BROWSER"),
+        -- Editor
+        (((modMask x .|. controlMask), xK_e), spawn "$VISUAL"),
+        -- File Browser
+        (((modMask x .|. controlMask), xK_f), spawn "urxvt -e mc"),
+        -- mail
         (((modMask x .|. controlMask), xK_m), spawn "emacs -T mail -f my/mu4e-start"),
         -- jabber
         (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f my/jabber-start"),
-        -- Audio volume
-        ((0, 0x1008FF13), spawn "audio-volume up"),
-        ((0, 0x1008FF11), spawn "audio-volume down")
+        -- Password manager
+        (((modMask x .|. controlMask), xK_p), spawn "urxvt -e ~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx")
     ]
 
 -- Define keys to remove

@@ -60,11 +60,11 @@ eval $(cat ~/.fehbg)
 ## Set urxvt settings
 xrdb -merge ~/.Xresources &
 
-## Start PCManFM Daemon
-pcmanfm --daemon-mode &
-
 ## Run syncthing sync
 syncthing &
 
-## Run an emacs instance
+## Start a tmux server
+tmux has || tmux new -d
+
+## Start an emacs instance
 emacs --daemon &
