@@ -77,14 +77,14 @@ $endif$endif\
 \
 ${if_running pulseaudio}\
 \
-${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} == 0}\
+${if_match ${exec audio-volume status} == 0}\
  | V: 0%\
-$else${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} < 50}\
- | V: <fc=green>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
-$else${if_match ${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'} < 90}\
- | V: <fc=orange>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
+$else${if_match ${exec audio-volume status} < 50}\
+ | V: <fc=green>${exec audio-volume status}</fc>%\
+$else${if_match ${exec audio-volume status} < 90}\
+ | V: <fc=orange>${exec audio-volume status}</fc>%\
 $else\
- | V: <fc=red>${exec pactl list sinks | grep "Volume: 0:" | awk '{print $3}' | sed 's/%//'}</fc>%\
+ | V: <fc=red>${exec audio-volume status}</fc>%\
 $endif$endif$endif\
 \
 $else\

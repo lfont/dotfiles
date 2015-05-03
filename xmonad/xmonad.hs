@@ -67,7 +67,10 @@ keysToAdd x =
         -- jabber
         (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f my/jabber-start"),
         -- Password manager
-        (((modMask x .|. controlMask), xK_p), spawn "urxvt -e ~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx")
+        (((modMask x .|. controlMask), xK_p), spawn "urxvt -e ~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx"),
+        -- Audio volume
+        ((0, 0x1008FF13), spawn "audio-volume up"),
+        ((0, 0x1008FF11), spawn "audio-volume down")
     ]
 
 -- Define keys to remove

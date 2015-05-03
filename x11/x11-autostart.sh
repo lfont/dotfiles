@@ -15,6 +15,9 @@ start /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 ## Start xfce power manager
 start xfce4-power-manager
 
+## Start xfce volume manager
+start xfce4-volumed
+
 ## Pulse Audio volume control
 start pasystray
 

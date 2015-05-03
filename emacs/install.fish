@@ -15,6 +15,6 @@ ln -sf (pwd)/offlineimap/offlineimap.py ~/.offlineimap.py
 
 link_command (pwd)/emacs/e.sh e
 link_command (pwd)/emacs/ew.sh ew
-link_command (pwd)/emacs/mail-notify.fish mail-notify
+link_command (pwd)/emacs/mail-notify.sh mail-notify
 
 sudo cp (pwd)/emacs/e.sh /root/bin/e
