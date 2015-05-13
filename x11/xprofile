@@ -67,5 +67,8 @@ syncthing &
 ## Start a tmux server
 tmux has || tmux new -d
 
+## Start PCManFM Daemon
+pcmanfm --daemon-mode &
+
 ## Start an emacs instance
 emacs --daemon &
