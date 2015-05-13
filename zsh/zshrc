@@ -59,6 +59,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
+alias root="sudo -i"
 
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up
