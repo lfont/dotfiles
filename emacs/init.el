@@ -24,13 +24,10 @@
                       tern-auto-complete
 
                       flycheck
-                      flycheck-rust
 
-                      fish-mode
                       js2-mode
                       php-mode
                       less-css-mode
-                      rust-mode
                       fsharp-mode
                       haskell-mode
 
@@ -122,6 +119,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Tab behavior
 (defun set-custom-tab-behavior ()
+  "Use space instead of tabs."
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
   (setq tab-stop-list (number-sequence 4 200 4)))
@@ -131,19 +129,36 @@ point reaches the beginning or end of the buffer, stop there."
 (add-hook 'css-mode-hook  'set-custom-tab-behavior)
 
 ;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
-(defun un-indent-by-removing-4-spaces ()
-  "remove 4 spaces from beginning of of line"
-  (interactive)
+(defun un-indent-by-removing-spaces (count)
+  "Remove COUNT spaces from beginning of line."
   (save-excursion
     (save-match-data
       (beginning-of-line)
       ;; get rid of tabs at beginning of line
       (when (looking-at "^\\s-+")
         (untabify (match-beginning 0) (match-end 0)))
-      (when (looking-at "^    ")
+      (when (looking-at (concat "^" (make-string count ?\s)))
         (replace-match "")))))
 
+(defun un-indent-by-removing-4-spaces ()
+  "Remove 4 spaces from beginning of line."
+  (interactive)
+  (un-indent-by-removing-spaces 4))
+
 (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+
+;; http://stackoverflow.com/questions/3417438/closing-all-other-buffers-in-emacs
+(defun kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer
+        (delq (current-buffer)
+              (remove-if-not
+               '(lambda (x) (or (buffer-file-name x)
+                                (eq 'dired-mode (buffer-local-value 'major-mode x))))
+               (buffer-list)))))
+
+(global-set-key (kbd "C-c k") 'kill-other-buffers)
 
 ;; Folding
 (add-hook 'prog-mode-hook 'hs-minor-mode)
@@ -184,13 +199,14 @@ point reaches the beginning or end of the buffer, stop there."
   (dolist (elem langs) (ring-insert lang-ring elem)))
 
 (defun ispell-cycle-languages ()
+  "Cycle thought available dictionaries."
   (interactive)
   (let ((lang (ring-ref lang-ring -1)))
     (ring-insert lang-ring lang)
     (ispell-change-dictionary lang)))
 
 (defun flyspell-check-next-highlighted-word ()
-  "Custom function to spell check next highlighted word"
+  "Custom function to spell check next highlighted word."
   (interactive)
   (flyspell-goto-next-error)
   (ispell-word))
@@ -201,10 +217,10 @@ point reaches the beginning or end of the buffer, stop there."
 (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
   (add-hook hook (lambda () (flyspell-mode nil))))
 
-(global-set-key (kbd "<f5>")     'ispell-word)
-(global-set-key (kbd "M-<f5>")   'ispell-cycle-languages)
-(global-set-key (kbd "C-S-<f5>") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-<f5>")   'flyspell-check-next-highlighted-word)
+(global-set-key (kbd "<f7>")     'ispell-word)
+(global-set-key (kbd "M-<f7>")   'ispell-cycle-languages)
+(global-set-key (kbd "C-S-<f7>") 'flyspell-check-previous-highlighted-word)
+(global-set-key (kbd "C-<f7>")   'flyspell-check-next-highlighted-word)
 
 ;; Accept self signed certificates
 (require 'starttls)
@@ -219,6 +235,7 @@ point reaches the beginning or end of the buffer, stop there."
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (defun command-line-diff (switch)
+  "Add a SWITCH to invoke Emacs in diff mode."
   (let ((file1 (pop command-line-args-left))
         (file2 (pop command-line-args-left)))
     (ediff file1 file2)))
@@ -226,6 +243,7 @@ point reaches the beginning or end of the buffer, stop there."
 (add-to-list 'command-switch-alist '("diff" . command-line-diff))
 
 (defun command-line-merge (switch)
+  "Add a SWITCH to invoke Emacs in merge mode."
   (let ((file1 (pop command-line-args-left))
         (file2 (pop command-line-args-left))
         (file3 (pop command-line-args-left))
@@ -279,10 +297,10 @@ point reaches the beginning or end of the buffer, stop there."
 (require 'multiple-cursors)
 (global-set-key (kbd "C-c <down>") 'mc/mmlte--down)
 (global-set-key (kbd "C-c <up>")   'mc/mmlte--up)
-(global-set-key (kbd "C-c l")      'mc/edit-lines)
-(global-set-key (kbd "C-c d")      'mc/mark-next-like-this)
-(global-set-key (kbd "C-c k")      'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-c u")      'mc/unmark-next-like-this)
+(global-set-key (kbd "C-c C-l")    'mc/edit-lines)
+(global-set-key (kbd "C-c C-d")    'mc/mark-next-like-this)
+(global-set-key (kbd "C-c C-k")    'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-c C-u")    'mc/unmark-next-like-this)
 
 (require 'whitespace)
 (setq whitespace-style '(face empty lines-tail tabs tab-mark trailing))
@@ -290,6 +308,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 (require 'rainbow-delimiters)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+(require 'magit)
+(setq magit-last-seen-setup-instructions "1.4.0")
 
 (require 'helm)
 (require 'helm-config)
@@ -342,8 +363,8 @@ point reaches the beginning or end of the buffer, stop there."
         (t "~/.emacs.d/")))
 
 (defun load-user-file (file)
+  "Load a FILE in current user's configuration directory."
   (interactive "f")
-  "Load a file in current user's configuration directory"
   (load-file (expand-file-name file user-init-dir)))
 
 (load-library "notify")
