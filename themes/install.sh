@@ -26,3 +26,9 @@ if [ ! -d ~/.icons/Numix-Circle ]; then
     ln -sf "$install_dir"/Numix-Circle ~/.icons/
     gtk-update-icon-cache -f -t ~/.icons/Numix-Circle
 fi
+
+
+if [ ! -d $DOTFILES_INSTALL_DIR/slim-minimal ]; then
+    install_dir=$(f_install_repository https://github.com/naglis/slim-minimal.git slim-minimal)
+    sudo cp -r $install_dir /usr/share/slim/themes/
+fi
