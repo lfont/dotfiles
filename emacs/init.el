@@ -354,22 +354,10 @@ point reaches the beginning or end of the buffer, stop there."
   '(progn
      (define-key fsharp-mode-map (kbd "C-c C-SPC") 'fsharp-ac/complete-at-point)))
 
-;; Loads some user's files
-(defconst user-init-dir
-  (cond ((boundp 'user-emacs-directory)
-         user-emacs-directory)
-        ((boundp 'user-init-directory)
-         user-init-directory)
-        (t "~/.emacs.d/")))
-
-(defun load-user-file (file)
-  "Load a FILE in current user's configuration directory."
-  (interactive "f")
-  (load-file (expand-file-name file user-init-dir)))
-
-(load-library "notify")
-(load-user-file "jabber.el")
-(load-user-file "offlineimap.el")
-(load-user-file "mu4e.el")
+;; autoload optional files
+(autoload 'notify "notify")
+(autoload 'offlineimap-get-password "offlineimap")
+(autoload 'my/jabber-start "init-jabber")
+(autoload 'my/mu4e-start "init-mu4e")
 
 ;;; init.el ends here
