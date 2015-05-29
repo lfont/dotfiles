@@ -75,12 +75,18 @@
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
 
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(unless (display-graphic-p) (menu-bar-mode -1))
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+
+(unless (display-graphic-p)
+  (menu-bar-mode -1))
 
 (load-theme 'molokai t)
-(set-frame-font "Terminus-13:Regular")
+(add-to-list 'default-frame-alist
+             '(font . "Terminus-13:Regular"))
 
 ;; Scroll line by line
 (setq scroll-step           1
@@ -98,17 +104,17 @@
 (global-set-key (kbd "C-+") 'enlarge-window)
 
 ;; Navgating: Windmove uses C-<up> etc.
-(global-set-key (kbd "C-<up>"   ) 'windmove-up)
-(global-set-key (kbd "C-<down>" ) 'windmove-down)
-(global-set-key (kbd "C-<left>" ) 'windmove-left)
+(global-set-key (kbd "C-<up>")    'windmove-up)
+(global-set-key (kbd "C-<down>")  'windmove-down)
+(global-set-key (kbd "C-<left>")  'windmove-left)
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
 ;; Swap buffers: M-<up> etc.
 (require 'buffer-move)
-(global-set-key (kbd "M-<up>"   ) 'buf-move-up)
-(global-set-key (kbd "M-<down>" ) 'buf-move-down)
+(global-set-key (kbd "M-<up>")    'buf-move-up)
+(global-set-key (kbd "M-<down>")  'buf-move-down)
 (global-set-key (kbd "M-<right>") 'buf-move-right)
-(global-set-key (kbd "M-<left>" ) 'buf-move-left)
+(global-set-key (kbd "M-<left>")  'buf-move-left)
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
@@ -178,7 +184,8 @@ point reaches the beginning or end of the buffer, stop there."
               (remove-if-not
                '(lambda (x) (or (buffer-file-name x)
                                 (eq 'dired-mode (buffer-local-value 'major-mode x))))
-               (buffer-list)))))
+               (buffer-list))))
+  (message "Other buffers killed"))
 
 (global-set-key (kbd "C-c k") 'kill-other-buffers)
 
@@ -214,10 +221,10 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Fix a weird bug with dead keys when Emacs runs in a GUI
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()
-            (global-set-key (kbd "<dead-acute> <SPC>"       ) "'")
-            (global-set-key (kbd "<dead-grave> <SPC>"       ) "`")
-            (global-set-key (kbd "<S-dead-tilde> <SPC>"     ) "~")
-            (global-set-key (kbd "<S-dead-diaeresis> <SPC>" ) "\"")
+            (global-set-key (kbd "<dead-acute> <SPC>")        "'")
+            (global-set-key (kbd "<dead-grave> <SPC>")        "`")
+            (global-set-key (kbd "<S-dead-tilde> <SPC>")      "~")
+            (global-set-key (kbd "<S-dead-diaeresis> <SPC>")  "\"")
             (global-set-key (kbd "<S-dead-circumflex> <SPC>") "^")))
 
 ;; Spell checking
@@ -340,42 +347,50 @@ point reaches the beginning or end of the buffer, stop there."
 (require 'magit)
 (setq magit-last-seen-setup-instructions "1.4.0")
 
-(require 'helm)
-(require 'helm-config)
-(require 'helm-eshell)
-(require 'helm-files)
-(require 'helm-grep)
+(when (require 'projectile nil t)
+  (projectile-global-mode))
 
-(setq
- ;; open helm buffer in another window
- helm-split-window-default-side 'below
- ;; open helm buffer inside current window, not occupy whole other window
- helm-split-window-in-side-p nil)
+(when (and (require 'helm         nil t)
+           (require 'helm-config  nil t)
+           (require 'helm-command nil t)
+           (require 'helm-files   nil t))
+  (setq
+   ;; open helm buffer inside current window, not occupy whole other window
+   helm-split-window-in-side-p nil
+   ;; Fuzzy matching
+   helm-M-x-fuzzy-match        t
+   helm-buffers-fuzzy-matching t
+   helm-recentf-fuzzy-match    t)
 
-(helm-mode t)
+  (helm-mode t)
+  (helm-autoresize-mode t)
 
-(global-set-key (kbd "M-x")     'helm-M-x)
-(global-set-key (kbd "M-y")     'helm-show-kill-ring)
-(global-set-key (kbd "C-x b")   'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "M-x")     'helm-M-x)
+  (global-set-key (kbd "M-y")     'helm-show-kill-ring)
+  (global-set-key (kbd "C-x b")   'helm-mini)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
-(require 'helm-projectile)
-(defun helm-projectile-switch-buffer ()
-  "Use Helm instead of ido to switch buffer in projectile."
-  (interactive)
-  (helm :sources helm-source-projectile-buffers-list
-        :buffer "*helm projectile buffers*"
-        :prompt (projectile-prepend-project-name "Switch to buffer: ")))
+  ;; rebind tab to run persistent action
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  ;; make TAB works in terminal
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  ;; list actions using C-z
+  (define-key helm-map (kbd "C-z") 'helm-select-action)
 
-(require 'projectile)
-(projectile-global-mode)
+  (when (require 'helm-projectile nil t)
+    (defun helm-projectile-switch-buffer ()
+      "Use Helm instead of ido to switch buffer in projectile."
+      (interactive)
+      (helm :sources helm-source-projectile-buffers-list
+            :buffer "*helm projectile buffers*"
+            :prompt (projectile-prepend-project-name "Switch to buffer: ")))
 
-;; Override some projectile keymaps
-(eval-after-load 'projectile
-  '(progn
-     (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
-     (define-key projectile-command-map (kbd "f") 'helm-projectile)
-     (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
+    ;; Override some projectile keymaps
+    (eval-after-load 'projectile
+      '(progn
+         (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
+         (define-key projectile-command-map (kbd "f") 'helm-projectile)
+         (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))))
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (when (require 'multi-term nil t)
