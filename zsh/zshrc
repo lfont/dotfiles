@@ -61,6 +61,13 @@ alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
 alias root="sudo -i"
 
+if [ "${TERM}x" = "eterm-colorx" ]; then
+  alias e='print -P "\eAnSiTe"'
+  alias x='print -P "\eAnSiTx"'
+else
+  alias e='emacsclient -t -a nano'
+fi
+
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down

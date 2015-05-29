@@ -3,6 +3,5 @@
 conky-xmobar &
 stalonetray &
 firefox &
-urxvt -e tmux attach &
 
 exec ck-launch-session xmonad

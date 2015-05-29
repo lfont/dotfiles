@@ -3,6 +3,10 @@
 ;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 
 ;;; Code:
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;; Packages settings
@@ -14,8 +18,6 @@
                       projectile
                       helm-projectile
 
-                      neotree
-
                       magit
                       git-gutter
 
@@ -26,10 +28,9 @@
                       flycheck
 
                       js2-mode
-                      php-mode
                       less-css-mode
-                      fsharp-mode
                       haskell-mode
+                      php-mode
 
                       molokai-theme
 
@@ -38,6 +39,9 @@
                       rainbow-delimiters
 
                       xclip
+
+                      multi-term
+                      buffer-move
 
                       jabber)))
 
@@ -82,11 +86,29 @@
 (setq scroll-step           1
       scroll-conservatively 10000)
 
-;; Window Resize
-(global-set-key (kbd "C-c <left>")  'shrink-window-horizontally)
-(global-set-key (kbd "C-c <right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "C-c <up>")    'shrink-window)
-(global-set-key (kbd "C-c <down>")  'enlarge-window)
+;;; Windows related operations
+;; Undo & redo
+(when (fboundp 'winner-mode)
+      (winner-mode t))
+
+;; Split & Resize
+(global-set-key (kbd "C-{") 'shrink-window-horizontally)
+(global-set-key (kbd "C-}") 'enlarge-window-horizontally)
+(global-set-key (kbd "C--") 'shrink-window)
+(global-set-key (kbd "C-+") 'enlarge-window)
+
+;; Navgating: Windmove uses C-<up> etc.
+(global-set-key (kbd "C-<up>"   ) 'windmove-up)
+(global-set-key (kbd "C-<down>" ) 'windmove-down)
+(global-set-key (kbd "C-<left>" ) 'windmove-left)
+(global-set-key (kbd "C-<right>") 'windmove-right)
+
+;; Swap buffers: M-<up> etc.
+(require 'buffer-move)
+(global-set-key (kbd "M-<up>"   ) 'buf-move-up)
+(global-set-key (kbd "M-<down>" ) 'buf-move-down)
+(global-set-key (kbd "M-<right>") 'buf-move-right)
+(global-set-key (kbd "M-<left>" ) 'buf-move-left)
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
@@ -175,7 +197,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Use xclip to copy/paste to the terminal from X.
 (require 'xclip)
 (xclip-mode t)
-(turn-on-xclip) ;; this function is not call in rxvt
+;(turn-on-xclip) ;; this function is not call in rxvt
 
 ;; Treat asc file like gpg file
 (require 'epa-file)
@@ -188,6 +210,15 @@ point reaches the beginning or end of the buffer, stop there."
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+
+;; Fix a weird bug with dead keys when Emacs runs in a GUI
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (global-set-key (kbd "<dead-acute> <SPC>"       ) "'")
+            (global-set-key (kbd "<dead-grave> <SPC>"       ) "`")
+            (global-set-key (kbd "<S-dead-tilde> <SPC>"     ) "~")
+            (global-set-key (kbd "<S-dead-diaeresis> <SPC>" ) "\"")
+            (global-set-key (kbd "<S-dead-circumflex> <SPC>") "^")))
 
 ;; Spell checking
 (require 'ispell)
@@ -251,9 +282,6 @@ point reaches the beginning or end of the buffer, stop there."
     (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
 
 (add-to-list 'command-switch-alist '("merge" . command-line-merge))
-
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
 
 (require 'flx-ido)
 ;(ido-mode 1)
@@ -320,9 +348,9 @@ point reaches the beginning or end of the buffer, stop there."
 
 (setq
  ;; open helm buffer in another window
- helm-split-window-default-side 'other
+ helm-split-window-default-side 'below
  ;; open helm buffer inside current window, not occupy whole other window
- helm-split-window-in-side-p t)
+ helm-split-window-in-side-p nil)
 
 (helm-mode t)
 
@@ -349,10 +377,73 @@ point reaches the beginning or end of the buffer, stop there."
      (define-key projectile-command-map (kbd "f") 'helm-projectile)
      (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))
 
-(require 'fsharp-mode)
-(eval-after-load 'fsharp-mode
-  '(progn
-     (define-key fsharp-mode-map (kbd "C-c C-SPC") 'fsharp-ac/complete-at-point)))
+;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
+(when (require 'multi-term nil t)
+  (global-set-key (kbd "<f5>") 'multi-term)
+  (global-set-key (kbd "<C-next>") 'multi-term-next)
+  (global-set-key (kbd "<C-prior>") 'multi-term-prev)
+
+  (setq multi-term-buffer-name "term"
+        multi-term-program "/usr/bin/zsh"))
+
+(when (require 'term nil t)
+  (setq term-bind-key-alist
+        (list (cons "C-c C-c" 'term-interrupt-subjob)
+              (cons "C-c C-j" 'term-line-mode)
+              (cons "C-c C-k" 'term-char-mode)
+              (cons "C-r"     'term-send-reverse-search-history)))
+
+  (defconst term-function-key-alist '((f1 . "\e[OP")
+                                      (f2 . "\e[OQ")
+                                      (f3 . "\e[OR")
+                                      (f4 . "\e[OS")))
+
+  (defun term-send-function-key ()
+    (interactive)
+    (let* ((char last-input-event)
+           (output (cdr (assoc char term-function-key-alist))))
+      (term-send-raw-string output)))
+
+  (dolist (spec term-function-key-alist)
+    (define-key term-raw-map
+      (read-kbd-macro (format "<%s>" (car spec)))
+      'term-send-function-key))
+
+  (defun term-handle-ansi-terminal-messages (message)
+    (while (string-match "\eAnSiT.+\n" message)
+      ;; Extract the command code and the argument.
+      (let* ((start (match-beginning 0))
+             (command-code (aref message (+ start 6)))
+             (argument
+              (save-match-data
+                (substring message
+                           (+ start 8)
+                           (string-match "\r?\n" message
+                                         (+ start 8))))))
+        ;; Delete this command from MESSAGE.
+        (setq message (replace-match "" t t message))
+
+        (cond ((= command-code ?c)
+               (setq term-ansi-at-dir argument))
+              ((= command-code ?h)
+               (setq term-ansi-at-host argument))
+              ((= command-code ?u)
+               (setq term-ansi-at-user argument))
+              ((= command-code ?e)
+               (save-excursion
+                 (find-file-other-window argument)))
+              ((= command-code ?x)
+               (save-excursion
+                 (find-file argument))))))
+
+    (when (and term-ansi-at-host term-ansi-at-dir term-ansi-at-user)
+      (setq buffer-file-name
+            (format "%s@%s:%s" term-ansi-at-user term-ansi-at-host term-ansi-at-dir))
+      (set-buffer-modified-p nil)
+        (setq default-directory (if (string= term-ansi-at-host (system-name))
+                                    (concatenate 'string term-ansi-at-dir "/")
+                                  (format "/%s@%s:%s/" term-ansi-at-user term-ansi-at-host term-ansi-at-dir))))
+    message))
 
 ;; autoload optional files
 (autoload 'notify "notify")

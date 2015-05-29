@@ -89,7 +89,7 @@ strippedKeys x = foldr M.delete (keys defaultConfig x) (keysToRemove x)
 myKeys x = M.union (strippedKeys x) (M.fromList (keysToAdd x))
 
 -- Define terminal
-myTerminal = "urxvt"
+myTerminal = "urxvt -e tmux"
 
 -- Startup
 myStartupHook = do

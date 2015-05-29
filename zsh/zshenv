@@ -2,7 +2,7 @@ export DE="lxde"
 export DESKTOP_SESSION="LXDE"
 export XDG_MENU_PREFIX="lxde-"
 
-export VISUAL="ew"
+export VISUAL="emacs"
 export EDITOR="e"
 export BROWSER="firefox"
 
