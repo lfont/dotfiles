@@ -97,11 +97,12 @@
 (when (fboundp 'winner-mode)
       (winner-mode t))
 
-;; Split & Resize
-(global-set-key (kbd "C-{") 'shrink-window-horizontally)
-(global-set-key (kbd "C-}") 'enlarge-window-horizontally)
-(global-set-key (kbd "C--") 'shrink-window)
-(global-set-key (kbd "C-+") 'enlarge-window)
+;; Resize: M-<up> etc.
+(load "win-resize")
+(global-set-key (kbd "M-<up>")    'win-resize-enlarge-horiz)
+(global-set-key (kbd "M-<down>")  'win-resize-minimize-horiz)
+(global-set-key (kbd "M-<left>")  'win-resize-enlarge-vert)
+(global-set-key (kbd "M-<right>") 'win-resize-minimize-vert)
 
 ;; Navgating: Windmove uses C-<up> etc.
 (global-set-key (kbd "C-<up>")    'windmove-up)
@@ -109,12 +110,12 @@
 (global-set-key (kbd "C-<left>")  'windmove-left)
 (global-set-key (kbd "C-<right>") 'windmove-right)
 
-;; Swap buffers: M-<up> etc.
+;; Swap buffers: C-S-<up> etc.
 (require 'buffer-move)
-(global-set-key (kbd "M-<up>")    'buf-move-up)
-(global-set-key (kbd "M-<down>")  'buf-move-down)
-(global-set-key (kbd "M-<right>") 'buf-move-right)
-(global-set-key (kbd "M-<left>")  'buf-move-left)
+(global-set-key (kbd "C-S-<up>")    'buf-move-up)
+(global-set-key (kbd "C-S-<down>")  'buf-move-down)
+(global-set-key (kbd "C-S-<left>")  'buf-move-left)
+(global-set-key (kbd "C-S-<right>") 'buf-move-right)
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
@@ -398,8 +399,7 @@ point reaches the beginning or end of the buffer, stop there."
   (global-set-key (kbd "<C-next>") 'multi-term-next)
   (global-set-key (kbd "<C-prior>") 'multi-term-prev)
 
-  (setq multi-term-buffer-name "term"
-        multi-term-program "/usr/bin/zsh"))
+  (setq multi-term-buffer-name "term"))
 
 (when (require 'term nil t)
   (setq term-bind-key-alist
