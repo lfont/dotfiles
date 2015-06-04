@@ -8,7 +8,7 @@ middle"
          (fr-height (frame-height)))
     (cond
      ((eq 0 this-window-y-min) "top")
-     ((eq (- fr-height 5) this-window-y-max) "bot")
+     ((<= (- fr-height this-window-y-max) 5) "bot")
      (t "mid"))))
 
 (defun win-resize-left-or-right ()
@@ -20,7 +20,7 @@ middle"
          (fr-width (frame-width)))
     (cond
      ((eq 0 this-window-x-min) "left")
-     ((eq (+ fr-width 3) this-window-x-max) "right")
+     ((<= (- fr-width this-window-x-max) 5) "right")
      (t "mid"))))
 
 (defun win-resize-enlarge-horiz ()
