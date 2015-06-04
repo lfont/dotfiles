@@ -51,6 +51,13 @@ plugins=(git autojump nvm zsh-syntax-highlighting history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
+# bind P and N for EMACS mode
+bindkey -M emacs '^P' history-substring-search-up
+bindkey -M emacs '^N' history-substring-search-down
+
+# init gpg agent
+gpg-connect-agent --quiet /bye >/dev/null
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -60,16 +67,17 @@ source $ZSH/oh-my-zsh.sh
 alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
 alias root="sudo -i"
+alias term="urxvt -e"
+alias pass="~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx"
+
+# edit file from an Emacs shell
+function emacs_term_edit_file () {
+    print -P "\eAnSiT$1" "$2:A"
+}
 
 if [ "${TERM}x" = "eterm-colorx" ]; then
-  alias e='print -P "\eAnSiTe"'
-  alias x='print -P "\eAnSiTx"'
+    alias e="emacs_term_edit_file e"
+    alias x="emacs_term_edit_file x"
 else
-  alias e='emacsclient -t -a nano'
+    alias e="emacsclient -t -a nano"
 fi
-
-# bind P and N for EMACS mode
-bindkey -M emacs '^P' history-substring-search-up
-bindkey -M emacs '^N' history-substring-search-down
-
-gpg-connect-agent --quiet /bye >/dev/null
