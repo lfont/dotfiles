@@ -62,7 +62,8 @@ eval $(cat ~/.fehbg)
 xrdb -merge ~/.Xresources
 
 ## Run syncthing sync
-syncthing -no-browser &
+mkdir -p ~/.config/syncthing
+syncthing -no-browser -logflags=3 > ~/.config/syncthing/stdout.log &
 
 ## Start PCManFM Daemon
 pcmanfm --daemon-mode &
