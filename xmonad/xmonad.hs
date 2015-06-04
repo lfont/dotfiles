@@ -6,6 +6,7 @@ import XMonad.Util.Run
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
+import XMonad.Layout.TwoPane
 
 import Control.Monad (liftM2)
 
@@ -16,19 +17,12 @@ import qualified XMonad.StackSet as W
 myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:media", "5:other" ]
 
 -- Layout
-myLayout = avoidStruts $ Full ||| tiled ||| Mirror tiled
-  where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
-
-     -- The default number of windows in the master pane
-     nmaster = 1
-
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
-
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+myLayout = avoidStruts $ Full ||| tiledH ||| splitH ||| tiledV ||| splitV
+    where
+      splitH = TwoPane (3/100) (1/2)
+      splitV = Mirror splitH
+      tiledH = Tall 1 (1/2) (3/100)
+      tiledV = Mirror tiledH
 
 -- Windows management
 myManageHook = composeAll . concat $
@@ -61,13 +55,11 @@ keysToAdd x =
         -- Editor
         (((modMask x .|. controlMask), xK_e), spawn "$VISUAL"),
         -- File Browser
-        (((modMask x .|. controlMask), xK_f), spawn "urxvt -e mc"),
+        (((modMask x .|. controlMask), xK_f), spawn "pcmanfm"),
         -- mail
         (((modMask x .|. controlMask), xK_m), spawn "emacs -T mail -f my/mu4e-start"),
         -- jabber
         (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f my/jabber-start"),
-        -- Password manager
-        (((modMask x .|. controlMask), xK_p), spawn "urxvt -e ~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx"),
         -- Audio volume
         ((0, 0x1008FF13), spawn "audio-volume up"),
         ((0, 0x1008FF11), spawn "audio-volume down")
@@ -89,7 +81,7 @@ strippedKeys x = foldr M.delete (keys defaultConfig x) (keysToRemove x)
 myKeys x = M.union (strippedKeys x) (M.fromList (keysToAdd x))
 
 -- Define terminal
-myTerminal = "urxvt -e tmux"
+myTerminal = "et"
 
 -- Startup
 myStartupHook = do
