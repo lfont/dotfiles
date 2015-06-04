@@ -348,6 +348,11 @@ point reaches the beginning or end of the buffer, stop there."
 (require 'magit)
 (setq magit-last-seen-setup-instructions "1.4.0")
 
+(require 'haskell-mode)
+(add-hook 'haskell-mode-hook (lambda ()
+                               (turn-on-haskell-doc-mode)
+                               (turn-on-haskell-indent)))
+
 (when (require 'projectile nil t)
   (projectile-global-mode))
 
