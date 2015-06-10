@@ -6,7 +6,7 @@ import XMonad.Util.Run
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
-import XMonad.Layout.TwoPane
+import XMonad.Layout.Minimize
 
 import Control.Monad (liftM2)
 
@@ -14,14 +14,12 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
 -- Define the names of all workspaces
-myWorkspaces = [ "1:web", "2:chat", "3:browse", "4:media", "5:other" ]
+myWorkspaces = [ "1:web", "2:chat", "3:media", "4" ]
 
 -- Layout
-myLayout = avoidStruts $ Full ||| tiledH ||| splitH ||| tiledV ||| splitV
+myLayout = avoidStruts $ Full ||| tiledH ||| tiledV
     where
-      splitH = TwoPane (3/100) (1/2)
-      splitV = Mirror splitH
-      tiledH = Tall 1 (1/2) (3/100)
+      tiledH = minimize (Tall 1 (3/100) (1/2))
       tiledV = Mirror tiledH
 
 -- Windows management
@@ -32,7 +30,7 @@ myManageHook = composeAll . concat $
         -- Applications that go to chat
         [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts  ],
         -- Applications that go to media
-        [ className =? d --> viewShift "4:media" | d <- myClassMediaShifts ],
+        [ className =? d --> viewShift "3:media" | d <- myClassMediaShifts ],
         -- Applications to ignore
         [ resource  =? i --> doIgnore            | i <- myResourceIgnores  ]
     ]
@@ -43,35 +41,38 @@ myManageHook = composeAll . concat $
       myClassMediaShifts = [ "Vlc", "Spotify" ]
       myResourceIgnores  = [ "stalonetray" ]
 
--- Define keys to add
-keysToAdd x =
-    [
-        -- Rebind dmenu
-        ((modMask x, xK_p), spawn "~/.config/dmenu/dmenu-bind.sh"),
-        -- Lock the screen
-        (((modMask x .|. controlMask), xK_l), spawn "slock"),
-        -- Web Browser
-        (((modMask x .|. controlMask), xK_w), spawn "$BROWSER"),
-        -- Editor
-        (((modMask x .|. controlMask), xK_e), spawn "$VISUAL"),
-        -- File Browser
-        (((modMask x .|. controlMask), xK_f), spawn "pcmanfm"),
-        -- mail
-        (((modMask x .|. controlMask), xK_m), spawn "emacs -T mail -f my/mu4e-start"),
-        -- jabber
-        (((modMask x .|. controlMask), xK_j), spawn "emacs -T jabber -f my/jabber-start"),
-        -- Audio volume
-        ((0, 0x1008FF13), spawn "audio-volume up"),
-        ((0, 0x1008FF11), spawn "audio-volume down")
-    ]
-
 -- Define keys to remove
 keysToRemove x =
     [
         -- Unused dmenu default binding
-        (modMask x, xK_p),
+        (modMask x,               xK_p),
         -- Unused gmrun binding
         (modMask x .|. shiftMask, xK_p)
+    ]
+
+-- Define keys to add
+keysToAdd x =
+    [
+        -- Minimize window
+        ((modMask x,                 xK_d),       withFocused minimizeWindow),
+        ((modMask x .|. shiftMask,   xK_d),       sendMessage RestoreNextMinimizedWin),
+        -- Rebind dmenu
+        ((modMask x,                 xK_p),       spawn "~/.config/dmenu/dmenu-bind.sh"),
+        -- Lock the screen
+        ((modMask x .|. controlMask, xK_l),       spawn "slock"),
+        -- Web Browser
+        ((modMask x .|. controlMask, xK_w),       spawn "$BROWSER"),
+        -- Editor
+        ((modMask x .|. controlMask, xK_e),       spawn "$VISUAL"),
+        -- File Browser
+        ((modMask x .|. controlMask, xK_f),       spawn "pcmanfm"),
+        -- mail
+        ((modMask x .|. controlMask, xK_m),       spawn "emacs -T mail -f my/mu4e-start"),
+        -- jabber
+        ((modMask x .|. controlMask, xK_j),       spawn "emacs -T jabber -f my/jabber-start"),
+        -- Audio volume
+        ((0,                         0x1008FF13), spawn "audio-volume up"),
+        ((0,                         0x1008FF11), spawn "audio-volume down")
     ]
 
 -- Delete the keys combinations we want to remove.
