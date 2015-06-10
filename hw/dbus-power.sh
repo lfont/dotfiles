@@ -6,19 +6,35 @@ CMD=$(basename $0)
 
 case $CMD in
     halt)
-        dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+        if [ $(which systemctl) &>/dev/null ]; then
+            systemctl poweroff
+        else
+            dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop
+        fi
         ;;
     reboot)
-        dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+        if [ $(which systemctl) &>/dev/null ]; then
+            systemctl reboot
+        else
+            dbus-send --system --print-reply --dest="org.freedesktop.ConsoleKit" /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Restart
+        fi
         ;;
     zzz)
-        dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend && slock
+        if [ $(which systemctl) &>/dev/null ]; then
+            systemctl suspend && slock
+        else
+            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend && slock
+        fi
         ;;
     ZZZ)
-        dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate && slock
+        if [ $(which systemctl) &>/dev/null ]; then
+            systemctl hibernate && slock
+        else
+            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate && slock
+        fi
         ;;
     *)
-        echo 'unknow command'
+        echo 'dbus-power.sh should be aliased to halt|reboot|zzz|ZZZ'
         exit 1
 esac
 
