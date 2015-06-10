@@ -9,23 +9,23 @@ function start {
     fi
 }
 
-## Gnome polkit
+## gnome polkit
 start /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 
-## Start xfce power manager
+## xfce power manager
 start xfce4-power-manager
 
-## Start xfce volume manager
+## xfce volume manager
 start xfce4-volumed
 
-## Pulse Audio volume control
+## volume control
 start pasystray
 
-## Start Clipboard manager
+## clipboard manager
 start clipit
 
-## Start blueman applet
+## bluetooth applet
 start blueman-applet
 
-## Start network manager applet
+## network applet
 start nm-applet

@@ -13,12 +13,11 @@ if [ ! -e /usr/share/xsessions/xsession.desktop ]; then
 fi
 
 # hw helpers
-ln -sf $(pwd)/hw/audio-volume.sh       ~/bin/audio-volume
-ln -sf $(pwd)/hw/keyboard-backlight.sh ~/bin/keyboard-backlight
-ln -sf $(pwd)/hw/dbus-power.sh         ~/bin/halt
-ln -sf $(pwd)/hw/dbus-power.sh         ~/bin/reboot
-ln -sf $(pwd)/hw/dbus-power.sh         ~/bin/zzz
-ln -sf $(pwd)/hw/dbus-power.sh         ~/bin/ZZZ
+ln -sf $(pwd)/hw/audio-volume.sh ~/bin/audio-volume
+ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/halt
+ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/reboot
+ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/zzz
+ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/ZZZ
 
 # xmonad
 mkdir -p ~/.xmonad
