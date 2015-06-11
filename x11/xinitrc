@@ -1,6 +1,6 @@
 . ~/dotfiles/x11/xprofile
 
-conky-xmobar &
+conky-xmobar.sh &
 stalonetray &
 firefox &
 

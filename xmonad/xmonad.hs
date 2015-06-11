@@ -2,9 +2,9 @@
 
 -- Import statements
 import XMonad
+import XMonad.Config.Desktop
 import XMonad.Util.Run
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Layout.Minimize
 
@@ -14,10 +14,11 @@ import qualified Data.Map as M
 import qualified XMonad.StackSet as W
 
 -- Define the names of all workspaces
-myWorkspaces = [ "1:web", "2:chat", "3:media", "4" ]
+myWorkspaces :: [String]
+myWorkspaces = [ "1:www", "2:mail", "3:media", "4", "5" ]
 
 -- Layout
-myLayout = avoidStruts $ Full ||| tiledH ||| tiledV
+myLayout = Full ||| tiledH ||| tiledV
     where
       tiledH = minimize (Tall 1 (3/100) (1/2))
       tiledV = Mirror tiledH
@@ -25,91 +26,74 @@ myLayout = avoidStruts $ Full ||| tiledH ||| tiledV
 -- Windows management
 myManageHook = composeAll . concat $
     [
-        -- Applications that go to web
-        [ className =? b --> viewShift "1:web"   | b <- myClassWebShifts   ],
-        -- Applications that go to chat
-        [ title     =? c --> viewShift "2:chat"  | c <- myTitleChatShifts  ],
-        -- Applications that go to media
+        [ className =? b --> viewShift "1:www"   | b <- myClassWwwShifts   ],
+        [ title     =? c --> viewShift "2:mail"  | c <- myTitleMailShifts  ],
         [ className =? d --> viewShift "3:media" | d <- myClassMediaShifts ],
-        -- Applications to ignore
         [ resource  =? i --> doIgnore            | i <- myResourceIgnores  ]
     ]
     where
       viewShift          = doF . liftM2 (.) W.greedyView W.shift
-      myClassWebShifts   = [ "Firefox", "Chromium" ]
-      myTitleChatShifts  = [ "mail", "jabber" ]
-      myClassMediaShifts = [ "Vlc", "Spotify" ]
+      myClassWwwShifts   = [ "Firefox", "Chromium" ]
+      myTitleMailShifts  = [ "mail", "jabber" ]
+      myClassMediaShifts = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
       myResourceIgnores  = [ "stalonetray" ]
 
--- Define keys to remove
-keysToRemove x =
-    [
-        -- Unused dmenu default binding
-        (modMask x,               xK_p),
-        -- Unused gmrun binding
-        (modMask x .|. shiftMask, xK_p)
-    ]
-
--- Define keys to add
-keysToAdd x =
+-- Keys binding
+myKeys (XConfig {modMask = modm}) = M.fromList $
     [
         -- Minimize window
-        ((modMask x,                 xK_d),       withFocused minimizeWindow),
-        ((modMask x .|. shiftMask,   xK_d),       sendMessage RestoreNextMinimizedWin),
+        ((modm,                 xK_d),       withFocused minimizeWindow),
+        ((modm .|. shiftMask,   xK_d),       sendMessage RestoreNextMinimizedWin),
         -- Rebind dmenu
-        ((modMask x,                 xK_p),       spawn "~/.config/dmenu/dmenu-bind.sh"),
+        ((modm,                 xK_p),       spawn "dmenu-bind.sh"),
         -- Lock the screen
-        ((modMask x .|. controlMask, xK_l),       spawn "slock"),
+        ((modm .|. controlMask, xK_l),       spawn "slock"),
         -- Web Browser
-        ((modMask x .|. controlMask, xK_w),       spawn "$BROWSER"),
+        ((modm .|. controlMask, xK_w),       spawn "$BROWSER"),
         -- Editor
-        ((modMask x .|. controlMask, xK_e),       spawn "$VISUAL"),
+        ((modm .|. controlMask, xK_e),       spawn "$VISUAL"),
         -- File Browser
-        ((modMask x .|. controlMask, xK_f),       spawn "pcmanfm"),
+        ((modm .|. controlMask, xK_f),       spawn "pcmanfm"),
         -- mail
-        ((modMask x .|. controlMask, xK_m),       spawn "emacs -T mail -f my/mu4e-start"),
+        ((modm .|. controlMask, xK_m),       spawn "emacs -T mail -f my/mu4e-start"),
         -- jabber
-        ((modMask x .|. controlMask, xK_j),       spawn "emacs -T jabber -f my/jabber-start"),
+        ((modm .|. controlMask, xK_j),       spawn "emacs -T jabber -f my/jabber-start"),
         -- Audio volume
-        ((0,                         0x1008FF13), spawn "audio-volume up"),
-        ((0,                         0x1008FF11), spawn "audio-volume down")
+        ((0,                    0x1008FF13), spawn "audio-volume.sh up"),
+        ((0,                    0x1008FF11), spawn "audio-volume.sh down")
     ]
 
--- Delete the keys combinations we want to remove.
-strippedKeys x = foldr M.delete (keys defaultConfig x) (keysToRemove x)
-
--- Compose all my key combinations
-myKeys x = M.union (strippedKeys x) (M.fromList (keysToAdd x))
-
 -- Define terminal
-myTerminal = "et"
+myTerminal :: String
+myTerminal = "emacsclient -c -e '(multi-term)' || emacs -f 'multi-term'"
 
 -- Startup
+myStartupHook :: X ()
 myStartupHook = do
-    setWMName "LG3D"
-    spawn "x11-autostart"
+  setWMName "LG3D"
+  spawn     "xmonad-start-once.sh"
 
--- Workspace bar
-myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
+-- Panel
+myLogHook h = dynamicLogWithPP $ prettyPrinter h
 
-myPrettyPrinter h = xmobarPP
+prettyPrinter h = xmobarPP
     {
-        ppOutput = hPutStrLn h,
-        ppTitle = xmobarColor "cyan" "" . shorten 55
+      ppOutput = hPutStrLn h,
+      ppTitle  = xmobarColor "cyan" "" . shorten 55
     }
 
 -- Run XMonad
+main :: IO ()
 main = do
-    workspaceBar <- spawnPipe "xmobar"
-
-    xmonad $ defaultConfig
-        {
-            manageHook = manageDocks <+> myManageHook,
-            layoutHook = myLayout,
-            logHook = myLogHook workspaceBar,
-            modMask = mod4Mask, -- Rebind mod to windows key
-            keys = myKeys,
-            terminal = myTerminal,
-            workspaces = myWorkspaces,
-            startupHook = myStartupHook
-        }
+  xmobarPanel <- spawnPipe "xmobar"
+  xmonad $ desktopConfig
+       {
+         manageHook  = myManageHook <+> manageHook desktopConfig,
+         layoutHook  = desktopLayoutModifiers $ myLayout,
+         logHook     = myLogHook xmobarPanel <+> logHook desktopConfig,
+         modMask     = mod4Mask, -- Rebind mod to windows key
+         keys        = myKeys <+> keys desktopConfig,
+         terminal    = myTerminal,
+         workspaces  = myWorkspaces,
+         startupHook = myStartupHook <+> startupHook desktopConfig
+       }

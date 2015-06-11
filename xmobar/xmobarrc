@@ -4,7 +4,7 @@ Config { font = "xft:Terminus-12:Regular"
        , bgColor = "black"
        , fgColor = "grey"
        , position = TopW L 100
-       , commands = [ Run Com "cat" ["/tmp/.inxmobar"] "conky" 10
+       , commands = [ Run Com "cat" ["/tmp/.conky-xmobar.out"] "conky" 10
                     , Run Date "%a %F %H:%M:%S" "date" 10
                     , Run StdinReader
                     ]

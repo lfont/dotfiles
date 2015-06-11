@@ -19,5 +19,4 @@ ln -sf $(pwd)/offlineimap/offlineimaprc  ~/.offlineimaprc
 ln -sf $(pwd)/offlineimap/offlineimap.py ~/.offlineimap.py
 
 f_link_command $(pwd)/emacs/ew.sh ew
-f_link_command $(pwd)/emacs/et.sh et
 f_link_command $(pwd)/emacs/mail-notify.sh mail-notify

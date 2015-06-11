@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-csfl="/tmp/.inxmobar"
+csfl="/tmp/.conky-xmobar.out"
 
 >$csfl
 
