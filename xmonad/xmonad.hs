@@ -26,10 +26,11 @@ myLayout = Full ||| tiledH ||| tiledV
 -- Windows management
 myManageHook = composeAll . concat $
     [
-        [ className =? b --> viewShift "1:www"   | b <- myClassWwwShifts   ],
-        [ title     =? c --> viewShift "2:mail"  | c <- myTitleMailShifts  ],
-        [ className =? d --> viewShift "3:media" | d <- myClassMediaShifts ],
-        [ resource  =? i --> doIgnore            | i <- myResourceIgnores  ]
+        [ className =? c --> viewShift "1:www"   | c <- myClassWwwShifts   ],
+        [ title     =? t --> viewShift "2:mail"  | t <- myTitleMailShifts  ],
+        [ className =? c --> viewShift "3:media" | c <- myClassMediaShifts ],
+        [ resource  =? r --> doIgnore            | r <- myResourceIgnores  ],
+        [ resource  =? c --> doFloat             | c <- myResourceFloats   ]
     ]
     where
       viewShift          = doF . liftM2 (.) W.greedyView W.shift
@@ -37,6 +38,7 @@ myManageHook = composeAll . concat $
       myTitleMailShifts  = [ "mail", "jabber" ]
       myClassMediaShifts = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
       myResourceIgnores  = [ "stalonetray" ]
+      myResourceFloats   = [ "xfce4-appfinder" ]
 
 -- Keys binding
 myKeys (XConfig {modMask = modm}) = M.fromList $
@@ -46,6 +48,8 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         ((modm .|. shiftMask,   xK_d),       sendMessage RestoreNextMinimizedWin),
         -- Rebind dmenu
         ((modm,                 xK_p),       spawn "dmenu-bind.sh"),
+        -- Rebind gmrun
+        ((modm .|. shiftMask,   xK_p),       spawn "xfce4-appfinder"),
         -- Lock the screen
         ((modm .|. controlMask, xK_l),       spawn "slock"),
         -- Web Browser
@@ -53,7 +57,7 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         -- Editor
         ((modm .|. controlMask, xK_e),       spawn "$VISUAL"),
         -- File Browser
-        ((modm .|. controlMask, xK_f),       spawn "pcmanfm"),
+        ((modm .|. controlMask, xK_f),       spawn "thunar"),
         -- mail
         ((modm .|. controlMask, xK_m),       spawn "emacs -T mail -f my/mu4e-start"),
         -- jabber

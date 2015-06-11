@@ -2,11 +2,13 @@
 sudo ln -sf $(pwd)/udev/51-android.rules /etc/udev/rules.d/
 
 # X
-ln -sf $(pwd)/x11/Xresources ~/.Xresources
-ln -sf $(pwd)/x11/xinitrc    ~/.xinitrc
-ln -sf $(pwd)/x11/xsession   ~/.xsession
-ln -sf $(pwd)/x11/xsidle.sh  ~/bin/
-ln -sf $(pwd)/x11/gtkrc-2.0  ~/.gtkrc-2.0
+ln -sf $(pwd)/x11/Xresources   ~/.Xresources
+ln -sf $(pwd)/x11/xinitrc      ~/.xinitrc
+ln -sf $(pwd)/x11/xsession     ~/.xsession
+ln -sf $(pwd)/x11/xsidle.sh    ~/bin/
+ln -sf $(pwd)/x11/gtkrc-2.0    ~/.gtkrc-2.0
+mkdir -p ~/.config/gtk-3.0/
+ln -sf $(pwd)/x11/settings.ini ~/.config/gtk-3.0/
 
 if [ ! -e /usr/share/xsessions/xsession.desktop ]; then
     sudo cp $(pwd)/x11/xsession.desktop /usr/share/xsessions/

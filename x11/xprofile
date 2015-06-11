@@ -1,6 +1,13 @@
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+    for f in /etc/X11/xinit/xinitrc.d/?* ; do
+        [ -x "$f" ] && . "$f"
+    done
+    unset f
+fi
+
 ## Launches a session dbus instance
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
-   eval $(dbus-launch --sh-syntax --exit-with-session)
+    eval $(dbus-launch --sh-syntax --exit-with-session)
 fi
 
 ## Launches a gpg-agent instance
@@ -26,7 +33,7 @@ xset dpms 600 700 800
 xsidle.sh slock &
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
-if [ -e /usr/X11R6/bin/synclient ]; then
+if [ -x /bin/synclient ]; then
     synclient ClickFinger1=0
     synclient ClickFinger2=0
     synclient ClickFinger3=0
@@ -63,6 +70,3 @@ xrdb -merge ~/.Xresources
 ## Run syncthing sync
 mkdir -p ~/.config/syncthing
 syncthing -no-browser -logflags=3 > ~/.config/syncthing/stdout.log &
-
-## Start PCManFM Daemon
-pcmanfm --daemon-mode &

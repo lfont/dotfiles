@@ -47,16 +47,22 @@ $else\
 $endif\
 \
 ${if_up eth0}\
- | eth0: <fc=red>^</fc>${upspeed eth0} <fc=green>v</fc>${downspeed eth0}\
+ | e: <fc=red>^</fc>${upspeed eth0} <fc=green>v</fc>${downspeed eth0}\
 $endif\
 ${if_up wlan0}\
- ${if_up eth0}*$else|$endif wlan0: <fc=red>^</fc>${upspeed wlan0} <fc=green>v</fc>${downspeed wlan0}\
+ ${if_up eth0}*$else|$endif w: <fc=red>^</fc>${upspeed wlan0} <fc=green>v</fc>${downspeed wlan0}\
+$endif\
+${if_up enp0s25}\
+ | e: <fc=red>^</fc>${upspeed enp0s25} <fc=green>v</fc>${downspeed enp0s25}\
+$endif\
+${if_up wlp3s0}\
+ ${if_up enp0s25}*$else|$endif w: <fc=red>^</fc>${upspeed wlp3s0} <fc=green>v</fc>${downspeed wlp3s0}\
 $endif\
 ${if_up em0}\
- | em0: <fc=red>^</fc>${upspeed em0} <fc=green>v</fc>${downspeed em0}\
+ | e: <fc=red>^</fc>${upspeed em0} <fc=green>v</fc>${downspeed em0}\
 $endif\
 ${if_up iwm0}\
- ${if_up em0}*$else|$endif iwm0: <fc=red>^</fc>${upspeed iwm0} <fc=green>v</fc>${downspeed iwm0}\
+ ${if_up em0}*$else|$endif w: <fc=red>^</fc>${upspeed iwm0} <fc=green>v</fc>${downspeed iwm0}\
 $endif\
 \
 ${if_match "$sysname" == "OpenBSD"}\

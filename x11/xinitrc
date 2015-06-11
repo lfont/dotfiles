@@ -4,4 +4,8 @@ conky-xmobar.sh &
 stalonetray &
 firefox &
 
-exec ck-launch-session xmonad
+if [ $(which systemctl) &>/dev/null ]; then
+    exec xmonad
+else
+    exec ck-launch-session xmonad
+fi
