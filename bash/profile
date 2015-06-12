@@ -7,5 +7,11 @@ fi
 export PATH
 
 export EDITOR=e
+export VISUAL=ew
+
+# Nix environment
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+   . ~/.nix-profile/etc/profile.d/nix.sh
+fi
 
 . ~/.bashrc

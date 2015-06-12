@@ -45,3 +45,8 @@ fi
 if [[ $(uname) == OpenBSD ]]; then
    export PKG_PATH=ftp://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`machine -a`/
 fi
+
+# Nix environment
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+   . ~/.nix-profile/etc/profile.d/nix.sh
+fi
