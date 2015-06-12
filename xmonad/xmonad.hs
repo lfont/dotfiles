@@ -99,5 +99,5 @@ main = do
          keys        = myKeys <+> keys desktopConfig,
          terminal    = myTerminal,
          workspaces  = myWorkspaces,
-         startupHook = myStartupHook <+> startupHook desktopConfig
+         startupHook = startupHook desktopConfig >> myStartupHook
        }
