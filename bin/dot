@@ -17,24 +17,14 @@ cd $DIR/..
 
 if [[ $1 = "-i" ]]; then
   if [ $2 ]; then
-      if [ -e ./$2/install.fish ]; then
-          fish ./$2/install.fish $3
-      else
-          bash ./$2/install.sh $3
-      fi
+      bash ./$2/install.sh $3
   else
     # find the installers and run them iteratively
-    find . -name install.fish -print0 | xargs -0 fish
     find . -name install.sh -print0 | xargs -0 bash
   fi
 elif [ $1 ]; then
-    if [ -e ./$1/update.fish ]; then
-        fish ./$1/update.fish $2
-    else
-        bash ./$1/update.sh $2
-    fi
+    bash ./$1/update.sh $2
 else
   # find the updaters and run them iteratively
-  find . -name update.fish -print0 | xargs -0 fish
   find . -name update.sh -print0 | xargs -0 bash
 fi
