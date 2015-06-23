@@ -1,6 +1,6 @@
 [general]
 accounts = fastmail, mappy
-pythonfile = ~/.offlineimap.py
+pythonfile = ~/dotfiles/offlineimap/offlineimap.py
 
 [Account fastmail]
 localrepository = fastmail-local
