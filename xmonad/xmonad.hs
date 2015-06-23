@@ -25,20 +25,23 @@ myLayout = Full ||| tiledH ||| tiledV
 
 -- Windows management
 myManageHook = composeAll . concat $
-    [
-        [ className =? c --> viewShift "1:www"   | c <- myClassWwwShifts   ],
-        [ title     =? t --> viewShift "2:mail"  | t <- myTitleMailShifts  ],
-        [ className =? c --> viewShift "3:media" | c <- myClassMediaShifts ],
-        [ resource  =? r --> doIgnore            | r <- myResourceIgnores  ],
-        [ resource  =? c --> doFloat             | c <- myResourceFloats   ]
-    ]
+               [
+                [ className =? c --> shiftFloat "5"      | c <- myClass5ShiftFloats ],
+                [ className =? c --> viewShift "1:www"   | c <- myClassWwwShifts    ],
+                [ className =? c --> viewShift "3:media" | c <- myClassMediaShifts  ],
+                [ resource  =? r --> doIgnore            | r <- myResourceIgnores   ],
+                [ resource  =? c --> doFloat             | c <- myResourceFloats    ],
+                [ title     =? t --> viewShift "2:mail"  | t <- myTitleMailShifts   ]
+               ]
     where
-      viewShift          = doF . liftM2 (.) W.greedyView W.shift
-      myClassWwwShifts   = [ "Firefox", "Chromium" ]
-      myTitleMailShifts  = [ "mail", "jabber" ]
-      myClassMediaShifts = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
-      myResourceIgnores  = [ "stalonetray" ]
-      myResourceFloats   = [ "xfce4-appfinder" ]
+      viewShift           = doF . liftM2 (.) W.greedyView W.shift
+      shiftFloat          = \w -> doFloat <+> doShift w
+      myClass5ShiftFloats = [ "Google-chrome" ]
+      myClassMediaShifts  = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
+      myClassWwwShifts    = [ "Firefox", "Chromium" ]
+      myResourceFloats    = [ "xfce4-appfinder" ]
+      myResourceIgnores   = [ "stalonetray" ]
+      myTitleMailShifts   = [ "mail", "jabber" ]
 
 -- Keys binding
 myKeys (XConfig {modMask = modm}) = M.fromList $
