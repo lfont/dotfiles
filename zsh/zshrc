@@ -68,7 +68,7 @@ alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
 alias root="sudo -i"
 alias term="urxvt -e"
-alias pass="~/bin/kpcli-2.8.pl --kdb ~/AppData/KeePassX/default.kdbx"
+alias pass="~/bin/kpcli.pl --kdb ~/AppData/KeePassX/default.kdbx"
 
 # edit file from an Emacs shell
 function emacs_term_edit_file () {

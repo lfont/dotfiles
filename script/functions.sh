@@ -66,3 +66,18 @@ function f_install_archive () {
 
     echo $install_dir
 }
+
+function f_install_file () {
+    url=$1
+    sha256=$2
+    file_path=$DOTFILES_INSTALL_DIR/$(basename $url)
+
+    wget -P $DOTFILES_INSTALL_DIR $url
+
+    if [ $(sha256sum $file_path | cut -d ' ' -f 1) == $sha256 ]; then
+        echo $file_path
+    else
+        rm $file_path
+        echo ''
+    fi
+}

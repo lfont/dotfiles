@@ -1,21 +1,32 @@
-cd ~/bin && { curl -OL http://sourceforge.net/projects/kpcli/files/kpcli-2.8.pl; cd -; }
+. ./script/functions.sh
 
-chmod +x ~/bin/kpcli-2.8.pl
+VERSION=3.0
+SHA256=947b7b0485215f72e14bb8936c847abb583253c597f58234650922270259049c
+
+file_path=$(f_install_file http://sourceforge.net/projects/kpcli/files/kpcli-$VERSION.pl $SHA256)
+
+if [[ ! -e $file_path ]]; then
+    echo 'Remote file is invalid'
+    exit 1
+fi
+
+chmod +x $file_path
+f_link_command $file_path kpcli.pl
 
 cpan -T \
-    Clone \
-    XML::Parser \
+    Crypt::Rijndael \
+    Term::ReadKey \
+    Sort::Naturally \
     File::KeePass \
     Term::ShellUI \
-    Term::ReadKey \
-    Term::ReadLine \
-    Capture::Tiny \
-    Clipboard \
-    Data::Password \
-    Sub::Install \
     Term::ReadLine::Gnu \
-    Sort::Naturally \
-    Crypt::Rijndael
+    Clipboard \
+    Capture::Tiny \
+    Data::Password \
+    Clone \
+    XML::Parser \
+    Term::ReadLine \
+    Sub::Install
 
 PATCH=$(pwd)/kpcli/Xclip.patch
 cd ~/perl5/lib/perl5/Clipboard && { patch < $PATCH; cd -; }
