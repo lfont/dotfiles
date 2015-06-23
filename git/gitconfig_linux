@@ -3,7 +3,7 @@
     name  = Loïc Fontaine
 
 [core]
-    editor       = e
+    editor       = emacsclient -t -a nano
     excludesfile = ~/.gitignore
 
 [diff]
