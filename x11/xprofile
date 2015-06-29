@@ -67,6 +67,9 @@ eval $(cat ~/.fehbg)
 ## Set urxvt settings
 xrdb -merge ~/.Xresources
 
+## Automount removable media
+pcmanfm --daemon-mode &
+
 ## Run syncthing sync
 mkdir -p ~/.config/syncthing
 syncthing -no-browser -logflags=3 > ~/.config/syncthing/stdout.log &

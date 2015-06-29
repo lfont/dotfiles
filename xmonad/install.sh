@@ -26,9 +26,6 @@ mkdir -p ~/.xmonad
 ln -sf $(pwd)/xmonad/xmonad.hs         ~/.xmonad/
 ln -sf $(pwd)/xmonad/xmonad-start-once.sh ~/bin/
 
-# dmenu
-ln -sf $(pwd)/dmenu/dmenu-bind.sh ~/bin/
-
 # xmobar
 ln -sf $(pwd)/xmobar/xmobarrc ~/.xmobarrc
 
