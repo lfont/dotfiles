@@ -15,15 +15,15 @@ if [ ! -e /usr/share/xsessions/xsession.desktop ]; then
 fi
 
 # hw helpers
-ln -sf $(pwd)/hw/audio-volume.sh ~/bin/
-ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/halt
-ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/reboot
-ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/zzz
-ln -sf $(pwd)/hw/dbus-power.sh   ~/bin/ZZZ
+ln -sf $(pwd)/bin/audio-volume.sh ~/bin/
+ln -sf $(pwd)/bin/power.sh        ~/bin/halt
+ln -sf $(pwd)/bin/power.sh        ~/bin/reboot
+ln -sf $(pwd)/bin/power.sh        ~/bin/zzz
+ln -sf $(pwd)/bin/power.sh        ~/bin/ZZZ
 
 # xmonad
 mkdir -p ~/.xmonad
-ln -sf $(pwd)/xmonad/xmonad.hs         ~/.xmonad/
+ln -sf $(pwd)/xmonad/xmonad.hs            ~/.xmonad/
 ln -sf $(pwd)/xmonad/xmonad-start-once.sh ~/bin/
 
 # xmobar

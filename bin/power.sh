@@ -21,20 +21,20 @@ case $CMD in
         ;;
     zzz)
         if [ $(which systemctl) &>/dev/null ]; then
-            systemctl suspend && slock
+            systemctl suspend
         else
             dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend && slock
         fi
         ;;
     ZZZ)
         if [ $(which systemctl) &>/dev/null ]; then
-            systemctl hibernate && slock
+            systemctl hibernate
         else
             dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate && slock
         fi
         ;;
     *)
-        echo 'dbus-power.sh should be aliased to halt|reboot|zzz|ZZZ'
+        echo 'power.sh should be aliased to halt|reboot|zzz|ZZZ'
         exit 1
 esac
 
