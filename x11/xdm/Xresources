@@ -1,0 +1,45 @@
+Xcursor.theme: whiteglass
+
+xlogin*login.translations: #override \
+	Ctrl<Key>R: abort-display()\n\
+	<Key>F1: set-session-argument(failsafe) finish-field()\n\
+	<Key>Delete: delete-character()\n\
+	<Key>Left: move-backward-character()\n\
+	<Key>Right: move-forward-character()\n\
+	<Key>Home: move-to-begining()\n\
+	<Key>End: move-to-end()\n\
+	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+	<Key>KP_Enter: set-session-argument() finish-field()\n\
+	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+	<Key>Return: set-session-argument() finish-field()
+
+xlogin*greeting:
+xlogin*namePrompt: Username:\040
+xlogin*passwdPrompt: Password:\040
+xlogin*echoPasswd: true
+xlogin*fail: login failed
+
+xlogin*greetFont:  -adobe-helvetica-medium-r-normal--12-----------iso8859-1
+xlogin*font:       -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+xlogin*promptFont: -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+xlogin*failFont:   -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+
+xlogin*greetFace:  Helvetica-12
+xlogin*face:       Helvetica-10
+xlogin*promptFace: Helvetica-10
+xlogin*failFace:   Helvetica-10
+
+xlogin*borderWidth: 0
+xlogin*frameWidth: 0
+xlogin*innerFramesWidth: 0
+xlogin*sepWidth: 0
+
+xlogin*foreground:  #eeeeee
+xlogin*background:  #222222
+xlogin*greetColor:  #eeeeee
+xlogin*promptColor: #ffffff
+xlogin*failColor:   red
+
+xlogin*useShape: true
+xlogin*logoPadding: 0
+xlogin*geometry: 320x175

@@ -54,15 +54,17 @@ if [ -x /bin/synclient ]; then
 fi
 
 ## Restore screen layout
-if [ -e ~/.screenlayout/default.sh ]; then
-    ~/.screenlayout/default.sh &
+if [ -x ~/.screenlayout/default.sh ]; then
+    ~/.screenlayout/default.sh
 fi
 
 ## Set root window colour
-xsetroot -solid "#2E3436" &
+xsetroot -solid "#222222"
 
 ## Restore wallpaper
-eval $(cat ~/.fehbg)
+if [ -x ~/.fehbg ]; then
+   ~/.fehbg
+fi
 
 ## Set urxvt settings
 xrdb -merge ~/.Xresources
