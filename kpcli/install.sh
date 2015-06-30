@@ -13,20 +13,24 @@ fi
 chmod +x $file_path
 f_link_command $file_path kpcli.pl
 
-cpan -T \
-    Crypt::Rijndael \
-    Term::ReadKey \
-    Sort::Naturally \
-    File::KeePass \
-    Term::ShellUI \
-    Term::ReadLine::Gnu \
-    Clipboard \
-    Capture::Tiny \
-    Data::Password \
-    Clone \
-    XML::Parser \
-    Term::ReadLine \
-    Sub::Install
+PERL_PACKAGES="Crypt::Rijndael
+               Term::ReadKey
+               Sort::Naturally
+               File::KeePass
+               Term::ShellUI
+               Term::ReadLine::Gnu
+               Clipboard
+               Capture::Tiny
+               Data::Password
+               Clone
+               XML::Parser
+               Term::ReadLine
+               Term::ReadKey
+               Sub::Install"
+
+for p in $PERL_PACKAGES; do
+    perl -MCPAN -e "notest install '$p'"
+done
 
 PATCH=$(pwd)/kpcli/Xclip.patch
 cd ~/perl5/lib/perl5/Clipboard && { patch < $PATCH; cd -; }
