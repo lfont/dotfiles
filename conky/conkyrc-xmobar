@@ -83,14 +83,14 @@ $endif$endif\
 \
 ${if_running pulseaudio}\
 \
-${if_match ${exec audio-volume status} == 0}\
+${if_match ${exec audio-volume.sh status} == 0}\
  | V: 0%\
-$else${if_match ${exec audio-volume status} < 50}\
- | V: <fc=green>${exec audio-volume status}</fc>%\
-$else${if_match ${exec audio-volume status} < 90}\
- | V: <fc=orange>${exec audio-volume status}</fc>%\
+$else${if_match ${exec audio-volume.sh status} < 50}\
+ | V: <fc=green>${exec audio-volume.sh status}</fc>%\
+$else${if_match ${exec audio-volume.sh status} < 90}\
+ | V: <fc=orange>${exec audio-volume.sh status}</fc>%\
 $else\
- | V: <fc=red>${exec audio-volume status}</fc>%\
+ | V: <fc=red>${exec audio-volume.sh status}</fc>%\
 $endif$endif$endif\
 \
 $else\
