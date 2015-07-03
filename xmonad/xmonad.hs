@@ -32,32 +32,31 @@ myLayout = Full ||| tiledH ||| tiledV
 -- Windows management
 myManageHook = composeAll . concat $
                [
-                [ className =? c --> shiftFloat "5"      | c <- myClass5ShiftFloats ],
-                [ className =? c --> viewShift "1:www"   | c <- myClassWwwShifts    ],
-                [ className =? c --> viewShift "3:media" | c <- myClassMediaShifts  ],
-                [ resource  =? r --> doIgnore            | r <- myResourceIgnores   ],
-                [ resource  =? c --> doFloat             | c <- myResourceFloats    ],
-                [ title     =? t --> viewShift "2:mail"  | t <- myTitleMailShifts   ]
+                [ className =? c --> shiftFloat "1:www"   | c <- myClassWwwShiftFloats ],
+                [ className =? c --> viewShift  "1:www"   | c <- myClassWwwShifts    ],
+                [ className =? c --> viewShift  "3:media" | c <- myClassMediaShifts  ],
+                [ resource  =? r --> doIgnore             | r <- myResourceIgnores   ],
+                [ resource  =? c --> doFloat              | c <- myResourceFloats    ],
+                [ title     =? t --> viewShift  "2:mail"  | t <- myTitleMailShifts   ]
                ]
     where
-      viewShift           = doF . liftM2 (.) W.greedyView W.shift
-      shiftFloat          = \w -> doFloat <+> doShift w
-      myClass5ShiftFloats = [ "Google-chrome" ]
-      myClassMediaShifts  = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
-      myClassWwwShifts    = [ "Firefox", "Chromium" ]
-      myResourceFloats    = [ "xfce4-appfinder" ]
-      myResourceIgnores   = [ "stalonetray" ]
-      myTitleMailShifts   = [ "mail", "jabber" ]
+      viewShift             = doF . liftM2 (.) W.greedyView W.shift
+      shiftFloat            = \w -> doFloat <+> doShift w
+      myClassMediaShifts    = [ "Vlc", "Spotify", "Audacious", "Gimp" ]
+      myClassWwwShifts      = [ "Firefox", "Chromium" ]
+      myClassWwwShiftFloats = [ "Google-chrome" ]
+      myResourceFloats      = [ "xfce4-appfinder" ]
+      myResourceIgnores     = [ "stalonetray" ]
+      myTitleMailShifts     = [ "mail", "jabber" ]
 
 -- Keys binding
 menuXPConfig :: XPConfig
 menuXPConfig = greenXPConfig
     {
-      font              = "xft:Terminus-12:Regular",
-      height            = 20,
-      position          = Top,
-      promptBorderWidth = 0,
-      promptKeymap      = emacsLikeXPKeymap
+      font            = "xft:Terminus-12:Regular",
+      height          = 20,
+      position        = Top,
+      promptKeymap    = emacsLikeXPKeymap
     }
 
 myKeys (XConfig {modMask = modm}) = M.fromList $
@@ -71,7 +70,7 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         ((modm,                 xK_BackSpace),            focusUrgent),
         ((modm .|. shiftMask,   xK_BackSpace),            clearUrgents),
         -- App launcher
-        ((modm,                 xK_p),                    shellPrompt menuXPConfig),
+        ((modm,                 xK_p),                    shellPrompt menuXPConfig { alwaysHighlight = True }),
         ((modm .|. controlMask, xK_p),                    prompt ("urxvt" ++ " -e") menuXPConfig),
         ((modm .|. shiftMask,   xK_p),                    spawn "xfce4-appfinder"),
         -- App shortcut
@@ -102,8 +101,8 @@ myLogHook h = dynamicLogWithPP $ prettyPrinter h
 prettyPrinter h = xmobarPP
     {
       ppOutput = hPutStrLn h,
-      ppTitle  = xmobarColor "cyan" "" . shorten 55,
-      ppUrgent = xmobarColor "yellow" "red" . xmobarStrip
+      ppTitle  = xmobarColor "cyan"   ""    . shorten 55,
+      ppUrgent = xmobarColor "yellow" "red"
     }
 
 -- Run XMonad
