@@ -9,13 +9,13 @@
 [diff]
     tool = ediff
 [difftool "ediff"]
-    cmd    = emacs -nw -diff $LOCAL $REMOTE
+    cmd    = emacs -n -diff $LOCAL $REMOTE
     prompt = false
 
 [merge]
     tool = ediff
 [mergetool "ediff"]
-    cmd        = emacs -nw -merge $LOCAL $REMOTE $BASE $MERGED
+    cmd        = emacs -n -merge $LOCAL $REMOTE $BASE $MERGED
     keepBackup = false
     prompt     = false
 
@@ -27,4 +27,3 @@
 
 [push]
     default = simple
-
