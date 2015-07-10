@@ -1,27 +1,28 @@
--- http://www.nepherte.be/step-by-step-configuration-of-xmonad/
-
 -- Import statements
 import XMonad
 import XMonad.Config.Desktop
 import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.SetWMName
-import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.Minimize
 import XMonad.Layout.Spacing
 import XMonad.Prompt
 import XMonad.Prompt.Shell
+import qualified XMonad.StackSet as W
+
+import qualified Data.Map as M
+import Data.Monoid
 
 import Control.Monad (liftM2)
 
 import Graphics.X11.ExtraTypes.XF86
 
-import qualified Data.Map as M
-import qualified XMonad.StackSet as W
+import System.IO
 
 -- Define the names of all workspaces
 myWorkspaces :: [String]
-myWorkspaces = [ "1:www", "2:mail", "3:media", "4", "5" ]
+myWorkspaces = [ "1", "2", "3:www", "4:mail", "5:media" ]
 
 -- Layout
 myLayout = Full ||| tiledH ||| tiledV
@@ -30,14 +31,15 @@ myLayout = Full ||| tiledH ||| tiledV
       tiledV = Mirror tiledH
 
 -- Windows management
+myManageHook :: Query (Endo WindowSet)
 myManageHook = composeAll . concat $
                [
-                [ className =? c --> shiftFloat "1:www"   | c <- myClassWwwShiftFloats ],
-                [ className =? c --> viewShift  "1:www"   | c <- myClassWwwShifts    ],
-                [ className =? c --> viewShift  "3:media" | c <- myClassMediaShifts  ],
-                [ resource  =? r --> doIgnore             | r <- myResourceIgnores   ],
-                [ resource  =? c --> doFloat              | c <- myResourceFloats    ],
-                [ title     =? t --> viewShift  "2:mail"  | t <- myTitleMailShifts   ]
+                [ className =? c --> shiftFloat "3:www"   | c <- myClassWwwShiftFloats ],
+                [ className =? c --> viewShift  "3:www"   | c <- myClassWwwShifts      ],
+                [ className =? c --> viewShift  "5:media" | c <- myClassMediaShifts    ],
+                [ resource  =? r --> doIgnore             | r <- myResourceIgnores     ],
+                [ resource  =? c --> doFloat              | c <- myResourceFloats      ],
+                [ title     =? t --> viewShift  "4:mail"  | t <- myTitleMailShifts     ]
                ]
     where
       viewShift             = doF . liftM2 (.) W.greedyView W.shift
@@ -53,12 +55,13 @@ myManageHook = composeAll . concat $
 menuXPConfig :: XPConfig
 menuXPConfig = greenXPConfig
     {
-      font            = "xft:Terminus-12:Regular",
-      height          = 20,
-      position        = Top,
-      promptKeymap    = emacsLikeXPKeymap
+      font         = "xft:Terminus-12:Regular",
+      height       = 20,
+      position     = Top,
+      promptKeymap = emacsLikeXPKeymap
     }
 
+myKeys :: XConfig t -> M.Map (KeyMask, KeySym) (X ())
 myKeys (XConfig {modMask = modm}) = M.fromList $
     [
         -- Reload configuration
@@ -66,12 +69,9 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         -- Minimize window
         ((modm,                 xK_d),                    withFocused minimizeWindow),
         ((modm .|. shiftMask,   xK_d),                    sendMessage RestoreNextMinimizedWin),
-        -- Show urgency
-        ((modm,                 xK_BackSpace),            focusUrgent),
-        ((modm .|. shiftMask,   xK_BackSpace),            clearUrgents),
         -- App launcher
-        ((modm,                 xK_p),                    shellPrompt menuXPConfig { alwaysHighlight = True }),
-        ((modm .|. controlMask, xK_p),                    prompt ("urxvt" ++ " -e") menuXPConfig),
+        ((modm,                 xK_p),                    shellPrompt menuXPConfig),
+        ((modm .|. controlMask, xK_p),                    shellPrompt menuXPConfig { defaultText = "urxvt -e " }),
         ((modm .|. shiftMask,   xK_p),                    spawn "xfce4-appfinder"),
         -- App shortcut
         ((modm .|. controlMask, xK_l),                    spawn "slock"),
@@ -92,31 +92,57 @@ myTerminal = "emacsclient -c -e '(multi-term)' || emacs -f 'multi-term'"
 -- Startup
 myStartupHook :: X ()
 myStartupHook = do
+  -- fix swing apps
   setWMName "LG3D"
-  spawn     "xmonad-start-once.sh"
+  -- background services
+  spawnOnce "/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1"
+  spawnOnce "xfce4-power-manager"
+  spawnOnce "xfce4-volumed"
+  spawnOnce "pcmanfm --daemon-mode"
+  spawnOnce "syncthing -no-browser -logflags=3"
+  -- system infos
+  spawnOnce "conky-xmobar.sh"
+  -- systray
+  spawnOnce "stalonetray"
+  spawnOnce "pasystray"
+  spawnOnce "clipit"
+  spawnOnce "blueman-applet"
+  spawnOnce "nm-applet"
 
 -- Panel
+myLogHook :: Handle -> X ()
 myLogHook h = dynamicLogWithPP $ prettyPrinter h
 
+prettyPrinter :: Handle -> PP
 prettyPrinter h = xmobarPP
     {
       ppOutput = hPutStrLn h,
-      ppTitle  = xmobarColor "cyan"   ""    . shorten 55,
-      ppUrgent = xmobarColor "yellow" "red"
+      ppTitle  = xmobarColor "cyan" "" . shorten 55
     }
+
+-- Do not auto switch workspace
+filterEwmhEvent :: (Event -> X All) -> Event -> X All
+filterEwmhEvent f e = do
+  let mt = ev_message_type e
+  a_aw <- getAtom "_NET_ACTIVE_WINDOW"
+  if mt == a_aw then do
+     return (All True)
+  else do
+    f e
 
 -- Run XMonad
 main :: IO ()
 main = do
   xmobarPanel <- spawnPipe "xmobar"
-  xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig
+  xmonad $ desktopConfig
        {
-         manageHook  = myManageHook <+> manageHook desktopConfig,
-         layoutHook  = desktopLayoutModifiers $ myLayout,
-         logHook     = myLogHook xmobarPanel <+> logHook desktopConfig,
-         modMask     = mod4Mask, -- Rebind mod to windows key
-         keys        = myKeys <+> keys desktopConfig,
-         terminal    = myTerminal,
-         workspaces  = myWorkspaces,
-         startupHook = startupHook desktopConfig >> myStartupHook
+         manageHook      = myManageHook <+> manageHook desktopConfig,
+         layoutHook      = desktopLayoutModifiers $ myLayout,
+         logHook         = myLogHook xmobarPanel <+> logHook desktopConfig,
+         modMask         = mod4Mask, -- Rebind mod to windows key
+         keys            = myKeys <+> keys desktopConfig,
+         terminal        = myTerminal,
+         workspaces      = myWorkspaces,
+         startupHook     = startupHook desktopConfig >> myStartupHook,
+         handleEventHook = filterEwmhEvent $ handleEventHook desktopConfig
        }

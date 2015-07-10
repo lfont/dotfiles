@@ -26,7 +26,6 @@ ln -sf $(pwd)/bin/power.sh        ~/bin/ZZZ
 # xmonad
 mkdir -p ~/.xmonad
 ln -sf $(pwd)/xmonad/xmonad.hs            ~/.xmonad/
-ln -sf $(pwd)/xmonad/xmonad-start-once.sh ~/bin/
 
 # xmobar
 ln -sf $(pwd)/xmobar/xmobarrc ~/.xmobarrc

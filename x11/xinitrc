@@ -1,9 +1,5 @@
 . ~/dotfiles/x11/xprofile
 
-conky-xmobar.sh &
-stalonetray &
-firefox &
-
 if [ $(which systemctl) &>/dev/null ]; then
     exec xmonad
 else

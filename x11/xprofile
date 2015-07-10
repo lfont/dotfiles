@@ -62,16 +62,13 @@ fi
 xsetroot -solid "#222222"
 
 ## Restore wallpaper
-if [ -x ~/.fehbg ]; then
-   ~/.fehbg
+if [ -e ~/.fehbg ]; then
+    if [ -x ~/.fehbg ]; then
+        ~/.fehbg
+    else
+        sh ~/.fehbg
+    fi
 fi
 
 ## Set urxvt settings
 xrdb -merge ~/.Xresources
-
-## Automount removable media
-pcmanfm --daemon-mode &
-
-## Run syncthing sync
-mkdir -p ~/.config/syncthing
-syncthing -no-browser -logflags=3 > ~/.config/syncthing/stdout.log &
