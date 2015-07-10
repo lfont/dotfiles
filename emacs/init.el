@@ -27,6 +27,7 @@
 
                       flycheck
 
+                      web-mode
                       js2-mode
                       less-css-mode
                       haskell-mode
@@ -352,6 +353,10 @@ point reaches the beginning or end of the buffer, stop there."
 (add-hook 'haskell-mode-hook (lambda ()
                                (turn-on-haskell-doc-mode)
                                (turn-on-haskell-indent)))
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.twig\\'"  . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (when (require 'projectile nil t)
   (projectile-global-mode))
