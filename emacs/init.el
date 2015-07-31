@@ -189,7 +189,7 @@ point reaches the beginning or end of the buffer, stop there."
                (buffer-list))))
   (message "Other buffers killed"))
 
-(global-set-key (kbd "C-c k") 'kill-other-buffers)
+(global-set-key (kbd "C-c C-k") 'kill-other-buffers)
 
 ;; Folding
 (add-hook 'prog-mode-hook 'hs-minor-mode)
@@ -334,10 +334,10 @@ point reaches the beginning or end of the buffer, stop there."
 (require 'multiple-cursors)
 (global-set-key (kbd "C-c <down>") 'mc/mmlte--down)
 (global-set-key (kbd "C-c <up>")   'mc/mmlte--up)
-(global-set-key (kbd "C-c C-l")    'mc/edit-lines)
-(global-set-key (kbd "C-c C-d")    'mc/mark-next-like-this)
-(global-set-key (kbd "C-c C-k")    'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-c C-u")    'mc/unmark-next-like-this)
+(global-set-key (kbd "C-c l")      'mc/edit-lines)
+(global-set-key (kbd "C-c d")      'mc/mark-next-like-this)
+(global-set-key (kbd "C-c k")      'mc/skip-to-next-like-this)
+(global-set-key (kbd "C-c u")      'mc/unmark-next-like-this)
 
 (require 'whitespace)
 (setq whitespace-style '(face empty lines-tail tabs tab-mark trailing))
