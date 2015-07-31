@@ -30,9 +30,6 @@ ln -sf $(pwd)/xmonad/xmonad.hs            ~/.xmonad/
 # xmobar
 ln -sf $(pwd)/xmobar/xmobarrc ~/.xmobarrc
 
-# conky
-ln -sf $(pwd)/conky/conky-xmobar.sh ~/bin/
-
 # stalonetray
 ln -sf $(pwd)/stalonetray/stalonetrayrc ~/.stalonetrayrc
 

@@ -100,8 +100,6 @@ myStartupHook = do
   spawnOnce "xfce4-volumed"
   spawnOnce "pcmanfm --daemon-mode"
   spawnOnce "syncthing -no-browser -logflags=3"
-  -- system infos
-  spawnOnce "conky-xmobar.sh"
   -- systray
   spawnOnce "stalonetray"
   spawnOnce "pasystray"
@@ -117,7 +115,7 @@ prettyPrinter :: Handle -> PP
 prettyPrinter h = xmobarPP
     {
       ppOutput = hPutStrLn h,
-      ppTitle  = xmobarColor "cyan" "" . shorten 55
+      ppTitle  = xmobarColor "cyan" "" . shorten 60
     }
 
 -- Do not auto switch workspace
