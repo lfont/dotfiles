@@ -3,27 +3,36 @@
     name  = Loïc Fontaine
 
 [core]
-    editor       = emacsclient -t -a nano
+    editor       = emacsclient -a nano
     excludesfile = ~/.gitignore
 
 [diff]
-    tool = ediff
-[difftool "ediff"]
-    cmd    = emacs -n -diff $LOCAL $REMOTE
+    tool    = ediff
+    guitool = ediff
+
+[difftool]
     prompt = false
+
+[difftool "ediff"]
+    cmd = emacs -diff $LOCAL $REMOTE
 
 [merge]
     tool = ediff
-[mergetool "ediff"]
-    cmd        = emacs -n -merge $LOCAL $REMOTE $BASE $MERGED
+
+[mergetool]
     keepBackup = false
     prompt     = false
+
+[mergetool "ediff"]
+    cmd = emacs -merge $LOCAL $REMOTE $BASE $MERGED
 
 #[url "https://"]
 #  insteadOf = git://
 
-[color]
-    ui = true
-
 [push]
     default = simple
+
+[alias]
+    unstage = reset HEAD
+    hist    = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    pr      = pull --rebase
