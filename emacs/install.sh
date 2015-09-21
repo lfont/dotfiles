@@ -17,5 +17,4 @@ ln -sf $(pwd)/emacs/init-mu4e.el   ~/.emacs.d/lisp/
 
 ln -sf $(pwd)/offlineimap/offlineimaprc ~/.offlineimaprc
 
-f_link_command $(pwd)/emacs/ew.sh ew
 f_link_command $(pwd)/emacs/mail-notify.sh mail-notify

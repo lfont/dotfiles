@@ -3,7 +3,7 @@
     name  = Loïc Fontaine
 
 [core]
-    editor       = emacsclient -a nano
+    editor       = emacsclient -a mg
     excludesfile = ~/.gitignore
 
 [diff]
@@ -33,6 +33,7 @@
     default = simple
 
 [alias]
-    unstage = reset HEAD
-    hist    = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
-    pr      = pull --rebase
+    unstage       = reset HEAD
+    hist          = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    pr            = pull --rebase
+    currentbranch = !git branch | grep \"^\\*\" | cut -d \" \" -f 2

@@ -87,7 +87,7 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
 
 -- Define terminal
 myTerminal :: String
-myTerminal = "emacsclient -c -e '(multi-term)' || emacs -f 'multi-term'"
+myTerminal = "emacsclient -c -e '(multi-term)'"
 
 -- Startup
 myStartupHook :: X ()

@@ -1,0 +1,13 @@
+export PATH="$HOME/bin:$HOME/perl5/bin:$PATH"
+export MANPATH="$HOME/perl5/man/man:/usr/local/man:$MANPATH"
+
+## Set default node version
+if [ -e ~/.nvm/nvm.sh ]; then
+    . ~/.nvm/nvm.sh
+    nvm use default
+fi
+
+# Start an Emacs server
+if command -v emacs >/dev/null; then
+    emacs --daemon
+fi

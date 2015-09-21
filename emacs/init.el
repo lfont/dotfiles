@@ -3,9 +3,13 @@
 ;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 
 ;;; Code:
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+;(require 'server)
+;(unless (server-running-p)
+;  (server-start))
+
+;(let ((default-directory "~/.nix-profile/share/emacs/site-lisp/"))
+;  (normal-top-level-add-to-load-path '("."))
+;  (normal-top-level-add-subdirs-to-load-path))
 
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
@@ -21,9 +25,9 @@
                       magit
                       git-gutter
 
+                      ;tern
                       auto-complete
-                      tern
-                      tern-auto-complete
+                      ;tern-auto-complete
 
                       flycheck
 
@@ -31,7 +35,6 @@
                       js2-mode
                       less-css-mode
                       haskell-mode
-                      php-mode
 
                       molokai-theme
 
@@ -43,12 +46,14 @@
 
                       multi-term
                       buffer-move
+                      workgroups2
 
+                      prodigy
                       jabber)))
 
   ;; list the repositories containing them
   (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/") t)
+               '("melpa" . "https://melpa.org/packages/") t)
 
   ;; activate all the packages (in particular autoloads)
   (package-initialize)
@@ -72,9 +77,11 @@
 ;; General UI stuff
 (global-hl-line-mode t)
 (column-number-mode t)
+(menu-bar-mode -1)
 
 (setq inhibit-startup-message t)
 (setq visible-bell 'top-bottom)
+(setq use-dialog-box nil)
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -82,12 +89,17 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-(unless (display-graphic-p)
-  (menu-bar-mode -1))
-
 (load-theme 'molokai t)
 (add-to-list 'default-frame-alist
-             '(font . "Terminus-13:Regular"))
+             '(font . "Hack-10:Normal"))
+
+;(defun contextual-menubar (&optional frame)
+;  "Display the menubar in FRAME (default: selected frame) if on a graphical display, but hide it if in terminal."
+;  (interactive)
+;  (set-frame-parameter frame 'menu-bar-lines (if (display-graphic-p frame) 1 0)))
+
+;(add-hook 'after-init-hook 'contextual-menubar)
+;(add-hook 'after-make-frame-functions 'contextual-menubar)
 
 ;; Scroll line by line
 (setq scroll-step           1
@@ -151,31 +163,37 @@ point reaches the beginning or end of the buffer, stop there."
 (defun set-custom-tab-behavior ()
   "Use space instead of tabs."
   (setq indent-tabs-mode nil)
-  (setq tab-width 4)
-  (setq tab-stop-list (number-sequence 4 200 4)))
+  (setq tab-width 2)
+  (setq default-tab-width tab-width)
+  (setq standard-indent tab-width)
+  (setq c-basic-offset tab-width)
+  (setq js-indent-level tab-width)
+  (setq tab-stop-list (number-sequence tab-width 200 tab-width)))
 
 (add-hook 'text-mode-hook 'set-custom-tab-behavior)
 (add-hook 'prog-mode-hook 'set-custom-tab-behavior)
 (add-hook 'css-mode-hook  'set-custom-tab-behavior)
 
 ;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
-(defun un-indent-by-removing-spaces (count)
-  "Remove COUNT spaces from beginning of line."
+(defun un-indent-by-removing-spaces ()
+  "Remove spaces from beginning of line."
+  (interactive)
   (save-excursion
     (save-match-data
       (beginning-of-line)
       ;; get rid of tabs at beginning of line
       (when (looking-at "^\\s-+")
         (untabify (match-beginning 0) (match-end 0)))
-      (when (looking-at (concat "^" (make-string count ?\s)))
+      (when (looking-at (concat "^" (make-string tab-width ?\s)))
         (replace-match "")))))
 
-(defun un-indent-by-removing-4-spaces ()
-  "Remove 4 spaces from beginning of line."
-  (interactive)
-  (un-indent-by-removing-spaces 4))
+(global-set-key (kbd "<backtab>") 'un-indent-by-removing-spaces)
 
-(global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+;; Remove trailing white spaces
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Put a new line at the end of file
+(setq require-final-newline t)
 
 ;; http://stackoverflow.com/questions/3417438/closing-all-other-buffers-in-emacs
 (defun kill-other-buffers ()
@@ -202,6 +220,15 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Syntax checking
 (add-hook 'prog-mode-hook 'flycheck-mode)
+
+;; Line wrapping
+(set-default 'truncate-lines t)
+(setq truncate-partial-width-windows nil)
+
+(require 'tramp)
+(setq tramp-default-method "ssh")
+(add-to-list 'tramp-default-proxies-alist
+             '("\\`bibimbap\\'" "\\`root\\'" "/ssh:%h:"))
 
 ;; Use xclip to copy/paste to the terminal from X.
 (require 'xclip)
@@ -309,21 +336,31 @@ point reaches the beginning or end of the buffer, stop there."
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(eval-after-load 'tern
-  '(progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
+;(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;(eval-after-load 'tern
+;  '(progn
+;     (require 'tern-auto-complete)
+;     (tern-ac-setup)))
 
-;(require 'linum)
-;(setq linum-format " %4d |")
-;(global-linum-mode)
+(require 'linum)
+;(setq linum-format "%4d |")
 
 (require 'git-gutter)
-(global-git-gutter-mode)
-(custom-set-variables '(git-gutter:separator-sign "|"))
-(set-face-foreground 'git-gutter:separator "grey")
-;(git-gutter:linum-setup)
+
+(defun set-linum-and-git-gutter-behavior ()
+  "Set up linum and git-gutter."
+  (if (display-graphic-p)
+      (progn
+        (git-gutter:linum-setup)
+        (linum-mode))
+    (custom-set-variables '(git-gutter:separator-sign "|"))
+    (set-face-foreground 'git-gutter:separator "grey"))
+
+  (git-gutter-mode))
+
+(add-hook 'text-mode-hook 'set-linum-and-git-gutter-behavior)
+(add-hook 'prog-mode-hook 'set-linum-and-git-gutter-behavior)
+(add-hook 'css-mode-hook  'set-linum-and-git-gutter-behavior)
 
 (require 'fill-column-indicator)
 (setq fci-rule-width 3)
@@ -355,53 +392,51 @@ point reaches the beginning or end of the buffer, stop there."
                                (turn-on-haskell-indent)))
 
 (require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.twig\\'"  . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (when (require 'projectile nil t)
   (projectile-global-mode))
 
-(when (and (require 'helm         nil t)
-           (require 'helm-config  nil t)
-           (require 'helm-command nil t)
-           (require 'helm-files   nil t))
-  (setq
-   ;; open helm buffer inside current window, not occupy whole other window
-   helm-split-window-in-side-p nil
+(require 'helm-config)
+(setq
+   ;; always split to bottom
+   ;helm-always-two-windows t
+   ;; split current window and display to bottom
+   helm-split-window-in-side-p t
+   helm-split-window-default-side 'below)
    ;; Fuzzy matching
-   helm-M-x-fuzzy-match        t
-   helm-buffers-fuzzy-matching t
-   helm-recentf-fuzzy-match    t)
+   ;helm-mode-fuzzy-match t
+   ;helm-completion-in-region-fuzzy-match t)
 
-  (helm-mode t)
-  (helm-autoresize-mode t)
+(helm-mode t)
+;(helm-autoresize-mode t)
 
-  (global-set-key (kbd "M-x")     'helm-M-x)
-  (global-set-key (kbd "M-y")     'helm-show-kill-ring)
-  (global-set-key (kbd "C-x b")   'helm-mini)
-  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-x")     'helm-M-x)
+(global-set-key (kbd "M-y")     'helm-show-kill-ring)
+(global-set-key (kbd "C-x b")   'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 
-  ;; rebind tab to run persistent action
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  ;; make TAB works in terminal
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-  ;; list actions using C-z
-  (define-key helm-map (kbd "C-z") 'helm-select-action)
+;; rebind tab to run persistent action
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+;; make TAB works in terminal
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+;; list actions using C-z
+(define-key helm-map (kbd "C-z") 'helm-select-action)
 
-  (when (require 'helm-projectile nil t)
-    (defun helm-projectile-switch-buffer ()
-      "Use Helm instead of ido to switch buffer in projectile."
-      (interactive)
-      (helm :sources helm-source-projectile-buffers-list
-            :buffer "*helm projectile buffers*"
-            :prompt (projectile-prepend-project-name "Switch to buffer: ")))
+(when (require 'helm-projectile nil t)
+  (defun helm-projectile-switch-buffer ()
+    "Use Helm instead of ido to switch buffer in projectile."
+    (interactive)
+    (helm :sources helm-source-projectile-buffers-list
+          :buffer "*helm projectile buffers*"
+          :prompt (projectile-prepend-project-name "Switch to buffer: ")))
 
-    ;; Override some projectile keymaps
-    (eval-after-load 'projectile
-      '(progn
-         (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
-         (define-key projectile-command-map (kbd "f") 'helm-projectile)
-         (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project)))))
+  ;; Override some projectile keymaps
+  (eval-after-load 'projectile
+    '(progn
+       (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
+       (define-key projectile-command-map (kbd "f") 'helm-projectile)
+       (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project))))
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (when (require 'multi-term nil t)
@@ -469,6 +504,58 @@ point reaches the beginning or end of the buffer, stop there."
                                     (concatenate 'string term-ansi-at-dir "/")
                                   (format "/%s@%s:%s/" term-ansi-at-user term-ansi-at-host term-ansi-at-dir))))
     message))
+
+(require 'workgroups2)
+;; What to do on Emacs exit / workgroups-mode exit?
+(setq wg-emacs-exit-save-behavior           nil
+      wg-workgroups-mode-exit-save-behavior nil
+      ;; do nothing on start
+      wg-session-load-on-start              nil)
+(workgroups-mode 1)
+
+(require 'prodigy)
+(prodigy-define-service
+    :name "Testerize"
+    :cwd "~/code/Fasterize/testerize"
+    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
+    :args '("app.js")
+    :tags '(work fasterize devfe)
+    :port 3001)
+(prodigy-define-service
+    :name "Geonosis"
+    :cwd "~/code/Fasterize/geonosis"
+    :command "~/code/Fasterize/geonosis/sbt"
+    :args '("run" "-Dconfig.file=../FasterizeEngine/geonosis.conf")
+    :tags '(work fasterize devfe)
+    :port 9000)
+(prodigy-define-service
+    :name "FastAPI"
+    :cwd "~/code/Fasterize/fastapi"
+    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
+    :args '("app.js")
+    :tags '(work fasterize devfe)
+    :port 8101)
+(prodigy-define-service
+    :name "Engine"
+    :cwd "~/code/Fasterize/FasterizeEngine"
+    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
+    :args '("devfe")
+    :tags '(work fasterize devfe)
+    :port 8080)
+(prodigy-define-service
+    :name "Engine - .devfe.fasterized.net"
+    :cwd "~/code/Fasterize/FasterizeEngine"
+    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
+    :args '("--" "devfe" "--origin_port" "80" "--secure_origin_port" "443")
+    :tags '(work fasterize devfe)
+    :port 8080)
+(prodigy-define-service
+    :name "fasterize.com"
+    :cwd "~/code/Fasterize/fasterize.com"
+    :command "/home/loic/.rbenv/shims/rails"
+    :args '("s")
+    :tags '(work fasterize devfe)
+    :port 3000)
 
 ;; autoload optional files
 (autoload 'notify "notify")

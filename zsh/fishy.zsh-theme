@@ -25,3 +25,18 @@ ZSH_THEME_GIT_PROMPT_DELETED="%{$fg_bold[red]%}-"
 ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg_bold[magenta]%}>"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg_bold[yellow]%}#"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[cyan]%}?"
+
+add-zsh-hook precmd prompt_fishy_precmd
+
+prompt_fishy_precmd () {
+  case $TERM in
+    screen*)
+      print -Pn "\e]0;%n@%m:%~ (%l)\a"
+      ;;
+    eterm-color*)
+      print -P "\eAnSiTh %m"
+      print -P "\eAnSiTu %n"
+      print -P "\eAnSiTc %~"
+      ;;
+  esac
+}

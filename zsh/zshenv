@@ -2,11 +2,8 @@ export DE="xfce"
 export DESKTOP_SESSION="XFCE"
 export XDG_MENU_PREFIX="xfce-"
 
-export VISUAL="ew"
+export VISUAL="emacsclient -c"
 export BROWSER="firefox-aurora"
-
-export PATH="$HOME/bin:$HOME/perl5/bin:$PATH"
-export MANPATH="$HOME/perl5/man/man:/usr/local/man:$MANPATH"
 
 export PERL_MB_OPT="--install_base \"/home/loic/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=/home/loic/perl5"
@@ -49,3 +46,6 @@ fi
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
    . ~/.nix-profile/etc/profile.d/nix.sh
 fi
+
+# Docker
+export DOCKER_HOST=tcp://127.0.0.1:2375

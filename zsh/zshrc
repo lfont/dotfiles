@@ -47,8 +47,19 @@ ENABLE_CORRECTION="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git autojump nvm zsh-syntax-highlighting history-substring-search)
 
-# User configuration
+if command -v rbenv >/dev/null; then
+	 eval "$(rbenv init -)"
+fi
 
+if command -v direnv >/dev/null; then
+	 eval "$(direnv hook zsh)"
+fi
+
+if [ -x ~/code/Fasterize/fstrz/bin/fstrz ]; then
+	 eval "$(~/code/Fasterize/fstrz/bin/fstrz init -)"
+fi
+
+# User configuration
 source $ZSH/oh-my-zsh.sh
 
 # bind P and N for EMACS mode
@@ -63,21 +74,44 @@ gpg-connect-agent --quiet /bye >/dev/null
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
+# zsh
 alias zshconfig="e ~/.zshrc"
 alias ohmyzsh="e ~/.oh-my-zsh"
+
+# tools
 alias root="sudo -i"
 alias term="urxvt -e"
 alias pass="~/bin/kpcli.pl --kdb ~/AppData/KeePassX/default.kdbx"
 
-# edit file from an Emacs shell
-function emacs_term_edit_file () {
-    print -P "\eAnSiT$1" "$2:A"
-}
+# pacman (https://wiki.archlinux.org/index.php/Pacman_tips)
+alias pacupg="yaourt -Syu"          # Synchronize with repositories and then upgrade packages that are out of date on the local system.
+alias pacdl="yaourt -Sw"            # Download specified package(s) as .tar.xz ball
+alias pacin="yaourt -S"             # Install specific package(s) from the repositories
+alias pacins="yaourt -U"            # Install specific package not from the repositories but from a file
+alias pacre="yaourt -R"             # Remove the specified package(s), retaining its configuration(s) and required dependencies
+alias pacrem="yaourt -Rns"          # Remove the specified package(s), its configuration(s) and unneeded dependencies
+alias pacrep="yaourt -Si"           # Display information about a given package in the repositories
+alias pacreps="yaourt -Ss"          # Search for package(s) in the repositories
+alias pacloc="yaourt -Qi"           # Display information about a given package in the local database
+alias paclocs="yaourt -Qs"          # Search for package(s) in the local database
+alias paclo="yaourt -Qdt"           # List all packages which are orphaned
+alias paclx="yaourt -Qen"   	      # List explicitly installed packages availble in the official repository
+alias paclxe="yaourt -Qem"          # List explicitly installed packages not avaible in the official repository
+alias pacc="yaourt -Scc"            # Clean cache - delete all the package files in the cache
+alias paclf="yaourt -Ql"            # List all files installed by a given package
+alias pacown="yaourt -Qo"           # Show package(s) owning the specified file(s)
+alias pacexpl="yaourt -D --asexp"   # Mark one or more installed packages as explicitly installed
+alias pacimpl="yaourt -D --asdep"   # Mark one or more installed packages as non explicitly installed
 
+# Emacs: edit file from an Emacs shell (http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/)
 if [ "${TERM}x" = "eterm-colorx" ]; then
-    alias e="emacs_term_edit_file e"
-    alias x="emacs_term_edit_file x"
+    alias e="print -P '\eAnSiTe'"
+    alias x="print -P '\eAnSiTx'"
 else
-    alias e="emacsclient -t -a nano"
+    alias e="emacsclient -t -a mg"
+    alias x="emacsclient -t -a mg"
 fi
+
+# fstrz: Fasterize tools
+alias fstup="fstrz host up cache01-devfe web01-devfe graphite01-devfe"
+alias fstdown="fstrz host halt cache01-devfe web01-devfe graphite01-devfe"
