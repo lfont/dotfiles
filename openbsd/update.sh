@@ -1,6 +1,6 @@
 ARCH=$(machine -a)
 
-VERSION=57
+VERSION=58
 
 URL=http://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/$ARCH
 
@@ -13,6 +13,7 @@ SETS="xserv${VERSION}.tgz
       xbase${VERSION}.tgz
       comp${VERSION}.tgz
       man${VERSION}.tgz
+      game${VERSION}.tgz
       base${VERSION}.tgz"
 
 CWD=$(pwd)

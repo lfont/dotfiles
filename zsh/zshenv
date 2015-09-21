@@ -39,7 +39,7 @@ fi
 
 # OpenBSD's packages
 if [[ $(uname) == OpenBSD ]]; then
-   export PKG_PATH=ftp://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`machine -a`/
+   export PKG_PATH=http://ftp.fr.openbsd.org/pub/OpenBSD/snapshots/packages/`machine -a`/
 fi
 
 # Nix environment
