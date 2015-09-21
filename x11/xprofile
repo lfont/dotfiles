@@ -30,7 +30,7 @@ xset s 300 60
 xset dpms 600 700 800
 
 ## Lock the screen on inactivity
-xsidle.sh slock &
+xsidle.sh xlock &
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
 if [ -x /bin/synclient ]; then

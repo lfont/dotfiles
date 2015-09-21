@@ -1,6 +1,6 @@
 . ~/dotfiles/x11/xprofile
 
-if [ $(which systemctl) &>/dev/null ]; then
+if command -v systemctl >/dev/null; then
     exec xmonad
 else
     exec ck-launch-session xmonad

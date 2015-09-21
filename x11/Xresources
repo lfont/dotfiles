@@ -68,7 +68,7 @@ URxvt*foreground: white
 ! URxvt*borderColor: colour
 
 ! Select the fonts to be used. This is a comma separated list of font names that are checked in order when trying to find glyphs for characters. The first font defines
-URxvt*font:  xft:terminus:regular:size=13
+URxvt*font:  xft:hack:normal:size=10
 
 ! URxvt*boldFont: fontlist
 
@@ -267,3 +267,1295 @@ URxvt*cursorBlink: true
 ! URxvt*iso14755_52: boolean
 
 
+XLock.mode: blank
+XLock.erasemode:
+XLock.erasedelay: 400
+XLock.erasetime: 2
+XLock.allowaccess: off
+XLock.debug: off
+!XLock.description: on
+XLock.description: off
+XLock.echokeys: off
+XLock.echokey: ?
+XLock.enablesaver: off
+XLock.resetsaver: on
+XLock.grabmouse: on
+XLock.grabserver: off
+XLock.hide: on
+XLock.install: on
+XLock.mousemotion: off
+XLock.mono: off
+XLock.sound: off
+XLock.showfps: off
+XLock.fpstop: on
+!XLock.fpsfont: -*-helvetica-medium-r-*-*-24-*-*-*-*-*-*
+XLock.fpsfont: -adobe-helvetica-medium-r-normal--12-----------iso8859-1
+XLock.showdate: on
+XLock.timeelapsed: off
+XLock.usefirst: on
+XLock.verbose: off
+XLock.visual:
+XLock.nice: 10
+XLock.lockdelay: 0
+XLock.unlockdelay: 0
+!XLock.timeout: 30
+XLock.timeout: 5
+!XLock.font: -*-helvetica-medium-r-*-*-24-*-*-*-*-*-*
+XLock.font: -adobe-helvetica-medium-r-normal--12-----------iso8859-1
+!XLock.planfont: -*-fixed-medium-r-*-*-14-*-*-*-*-*-*
+XLock.planfont: -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+!XLock.fontset: -*-helvetica-medium-r-*-*-24-*-*-*-*-*-*,-*-*-medium-r-normal--24-*
+XLock.fontset: -adobe-helvetica-medium-r-normal--12-----------iso8859-1
+!XLock.planfontset: -*-fixed-medium-r-*-*-14-*-*-*-*-*-*,-*-*-medium-r-normal--14-*
+XLock.planfontset: -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+!XLock.background: White
+XLock.background: Black
+!XLock.foreground: Black
+XLock.foreground: White
+!XLock.username: Name:
+XLock.username: Username:\040
+XLock.password: Password:\040
+!XLock.info: Enter password to unlock; select icon to lock.
+XLock.info:
+XLock.validate: Validating login...
+XLock.invalid: Invalid login.
+XLock.invalidCapsLock: Invalid login, Caps Lock on.
+XLock.attempt:  failed attempt.
+XLock.attempts:  failed attempts.
+XLock.geometry:
+XLock.icongeometry:
+XLock.wireframe: off
+XLock.use3d: off
+XLock.delta3d: 1.5
+XLock.none3d: Black
+XLock.right3d: Blue
+XLock.left3d: Red
+XLock.both3d: Magenta
+XLock.program: fortune -s
+XLock.messagesfile:
+XLock.messagefile:
+XLock.message:
+!XLock.messagefont: -*-times-*-*-*-*-18-*-*-*-*-*-*-*
+XLock.messagefont: -adobe-helvetica-medium-r-normal--10-----------iso8859-1
+XLock.startCmd:
+XLock.endCmd:
+XLock.pipepassCmd:
+XLock.logoutCmd:
+XLock.dpmsstandby: -1
+XLock.dpmssuspend: -1
+XLock.dpmsoff: -1
+XLock.mailCmd:
+XLock.mailIcon:
+XLock.nomailIcon:
+XLock.anemone.delay: 5000
+XLock.anemone.count: 1
+XLock.anemone.cycles: 1
+XLock.anemone.size: 1
+XLock.anemone.ncolors: 64
+XLock.anemone.saturation: 1
+XLock.anemone.bitmap:
+XLock.anemone.arms: 256
+XLock.anemone.finpoints: 64
+XLock.anemone.width: 2
+XLock.anemone.withdraw: 2400
+XLock.anemone.turnspeed: 5
+XLock.ant.delay: 1000
+XLock.ant.count: -3
+XLock.ant.cycles: 40000
+XLock.ant.size: -12
+XLock.ant.ncolors: 64
+XLock.ant.saturation: 1
+XLock.ant.bitmap:
+XLock.ant.label: True
+XLock.ant.neighbors: 0
+XLock.ant.rule: A
+XLock.ant.truchet: False
+XLock.ant.eyes: False
+XLock.ant.sharpturn: False
+XLock.ant.vertical: False
+XLock.ant3d.delay: 5000
+XLock.ant3d.count: -3
+XLock.ant3d.cycles: 10000
+XLock.ant3d.size: 1
+XLock.ant3d.ncolors: 64
+XLock.ant3d.saturation: 1
+XLock.ant3d.bitmap:
+XLock.ant3d.label: True
+XLock.ant3d.neighbors: 0
+XLock.ant3d.rule: A
+XLock.ant3d.eyes: False
+XLock.apollonian.delay: 1000000
+XLock.apollonian.count: 64
+XLock.apollonian.cycles: 20
+XLock.apollonian.size: 1
+XLock.apollonian.ncolors: 64
+XLock.apollonian.saturation: 1
+XLock.apollonian.bitmap:
+XLock.apollonian.altgeom: True
+XLock.apollonian.label: True
+XLock.atlantis.delay: 25000
+XLock.atlantis.count: 4
+XLock.atlantis.cycles: 250
+XLock.atlantis.size: 6000
+XLock.atlantis.ncolors: 64
+XLock.atlantis.saturation: 1
+XLock.atlantis.bitmap:
+XLock.atlantis.whalespeed: 250
+XLock.atlantis.texture: True
+XLock.atlantis.gradient: False
+XLock.atunnels.delay: 25000
+XLock.atunnels.count: 1
+XLock.atunnels.cycles: 1
+XLock.atunnels.size: 0
+XLock.atunnels.ncolors: 64
+XLock.atunnels.saturation: 1
+XLock.atunnels.bitmap:
+XLock.atunnels.light: True
+XLock.atunnels.wire: False
+XLock.atunnels.texture: True
+XLock.ball.delay: 10000
+XLock.ball.count: 10
+XLock.ball.cycles: 20
+XLock.ball.size: -100
+XLock.ball.ncolors: 64
+XLock.ball.saturation: 1
+XLock.ball.bitmap:
+XLock.bat.delay: 100000
+XLock.bat.count: -8
+XLock.bat.cycles: 1
+XLock.bat.size: 0
+XLock.bat.ncolors: 64
+XLock.bat.saturation: 1
+XLock.bat.bitmap:
+XLock.blot.delay: 200000
+XLock.blot.count: 6
+XLock.blot.cycles: 30
+XLock.blot.size: 1
+XLock.blot.ncolors: 64
+XLock.blot.saturation: 0.3
+XLock.blot.bitmap:
+XLock.bouboule.delay: 10000
+XLock.bouboule.count: 100
+XLock.bouboule.cycles: 1
+XLock.bouboule.size: 15
+XLock.bouboule.ncolors: 64
+XLock.bouboule.saturation: 1
+XLock.bouboule.bitmap:
+XLock.bounce.delay: 5000
+XLock.bounce.count: -10
+XLock.bounce.cycles: 1
+XLock.bounce.size: 0
+XLock.bounce.ncolors: 64
+XLock.bounce.saturation: 1
+XLock.bounce.bitmap:
+XLock.braid.delay: 1000
+XLock.braid.count: 15
+XLock.braid.cycles: 100
+XLock.braid.size: -7
+XLock.braid.ncolors: 64
+XLock.braid.saturation: 1
+XLock.braid.bitmap:
+XLock.bubble.delay: 100000
+XLock.bubble.count: 25
+XLock.bubble.cycles: 1
+XLock.bubble.size: 100
+XLock.bubble.ncolors: 64
+XLock.bubble.saturation: 0.3
+XLock.bubble.bitmap:
+XLock.bubble.boil: False
+XLock.bubble3d.delay: 20000
+XLock.bubble3d.count: 1
+XLock.bubble3d.cycles: 2
+XLock.bubble3d.size: 1
+XLock.bubble3d.ncolors: 64
+XLock.bubble3d.saturation: 1
+XLock.bubble3d.bitmap:
+XLock.bug.delay: 75000
+XLock.bug.count: 10
+XLock.bug.cycles: 32767
+XLock.bug.size: -4
+XLock.bug.ncolors: 64
+XLock.bug.saturation: 1
+XLock.bug.bitmap:
+XLock.bug.neighbors: 0
+XLock.bug.eyes: False
+XLock.bug.vertical: False
+XLock.cage.delay: 80000
+XLock.cage.count: 1
+XLock.cage.cycles: 1
+XLock.cage.size: 1
+XLock.cage.ncolors: 64
+XLock.cage.saturation: 1
+XLock.cage.bitmap:
+XLock.clock.delay: 100000
+XLock.clock.count: -16
+XLock.clock.cycles: 200
+XLock.clock.size: -200
+XLock.clock.ncolors: 64
+XLock.clock.saturation: 1
+XLock.clock.bitmap:
+XLock.coral.delay: 60000
+XLock.coral.count: -3
+XLock.coral.cycles: 1
+XLock.coral.size: 35
+XLock.coral.ncolors: 64
+XLock.coral.saturation: 0.6
+XLock.coral.bitmap:
+XLock.crystal.delay: 60000
+XLock.crystal.count: -500
+XLock.crystal.cycles: 200
+XLock.crystal.size: -15
+XLock.crystal.ncolors: 64
+XLock.crystal.saturation: 1
+XLock.crystal.bitmap:
+XLock.crystal.nx: -3
+XLock.crystal.ny: -3
+XLock.crystal.centre: False
+XLock.crystal.maxsize: False
+XLock.crystal.cell: True
+XLock.crystal.grid: False
+XLock.crystal.cycle: True
+XLock.crystal.vertical: False
+XLock.daisy.delay: 100000
+XLock.daisy.count: 300
+XLock.daisy.cycles: 350
+XLock.daisy.size: 1
+XLock.daisy.ncolors: 64
+XLock.daisy.saturation: 1
+XLock.daisy.bitmap:
+XLock.daisy.garden: False
+XLock.dclock.delay: 10000
+XLock.dclock.count: 1
+XLock.dclock.cycles: 10000
+XLock.dclock.size: 1
+XLock.dclock.ncolors: 64
+XLock.dclock.saturation: 0.3
+XLock.dclock.bitmap:
+XLock.dclock.binary: False
+XLock.dclock.led: False
+XLock.dclock.popex: False
+XLock.dclock.forest: False
+XLock.dclock.hiv: False
+XLock.dclock.lab: False
+XLock.dclock.veg: False
+XLock.dclock.time24: False
+XLock.dclock.y2k: False
+XLock.dclock.millennium: False
+XLock.dclock.mayan: False
+XLock.decay.delay: 200000
+XLock.decay.count: 6
+XLock.decay.cycles: 30
+XLock.decay.size: 1
+XLock.decay.ncolors: 64
+XLock.decay.saturation: 0.3
+XLock.decay.bitmap:
+XLock.deco.delay: 1000000
+XLock.deco.count: -30
+XLock.deco.cycles: 2
+XLock.deco.size: -10
+XLock.deco.ncolors: 64
+XLock.deco.saturation: 0.6
+XLock.deco.bitmap:
+XLock.deluxe.delay: 5000
+XLock.deluxe.count: 5
+XLock.deluxe.cycles: 1
+XLock.deluxe.size: 1
+XLock.deluxe.ncolors: 64
+XLock.deluxe.saturation: 1
+XLock.deluxe.bitmap:
+XLock.deluxe.thickness: 50
+XLock.deluxe.speed: 15
+XLock.deluxe.planes: 0
+XLock.deluxe.transparent: False
+XLock.deluxe.mono: False
+XLock.deluxe.db: True
+XLock.demon.delay: 50000
+XLock.demon.count: 0
+XLock.demon.cycles: 1000
+XLock.demon.size: -7
+XLock.demon.ncolors: 64
+XLock.demon.saturation: 1
+XLock.demon.bitmap:
+XLock.demon.neighbors: 0
+XLock.demon.vertical: False
+XLock.demon.colorsonly: False
+XLock.dilemma.delay: 200000
+XLock.dilemma.count: -2
+XLock.dilemma.cycles: 1000
+XLock.dilemma.size: 0
+XLock.dilemma.ncolors: 64
+XLock.dilemma.saturation: 1
+XLock.dilemma.bitmap:
+XLock.dilemma.neighbors: 0
+XLock.dilemma.bonus: 1.85
+XLock.dilemma.conscious: True
+XLock.dilemma.vertical: False
+XLock.discrete.delay: 1000
+XLock.discrete.count: 4096
+XLock.discrete.cycles: 2500
+XLock.discrete.size: 1
+XLock.discrete.ncolors: 64
+XLock.discrete.saturation: 1
+XLock.discrete.bitmap:
+XLock.dragon.delay: 2000000
+XLock.dragon.count: 1
+XLock.dragon.cycles: 16
+XLock.dragon.size: -24
+XLock.dragon.ncolors: 64
+XLock.dragon.saturation: 1
+XLock.dragon.bitmap:
+XLock.dragon.vertical: False
+XLock.drift.delay: 10000
+XLock.drift.count: 30
+XLock.drift.cycles: 1
+XLock.drift.size: 1
+XLock.drift.ncolors: 64
+XLock.drift.saturation: 1
+XLock.drift.bitmap:
+XLock.drift.grow: False
+XLock.drift.liss: False
+XLock.euler2d.delay: 1000
+XLock.euler2d.count: 1024
+XLock.euler2d.cycles: 3000
+XLock.euler2d.size: 1
+XLock.euler2d.ncolors: 64
+XLock.euler2d.saturation: 1
+XLock.euler2d.bitmap:
+XLock.euler2d.eulertail: 10
+XLock.euler2d.eulerpower: 1
+XLock.eyes.delay: 20000
+XLock.eyes.count: -8
+XLock.eyes.cycles: 5
+XLock.eyes.size: 1
+XLock.eyes.ncolors: 64
+XLock.eyes.saturation: 1
+XLock.eyes.bitmap:
+XLock.eyes.trackmouse: False
+XLock.fadeplot.delay: 30000
+XLock.fadeplot.count: 10
+XLock.fadeplot.cycles: 1500
+XLock.fadeplot.size: 1
+XLock.fadeplot.ncolors: 64
+XLock.fadeplot.saturation: 0.6
+XLock.fadeplot.bitmap:
+XLock.fiberlamp.delay: 10000
+XLock.fiberlamp.count: 500
+XLock.fiberlamp.cycles: 10000
+XLock.fiberlamp.size: 0
+XLock.fiberlamp.ncolors: 64
+XLock.fiberlamp.saturation: 1
+XLock.fiberlamp.bitmap:
+XLock.fire.delay: 10000
+XLock.fire.count: 800
+XLock.fire.cycles: 1
+XLock.fire.size: 0
+XLock.fire.ncolors: 64
+XLock.fire.saturation: 1
+XLock.fire.bitmap:
+XLock.fire.texture: True
+XLock.fire.fog: False
+XLock.fire.shadows: True
+XLock.fire.trackmouse: False
+XLock.fire.wander: True
+XLock.fire.trees: 5
+XLock.flag.delay: 50000
+XLock.flag.count: 1
+XLock.flag.cycles: 1000
+XLock.flag.size: -7
+XLock.flag.ncolors: 64
+XLock.flag.saturation: 1
+XLock.flag.bitmap:
+XLock.flag.invert: False
+XLock.flame.delay: 750000
+XLock.flame.count: 20
+XLock.flame.cycles: 10000
+XLock.flame.size: 1
+XLock.flame.ncolors: 64
+XLock.flame.saturation: 1
+XLock.flame.bitmap:
+XLock.flow.delay: 1000
+XLock.flow.count: 3000
+XLock.flow.cycles: 10000
+XLock.flow.size: -10
+XLock.flow.ncolors: 64
+XLock.flow.saturation: 1
+XLock.flow.bitmap:
+XLock.flow.rotate: TRUE
+XLock.flow.ride: TRUE
+XLock.flow.box: TRUE
+XLock.flow.periodic: TRUE
+XLock.flow.search: TRUE
+XLock.flow.dbuf: TRUE
+XLock.forest.delay: 400000
+XLock.forest.count: 100
+XLock.forest.cycles: 200
+XLock.forest.size: 1
+XLock.forest.ncolors: 64
+XLock.forest.saturation: 1
+XLock.forest.bitmap:
+XLock.fzort.delay: 10000
+XLock.fzort.count: 1
+XLock.fzort.cycles: 1000
+XLock.fzort.size: 1
+XLock.fzort.ncolors: 64
+XLock.fzort.saturation: 1
+XLock.fzort.bitmap:
+XLock.galaxy.delay: 100
+XLock.galaxy.count: -5
+XLock.galaxy.cycles: 250
+XLock.galaxy.size: -3
+XLock.galaxy.ncolors: 64
+XLock.galaxy.saturation: 1
+XLock.galaxy.bitmap:
+XLock.galaxy.fisheye: True
+XLock.galaxy.tracks: False
+XLock.gears.delay: 50000
+XLock.gears.count: 1
+XLock.gears.cycles: 2
+XLock.gears.size: 0
+XLock.gears.ncolors: 64
+XLock.gears.saturation: 1
+XLock.gears.bitmap:
+XLock.gears.planetary: False
+XLock.gears.planetsize: 0
+XLock.glplanet.delay: 15000
+XLock.glplanet.count: 1
+XLock.glplanet.cycles: 2
+XLock.glplanet.size: 1
+XLock.glplanet.ncolors: 64
+XLock.glplanet.saturation: 1
+XLock.glplanet.bitmap:
+XLock.glplanet.rotate: True
+XLock.glplanet.roll: True
+XLock.glplanet.bounce: True
+XLock.glplanet.texture: True
+XLock.glplanet.stars: True
+XLock.glplanet.light: True
+XLock.glplanet.pimage: BUILTIN
+XLock.goop.delay: 10000
+XLock.goop.count: -5
+XLock.goop.cycles: 1
+XLock.goop.size: 1
+XLock.goop.ncolors: 64
+XLock.goop.saturation: 1
+XLock.goop.bitmap:
+XLock.grav.delay: 10000
+XLock.grav.count: -12
+XLock.grav.cycles: 1
+XLock.grav.size: 1
+XLock.grav.ncolors: 64
+XLock.grav.saturation: 1
+XLock.grav.bitmap:
+XLock.grav.decay: False
+XLock.grav.trail: False
+XLock.helix.delay: 25000
+XLock.helix.count: 1
+XLock.helix.cycles: 100
+XLock.helix.size: 1
+XLock.helix.ncolors: 64
+XLock.helix.saturation: 1
+XLock.helix.bitmap:
+XLock.helix.ellipse: False
+XLock.hop.delay: 10000
+XLock.hop.count: 1000
+XLock.hop.cycles: 2500
+XLock.hop.size: 1
+XLock.hop.ncolors: 64
+XLock.hop.saturation: 1
+XLock.hop.bitmap:
+XLock.hop.martin: False
+XLock.hop.popcorn: False
+XLock.hop.ejk1: False
+XLock.hop.ejk2: False
+XLock.hop.ejk3: False
+XLock.hop.ejk4: False
+XLock.hop.ejk5: False
+XLock.hop.ejk6: False
+XLock.hop.rr: False
+XLock.hop.jong: False
+XLock.hop.sine: False
+XLock.hyper.delay: 100000
+XLock.hyper.count: -6
+XLock.hyper.cycles: 300
+XLock.hyper.size: 1
+XLock.hyper.ncolors: 64
+XLock.hyper.saturation: 1
+XLock.hyper.bitmap:
+XLock.hyper.randomStart: True
+XLock.hyper.showAxes: True
+XLock.hyper.showPlanes: False
+XLock.hyper.spinDelay: 2
+XLock.ico.delay: 100000
+XLock.ico.count: 0
+XLock.ico.cycles: 400
+XLock.ico.size: 0
+XLock.ico.ncolors: 64
+XLock.ico.saturation: 1
+XLock.ico.bitmap:
+XLock.ico.faces: True
+XLock.ico.edges: True
+XLock.ico.opaque: True
+XLock.ifs.delay: 1000
+XLock.ifs.count: 1
+XLock.ifs.cycles: 1
+XLock.ifs.size: 1
+XLock.ifs.ncolors: 64
+XLock.ifs.saturation: 1
+XLock.ifs.bitmap:
+XLock.image.delay: 3000000
+XLock.image.count: -20
+XLock.image.cycles: 1
+XLock.image.size: 1
+XLock.image.ncolors: 64
+XLock.image.saturation: 1
+XLock.image.bitmap:
+XLock.image.icononly: FALSE
+XLock.invert.delay: 80000
+XLock.invert.count: 1
+XLock.invert.cycles: 1
+XLock.invert.size: 1
+XLock.invert.ncolors: 64
+XLock.invert.saturation: 1
+XLock.invert.bitmap:
+XLock.juggle.delay: 10000
+XLock.juggle.count: 200
+XLock.juggle.cycles: 1000
+XLock.juggle.size: 1
+XLock.juggle.ncolors: 64
+XLock.juggle.saturation: 1
+XLock.juggle.bitmap:
+XLock.juggle.pattern: .
+XLock.juggle.tail: 1
+XLock.juggle.real: True
+XLock.juggle.describe: True
+XLock.juggle.balls: True
+XLock.juggle.clubs: True
+XLock.juggle.torches: True
+XLock.juggle.knives: True
+XLock.juggle.rings: True
+XLock.juggle.bballs: True
+XLock.juggle.only:
+XLock.juggler3d.delay: 10000
+XLock.juggler3d.count: 200
+XLock.juggler3d.cycles: 1000
+XLock.juggler3d.size: 1
+XLock.juggler3d.ncolors: 64
+XLock.juggler3d.saturation: 1
+XLock.juggler3d.bitmap:
+XLock.juggler3d.pattern: random
+XLock.juggler3d.tail: 1
+XLock.juggler3d.real: True
+XLock.juggler3d.describe: True
+XLock.juggler3d.balls: True
+XLock.juggler3d.clubs: True
+XLock.juggler3d.torches: True
+XLock.juggler3d.knives: True
+XLock.juggler3d.rings: True
+XLock.juggler3d.bballs: True
+XLock.juggler3d.only:
+XLock.julia.delay: 10000
+XLock.julia.count: 1000
+XLock.julia.cycles: 20
+XLock.julia.size: 1
+XLock.julia.ncolors: 64
+XLock.julia.saturation: 1
+XLock.julia.bitmap:
+XLock.julia.trackmouse: False
+XLock.kaleid.delay: 60000
+XLock.kaleid.count: -8
+XLock.kaleid.cycles: 40
+XLock.kaleid.size: -9
+XLock.kaleid.ncolors: 64
+XLock.kaleid.saturation: 0.6
+XLock.kaleid.bitmap:
+XLock.kaleid.disconnected: True
+XLock.kaleid.serial: False
+XLock.kaleid.alternate: False
+XLock.kaleid.spiral: False
+XLock.kaleid.spots: False
+XLock.kaleid.quad: False
+XLock.kaleid.oct: False
+XLock.kaleid.linear: False
+XLock.kumppa.delay: 10000
+XLock.kumppa.count: 1
+XLock.kumppa.cycles: 1000
+XLock.kumppa.size: 1
+XLock.kumppa.ncolors: 64
+XLock.kumppa.saturation: 1
+XLock.kumppa.bitmap:
+XLock.kumppa.speed: 0.1
+XLock.kumppa.rrandom: True
+XLock.lament.delay: 10000
+XLock.lament.count: 1
+XLock.lament.cycles: 1
+XLock.lament.size: 1
+XLock.lament.ncolors: 64
+XLock.lament.saturation: 1
+XLock.lament.bitmap:
+XLock.lament.texture: True
+XLock.laser.delay: 20000
+XLock.laser.count: -10
+XLock.laser.cycles: 200
+XLock.laser.size: 1
+XLock.laser.ncolors: 64
+XLock.laser.saturation: 1
+XLock.laser.bitmap:
+XLock.life.delay: 750000
+XLock.life.count: 40
+XLock.life.cycles: 140
+XLock.life.size: 0
+XLock.life.ncolors: 64
+XLock.life.saturation: 1
+XLock.life.bitmap:
+XLock.life.label: True
+XLock.life.draw: True
+XLock.life.neighbors: 0
+XLock.life.repeat: 0
+XLock.life.rule: G
+XLock.life.lifefile:
+XLock.life.serial: False
+XLock.life.vertical: False
+XLock.life.glidersearch: False
+XLock.life.patternsearch: False
+XLock.life.nontot: False
+XLock.life.conway: False
+XLock.life.highlife: False
+XLock.life.daynight: False
+XLock.life.callahan: False
+XLock.life.andreen: False
+XLock.life.bays: False
+XLock.life.trilife: False
+XLock.life.trilife1: False
+XLock.life.trilife2: False
+XLock.life.pent: False
+XLock.life.pent2: False
+XLock.life1d.delay: 10000
+XLock.life1d.count: -5
+XLock.life1d.cycles: 10
+XLock.life1d.size: 0
+XLock.life1d.ncolors: 64
+XLock.life1d.saturation: 1
+XLock.life1d.bitmap:
+XLock.life1d.totalistic: True
+XLock.life3d.delay: 1000000
+XLock.life3d.count: 35
+XLock.life3d.cycles: 85
+XLock.life3d.size: 1
+XLock.life3d.ncolors: 64
+XLock.life3d.saturation: 1
+XLock.life3d.bitmap:
+XLock.life3d.label: True
+XLock.life3d.draw: True
+XLock.life3d.neighbors: 0
+XLock.life3d.repeat: 0
+XLock.life3d.rule: G
+XLock.life3d.lifefile:
+XLock.life3d.serial: False
+XLock.life3d.glidersearch: False
+XLock.life3d.patternsearch: False
+XLock.lightning.delay: 10000
+XLock.lightning.count: 1
+XLock.lightning.cycles: 1
+XLock.lightning.size: 1
+XLock.lightning.ncolors: 64
+XLock.lightning.saturation: 0.6
+XLock.lightning.bitmap:
+XLock.lisa.delay: 25000
+XLock.lisa.count: 1
+XLock.lisa.cycles: 256
+XLock.lisa.size: -1
+XLock.lisa.ncolors: 64
+XLock.lisa.saturation: 1
+XLock.lisa.bitmap:
+XLock.lisa.additive: True
+XLock.lissie.delay: 10000
+XLock.lissie.count: 1
+XLock.lissie.cycles: 2000
+XLock.lissie.size: -200
+XLock.lissie.ncolors: 64
+XLock.lissie.saturation: 0.6
+XLock.lissie.bitmap:
+XLock.loop.delay: 100000
+XLock.loop.count: -5
+XLock.loop.cycles: 1600
+XLock.loop.size: -12
+XLock.loop.ncolors: 64
+XLock.loop.saturation: 1
+XLock.loop.bitmap:
+XLock.loop.neighbors: 0
+XLock.loop.langton: False
+XLock.loop.byl: False
+XLock.loop.chou1: False
+XLock.loop.chou2: False
+XLock.loop.evolve: False
+XLock.loop.dissolve: False
+XLock.loop.sheath: False
+XLock.loop.wrap: True
+XLock.loop.vertical: False
+XLock.lyapunov.delay: 25000
+XLock.lyapunov.count: 600
+XLock.lyapunov.cycles: 1
+XLock.lyapunov.size: 1
+XLock.lyapunov.ncolors: 64
+XLock.lyapunov.saturation: 1
+XLock.lyapunov.bitmap:
+XLock.lyapunov.cycle: True
+XLock.mandelbrot.delay: 25000
+XLock.mandelbrot.count: -8
+XLock.mandelbrot.cycles: 20000
+XLock.mandelbrot.size: 1
+XLock.mandelbrot.ncolors: 64
+XLock.mandelbrot.saturation: 1
+XLock.mandelbrot.bitmap:
+XLock.mandelbrot.increment: 1.00
+XLock.mandelbrot.binary: False
+XLock.mandelbrot.dem: False
+XLock.mandelbrot.lyap: False
+XLock.mandelbrot.alpha: False
+XLock.mandelbrot.index: False
+XLock.mandelbrot.pow: False
+XLock.mandelbrot.sin: False
+XLock.mandelbrot.cycle: True
+XLock.marquee.delay: 100000
+XLock.marquee.count: 1
+XLock.marquee.cycles: 1
+XLock.marquee.size: 1
+XLock.marquee.ncolors: 64
+XLock.marquee.saturation: 1
+XLock.marquee.bitmap:
+XLock.matrix.delay: 1000
+XLock.matrix.count: 1
+XLock.matrix.cycles: 1
+XLock.matrix.size: 1
+XLock.matrix.ncolors: 64
+XLock.matrix.saturation: 1
+XLock.matrix.bitmap:
+XLock.maze.delay: 1000
+XLock.maze.count: 1
+XLock.maze.cycles: 3000
+XLock.maze.size: -40
+XLock.maze.ncolors: 64
+XLock.maze.saturation: 1
+XLock.maze.bitmap:
+XLock.maze.thick: False
+XLock.maze.threed: False
+XLock.moebius.delay: 30000
+XLock.moebius.count: 1
+XLock.moebius.cycles: 1
+XLock.moebius.size: 1
+XLock.moebius.ncolors: 64
+XLock.moebius.saturation: 1
+XLock.moebius.bitmap:
+XLock.moebius.solidmoebius: False
+XLock.moebius.noants: False
+XLock.molecule.delay: 50000
+XLock.molecule.count: 1
+XLock.molecule.cycles: 20
+XLock.molecule.size: 1
+XLock.molecule.ncolors: 64
+XLock.molecule.saturation: 1
+XLock.molecule.bitmap:
+XLock.molecule.molecule: (default)
+XLock.molecule.spin: XYZ
+XLock.molecule.wander: False
+XLock.molecule.labels: True
+XLock.molecule.titles: True
+XLock.molecule.atoms: True
+XLock.molecule.bonds: True
+XLock.molecule.bbox: False
+XLock.morph3d.delay: 40000
+XLock.morph3d.count: 0
+XLock.morph3d.cycles: 1
+XLock.morph3d.size: 1
+XLock.morph3d.ncolors: 64
+XLock.morph3d.saturation: 1
+XLock.morph3d.bitmap:
+XLock.mountain.delay: 1000
+XLock.mountain.count: 30
+XLock.mountain.cycles: 4000
+XLock.mountain.size: 1
+XLock.mountain.ncolors: 64
+XLock.mountain.saturation: 1
+XLock.mountain.bitmap:
+XLock.munch.delay: 5000
+XLock.munch.count: 1
+XLock.munch.cycles: 7
+XLock.munch.size: 1
+XLock.munch.ncolors: 64
+XLock.munch.saturation: 1
+XLock.munch.bitmap:
+XLock.noof.delay: 1000
+XLock.noof.count: 1
+XLock.noof.cycles: 1
+XLock.noof.size: 1
+XLock.noof.ncolors: 64
+XLock.noof.saturation: 1
+XLock.noof.bitmap:
+XLock.nose.delay: 100000
+XLock.nose.count: 1
+XLock.nose.cycles: 1
+XLock.nose.size: 1
+XLock.nose.ncolors: 64
+XLock.nose.saturation: 1
+XLock.nose.bitmap:
+XLock.pacman.delay: 10000
+XLock.pacman.count: 10
+XLock.pacman.cycles: 1
+XLock.pacman.size: 0
+XLock.pacman.ncolors: 64
+XLock.pacman.saturation: 1
+XLock.pacman.bitmap:
+XLock.pacman.trackmouse: False
+XLock.penrose.delay: 10000
+XLock.penrose.count: 1
+XLock.penrose.cycles: 1
+XLock.penrose.size: -40
+XLock.penrose.ncolors: 64
+XLock.penrose.saturation: 1
+XLock.penrose.bitmap:
+XLock.penrose.ammann: False
+XLock.petal.delay: 10000
+XLock.petal.count: -500
+XLock.petal.cycles: 400
+XLock.petal.size: 1
+XLock.petal.ncolors: 64
+XLock.petal.saturation: 1
+XLock.petal.bitmap:
+XLock.petri.delay: 10000
+XLock.petri.count: 1
+XLock.petri.cycles: 1
+XLock.petri.size: 4
+XLock.petri.ncolors: 8
+XLock.petri.saturation: 1
+XLock.petri.bitmap:
+XLock.petri.anychan: 0.0015
+XLock.petri.diaglim: 1.414
+XLock.petri.instantdeathchan: 1.414
+XLock.petri.memthrottle: 22M
+XLock.petri.maxlifespan: 1500
+XLock.petri.minlifespan: 500
+XLock.petri.maxlifespeed: 0.13
+XLock.petri.minlifespeed: 0.04
+XLock.petri.maxdeathspeed: 0.46
+XLock.petri.mindeathspeed: 0.42
+XLock.petri.minorchan: 0.5
+XLock.pipes.delay: 1000
+XLock.pipes.count: 2
+XLock.pipes.cycles: 5
+XLock.pipes.size: 500
+XLock.pipes.ncolors: 64
+XLock.pipes.saturation: 1
+XLock.pipes.bitmap:
+XLock.pipes.factory: 2
+XLock.pipes.fisheye: True
+XLock.pipes.tightturns: False
+XLock.pipes.rotatepipes: True
+XLock.polyominoes.delay: 6000
+XLock.polyominoes.count: 1
+XLock.polyominoes.cycles: 8192
+XLock.polyominoes.size: 1
+XLock.polyominoes.ncolors: 64
+XLock.polyominoes.saturation: 1
+XLock.polyominoes.bitmap:
+XLock.polyominoes.identical: False
+XLock.polyominoes.plain: False
+XLock.puzzle.delay: 10000
+XLock.puzzle.count: 250
+XLock.puzzle.cycles: 1
+XLock.puzzle.size: 1
+XLock.puzzle.ncolors: 64
+XLock.puzzle.saturation: 1
+XLock.puzzle.bitmap:
+XLock.pyro.delay: 15000
+XLock.pyro.count: 100
+XLock.pyro.cycles: 1
+XLock.pyro.size: -3
+XLock.pyro.ncolors: 64
+XLock.pyro.saturation: 1
+XLock.pyro.bitmap:
+XLock.pyro2.delay: 15000
+XLock.pyro2.count: 100
+XLock.pyro2.cycles: 1
+XLock.pyro2.size: -3
+XLock.pyro2.ncolors: 64
+XLock.pyro2.saturation: 1
+XLock.pyro2.bitmap:
+XLock.pyro2.invert: False
+XLock.pyro2.msg:
+XLock.pyro2.fnt: -*-helvetica-bold-r-*-240-*
+XLock.qix.delay: 30000
+XLock.qix.count: -5
+XLock.qix.cycles: 32
+XLock.qix.size: 1
+XLock.qix.ncolors: 64
+XLock.qix.saturation: 1
+XLock.qix.bitmap:
+XLock.qix.complete: False
+XLock.qix.kaleid: False
+XLock.qix.solid: False
+XLock.rain.delay: 35000
+XLock.rain.count: 1
+XLock.rain.cycles: 1
+XLock.rain.size: 1
+XLock.rain.ncolors: 64
+XLock.rain.saturation: 0.3
+XLock.rain.bitmap:
+XLock.roll.delay: 100000
+XLock.roll.count: 25
+XLock.roll.cycles: 1
+XLock.roll.size: -64
+XLock.roll.ncolors: 64
+XLock.roll.saturation: 0.6
+XLock.roll.bitmap:
+XLock.rotor.delay: 100
+XLock.rotor.count: 4
+XLock.rotor.cycles: 100
+XLock.rotor.size: -6
+XLock.rotor.ncolors: 64
+XLock.rotor.saturation: 0.3
+XLock.rotor.bitmap:
+XLock.rubik.delay: 100000
+XLock.rubik.count: -30
+XLock.rubik.cycles: 5
+XLock.rubik.size: -6
+XLock.rubik.ncolors: 64
+XLock.rubik.saturation: 1
+XLock.rubik.bitmap:
+XLock.rubik.sizex: 0
+XLock.rubik.sizey: 0
+XLock.rubik.sizez: 0
+XLock.rubik.hideshuffling: False
+XLock.sballs.delay: 40000
+XLock.sballs.count: 0
+XLock.sballs.cycles: 10
+XLock.sballs.size: 0
+XLock.sballs.ncolors: 64
+XLock.sballs.saturation: 1
+XLock.sballs.bitmap:
+XLock.sballs.texture: True
+XLock.sballs.trackmouse: False
+XLock.sballs.object: 2
+XLock.scooter.delay: 20000
+XLock.scooter.count: 24
+XLock.scooter.cycles: 3
+XLock.scooter.size: 100
+XLock.scooter.ncolors: 64
+XLock.scooter.saturation: 1
+XLock.scooter.bitmap:
+XLock.shape.delay: 10000
+XLock.shape.count: 100
+XLock.shape.cycles: 256
+XLock.shape.size: 1
+XLock.shape.ncolors: 64
+XLock.shape.saturation: 1
+XLock.shape.bitmap:
+XLock.shape.shade: True
+XLock.shape.border: False
+XLock.shape.stipple: False
+XLock.sierpinski.delay: 400000
+XLock.sierpinski.count: 2000
+XLock.sierpinski.cycles: 100
+XLock.sierpinski.size: 1
+XLock.sierpinski.ncolors: 64
+XLock.sierpinski.saturation: 1
+XLock.sierpinski.bitmap:
+XLock.sierpinski3d.delay: 15000
+XLock.sierpinski3d.count: 1
+XLock.sierpinski3d.cycles: 2
+XLock.sierpinski3d.size: 1
+XLock.sierpinski3d.ncolors: 64
+XLock.sierpinski3d.saturation: 1
+XLock.sierpinski3d.bitmap:
+XLock.sierpinski3d.maxdepth: 5
+XLock.sierpinski3d.speed: 150
+XLock.sierpinski3d.intensity: 2185
+XLock.skewb.delay: 100000
+XLock.skewb.count: -30
+XLock.skewb.cycles: 5
+XLock.skewb.size: 1
+XLock.skewb.ncolors: 64
+XLock.skewb.saturation: 1
+XLock.skewb.bitmap:
+XLock.skewb.hideshuffling: False
+XLock.slip.delay: 50000
+XLock.slip.count: 35
+XLock.slip.cycles: 50
+XLock.slip.size: 1
+XLock.slip.ncolors: 64
+XLock.slip.saturation: 1
+XLock.slip.bitmap:
+XLock.solitaire.delay: 2000000
+XLock.solitaire.count: 1
+XLock.solitaire.cycles: 1
+XLock.solitaire.size: 1
+XLock.solitaire.ncolors: 64
+XLock.solitaire.saturation: 1
+XLock.solitaire.bitmap:
+XLock.solitaire.trackmouse: False
+XLock.space.delay: 10000
+XLock.space.count: 100
+XLock.space.cycles: 1
+XLock.space.size: 1
+XLock.space.ncolors: 64
+XLock.space.saturation: 1
+XLock.space.bitmap:
+XLock.sphere.delay: 5000
+XLock.sphere.count: 1
+XLock.sphere.cycles: 20
+XLock.sphere.size: 0
+XLock.sphere.ncolors: 64
+XLock.sphere.saturation: 1
+XLock.sphere.bitmap:
+XLock.spiral.delay: 5000
+XLock.spiral.count: -40
+XLock.spiral.cycles: 350
+XLock.spiral.size: 1
+XLock.spiral.ncolors: 64
+XLock.spiral.saturation: 1
+XLock.spiral.bitmap:
+XLock.spline.delay: 30000
+XLock.spline.count: -6
+XLock.spline.cycles: 2048
+XLock.spline.size: 1
+XLock.spline.ncolors: 64
+XLock.spline.saturation: 0.3
+XLock.spline.bitmap:
+XLock.spline.erase: False
+XLock.sproingies.delay: 80000
+XLock.sproingies.count: 5
+XLock.sproingies.cycles: 0
+XLock.sproingies.size: 0
+XLock.sproingies.ncolors: 64
+XLock.sproingies.saturation: 1
+XLock.sproingies.bitmap:
+XLock.stairs.delay: 200000
+XLock.stairs.count: 0
+XLock.stairs.cycles: 1
+XLock.stairs.size: 1
+XLock.stairs.ncolors: 64
+XLock.stairs.saturation: 1
+XLock.stairs.bitmap:
+XLock.star.delay: 75000
+XLock.star.count: 100
+XLock.star.cycles: 1
+XLock.star.size: 100
+XLock.star.ncolors: 64
+XLock.star.saturation: 0.3
+XLock.star.bitmap:
+XLock.star.trek: 50
+XLock.star.rock: False
+XLock.star.straight: False
+XLock.starfish.delay: 2000
+XLock.starfish.count: 1
+XLock.starfish.cycles: 1000
+XLock.starfish.size: 1
+XLock.starfish.ncolors: 64
+XLock.starfish.saturation: 1
+XLock.starfish.bitmap:
+XLock.starfish.cyclespeed: 3
+XLock.starfish.rotation: -1
+XLock.starfish.thickness: -20
+XLock.starfish.blob: False
+XLock.starfish.cycle: True
+XLock.strange.delay: 1000
+XLock.strange.count: 1
+XLock.strange.cycles: 1
+XLock.strange.size: 1
+XLock.strange.ncolors: 64
+XLock.strange.saturation: 1
+XLock.strange.bitmap:
+XLock.superquadrics.delay: 40000
+XLock.superquadrics.count: 25
+XLock.superquadrics.cycles: 40
+XLock.superquadrics.size: 1
+XLock.superquadrics.ncolors: 64
+XLock.superquadrics.saturation: 1
+XLock.superquadrics.bitmap:
+XLock.superquadrics.spinspeed: 5.0
+XLock.swarm.delay: 15000
+XLock.swarm.count: -100
+XLock.swarm.cycles: 1
+XLock.swarm.size: -10
+XLock.swarm.ncolors: 64
+XLock.swarm.saturation: 1
+XLock.swarm.bitmap:
+XLock.swarm.trackmouse: False
+XLock.swirl.delay: 5000
+XLock.swirl.count: 5
+XLock.swirl.cycles: 1
+XLock.swirl.size: 1
+XLock.swirl.ncolors: 64
+XLock.swirl.saturation: 1
+XLock.swirl.bitmap:
+XLock.swirl.cycle: True
+XLock.t3d.delay: 250000
+XLock.t3d.count: 1
+XLock.t3d.cycles: 60000
+XLock.t3d.size: 1
+XLock.t3d.ncolors: 64
+XLock.t3d.saturation: 1
+XLock.t3d.bitmap:
+XLock.t3d.cycle: True
+XLock.t3d.move: 0.5
+XLock.t3d.wobble: 2.0
+XLock.t3d.mag: 10.0
+XLock.t3d.fast: 50
+XLock.t3d.minutes: False
+XLock.t3d.trackmouse: False
+XLock.tetris.delay: 50000
+XLock.tetris.count: 1
+XLock.tetris.cycles: 1
+XLock.tetris.size: -100
+XLock.tetris.ncolors: 64
+XLock.tetris.saturation: 1
+XLock.tetris.bitmap:
+XLock.tetris.bonus: False
+XLock.tetris.cycle: True
+XLock.tetris.plain: False
+XLock.tetris.trackmouse: False
+XLock.tetris.well: False
+XLock.thornbird.delay: 1000
+XLock.thornbird.count: 800
+XLock.thornbird.cycles: 16
+XLock.thornbird.size: 1
+XLock.thornbird.ncolors: 64
+XLock.thornbird.saturation: 1
+XLock.thornbird.bitmap:
+XLock.tik_tak.delay: 60000
+XLock.tik_tak.count: -20
+XLock.tik_tak.cycles: 200
+XLock.tik_tak.size: -1000
+XLock.tik_tak.ncolors: 64
+XLock.tik_tak.saturation: 1
+XLock.tik_tak.bitmap:
+XLock.tik_tak.cycle: True
+XLock.toneclock.delay: 60000
+XLock.toneclock.count: -20
+XLock.toneclock.cycles: 200
+XLock.toneclock.size: -1000
+XLock.toneclock.ncolors: 64
+XLock.toneclock.saturation: 1
+XLock.toneclock.bitmap:
+XLock.toneclock.fill: 0
+XLock.toneclock.cycle: True
+XLock.toneclock.original: False
+XLock.toneclock.move: True
+XLock.toneclock.pulsating: False
+XLock.triangle.delay: 10000
+XLock.triangle.count: 1
+XLock.triangle.cycles: 1
+XLock.triangle.size: 1
+XLock.triangle.ncolors: 64
+XLock.triangle.saturation: 1
+XLock.triangle.bitmap:
+XLock.tube.delay: 25000
+XLock.tube.count: -9
+XLock.tube.cycles: 20000
+XLock.tube.size: -200
+XLock.tube.ncolors: 64
+XLock.tube.saturation: 1
+XLock.tube.bitmap:
+XLock.tube.cycle: True
+XLock.turtle.delay: 1000000
+XLock.turtle.count: 1
+XLock.turtle.cycles: 20
+XLock.turtle.size: 1
+XLock.turtle.ncolors: 64
+XLock.turtle.saturation: 1
+XLock.turtle.bitmap:
+XLock.vines.delay: 200000
+XLock.vines.count: 0
+XLock.vines.cycles: 1
+XLock.vines.size: 1
+XLock.vines.ncolors: 64
+XLock.vines.saturation: 1
+XLock.vines.bitmap:
+XLock.voters.delay: 1000
+XLock.voters.count: 0
+XLock.voters.cycles: 327670
+XLock.voters.size: 0
+XLock.voters.ncolors: 64
+XLock.voters.saturation: 1
+XLock.voters.bitmap:
+XLock.voters.neighbors: 0
+XLock.voters.vertical: False
+XLock.wator.delay: 750000
+XLock.wator.count: 1
+XLock.wator.cycles: 32767
+XLock.wator.size: 0
+XLock.wator.ncolors: 64
+XLock.wator.saturation: 1
+XLock.wator.bitmap:
+XLock.wator.neighbors: 0
+XLock.wator.vertical: False
+XLock.wire.delay: 500000
+XLock.wire.count: 1000
+XLock.wire.cycles: 150
+XLock.wire.size: -8
+XLock.wire.ncolors: 64
+XLock.wire.saturation: 1
+XLock.wire.bitmap:
+XLock.wire.neighbors: 0
+XLock.wire.vertical: False
+XLock.world.delay: 100000
+XLock.world.count: -16
+XLock.world.cycles: 1
+XLock.world.size: 1
+XLock.world.ncolors: 64
+XLock.world.saturation: 0.3
+XLock.world.bitmap:
+XLock.worm.delay: 17000
+XLock.worm.count: -20
+XLock.worm.cycles: 10
+XLock.worm.size: -3
+XLock.worm.ncolors: 64
+XLock.worm.saturation: 1
+XLock.worm.bitmap:
+XLock.xcl.delay: 20000
+XLock.xcl.count: -3
+XLock.xcl.cycles: 1
+XLock.xcl.size: 1
+XLock.xcl.ncolors: 64
+XLock.xcl.saturation: 1
+XLock.xcl.bitmap:
+XLock.xcl.speed: 105.0
+XLock.xcl.frametime: 45000
+XLock.xcl.line_length: 15910
+XLock.xcl.spectator: 22000
+XLock.xcl.viewmodel: False
+XLock.xcl.oldcolor: False
+XLock.xcl.xcldebug: False
+XLock.xcl.automatic: True
+XLock.xcl.randomstart: False
+XLock.xjack.delay: 50000
+XLock.xjack.count: 1
+XLock.xjack.cycles: 1
+XLock.xjack.size: 1
+XLock.xjack.ncolors: 64
+XLock.xjack.saturation: 1
+XLock.xjack.bitmap:
+XLock.blank.delay: 3000000
+XLock.blank.count: 1
+XLock.blank.cycles: 1
+XLock.blank.size: 1
+XLock.blank.ncolors: 64
+XLock.blank.saturation: 1
+XLock.blank.bitmap:
+XLock.bomb.delay: 100000
+XLock.bomb.count: 10
+XLock.bomb.cycles: 20
+XLock.bomb.size: 1
+XLock.bomb.ncolors: 64
+XLock.bomb.saturation: 1
+XLock.bomb.bitmap:
+XLock.random.delay: 1
+XLock.random.count: 1
+XLock.random.cycles: 1
+XLock.random.size: 1
+XLock.random.ncolors: 64
+XLock.random.saturation: 1
+XLock.random.bitmap:
+XLock.random.duration: 60
+XLock.random.modelist:
+XLock.random.sequential: False
+XLock.random.fullrandom: True

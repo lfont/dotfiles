@@ -74,7 +74,7 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         ((modm .|. controlMask, xK_p),                    shellPrompt menuXPConfig { defaultText = "urxvt -e " }),
         ((modm .|. shiftMask,   xK_p),                    spawn "xfce4-appfinder"),
         -- App shortcut
-        ((modm .|. controlMask, xK_l),                    spawn "slock"),
+        ((modm .|. controlMask, xK_l),                    spawn "xlock"),
         ((modm .|. controlMask, xK_w),                    spawn "$BROWSER"),
         ((modm .|. controlMask, xK_e),                    spawn "$VISUAL"),
         ((modm .|. controlMask, xK_f),                    spawn "pcmanfm"),
