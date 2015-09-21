@@ -7,7 +7,9 @@ if [ -e ~/.nvm/nvm.sh ]; then
     nvm use default
 fi
 
-# Start an Emacs server
+## Start an Emacs server (this works with emacs-lucid)
 if command -v emacs >/dev/null; then
-    emacs --daemon
+	  if ! pgrep -f "emacs --daemon" >/dev/null; then
+        nohup emacs --daemon &
+    fi
 fi
