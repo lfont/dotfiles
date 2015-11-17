@@ -7,7 +7,7 @@ _fishy_collapsed_wd() {
       binmode STDOUT, ':encoding(UTF-8)';
    }; s|^$HOME|~|g; s|/([^/])[^/]*(?=/)|/\$1|g
 ")
-} 
+}
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
 local return_status="%{$fg_bold[red]%}%(?.. [%?])%{$reset_color%}"
@@ -30,7 +30,7 @@ add-zsh-hook precmd prompt_fishy_precmd
 
 prompt_fishy_precmd () {
   case $TERM in
-    screen*)
+    xterm*|rxvt*|screen*)
       print -Pn "\e]0;%n@%m:%~ (%l)\a"
       ;;
     eterm-color*)

@@ -35,7 +35,7 @@
 
 (add-hook 'mu4e-index-updated-hook
           (defun my/mu4e-index-updated ()
-            (start-process "mail-notify" nil "mail-notify"
+            (start-process "mail-notify" nil "mail-notify.sh"
                            (concat (getenv "HOME") "/Maildir/fastmail/INBOX")
                            (concat (getenv "HOME") "/Maildir/mappy/INBOX"))))
 
@@ -174,7 +174,9 @@
 (my/mu4e-account-personal)
 
 ;; function to start mu4e
-(defun my/mu4e-start ()
+(defun my-mu4e ()
   (setq server-name "mail") ;; the server is used by offlineimap to request
   (server-start)            ;; the authinfo password
   (mu4e))
+
+(provide 'my-mu4e)

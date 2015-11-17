@@ -3,564 +3,62 @@
 ;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
 
 ;;; Code:
-;(require 'server)
-;(unless (server-running-p)
-;  (server-start))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lib/"))
+(defconst my-user-lisp (expand-file-name "~/.emacs.d/site-lisp/"))
 
-;(let ((default-directory "~/.nix-profile/share/emacs/site-lisp/"))
-;  (normal-top-level-add-to-load-path '("."))
-;  (normal-top-level-add-subdirs-to-load-path))
+;; load modules
+(defun my-load (file)
+  "Load FILE from user site-lisp."
+  (load (concat my-user-lisp file)))
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
+(my-load "package")
+(my-load "ui")
+(my-load "editor")
+(my-load "indent")
+(my-load "navigation")
+(my-load "helm")
+(my-load "ediff")
+(my-load "git")
+(my-load "code")
 
-;; Packages settings
-(require 'package)
-(let ((package-list '(flx-ido
-                      ido-vertical-mode
+;; autoload optional modules
+(defun my-autoload (function file &optional docstring interactive)
+  "Autoload file from user site-lisp when function is called.
 
-                      helm
-                      projectile
-                      helm-projectile
+FUNCTION is the symbol of the function.
+FILE is the file to load.
+DOCSTRING is an optional documentation string.
+INTERACTIVE can be set if FUNCTION call be called interactively."
+  (autoload function (concat my-user-lisp file) docstring interactive nil))
 
-                      magit
-                      git-gutter
+(my-autoload 'authinfo-get-password "authinfo-get-password")
+(my-autoload 'prodigy "prodigy" "Launch prodigy." t)
+(my-autoload 'multi-term "multi-term" "Launch multi-term." t)
+(my-autoload 'my-jabber "jabber" "Launch jabber client." t)
+(my-autoload 'my-mu4e "mu4e")
+(my-autoload 'my-ispell "ispell" "Launch ispell." t)
+(my-autoload 'my-window "window" "Manage windows." t)
 
-                      ;tern
-                      auto-complete
-                      ;tern-auto-complete
+;; autoload key bindings
+(global-set-key (kbd "<f5>") 'multi-term)
+(global-set-key (kbd "C-c s") 'my-ispell)
+(global-set-key (kbd "C-c w") 'my-window)
 
-                      flycheck
-
-                      web-mode
-                      js2-mode
-                      less-css-mode
-                      haskell-mode
-
-                      molokai-theme
-
-                      fill-column-indicator
-                      multiple-cursors
-                      rainbow-delimiters
-
-                      xclip
-
-                      multi-term
-                      buffer-move
-                      workgroups2
-
-                      prodigy
-                      jabber)))
-
-  ;; list the repositories containing them
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t)
-
-  ;; activate all the packages (in particular autoloads)
-  (package-initialize)
-
-  ;; fetch the list of packages available
-  (unless package-archive-contents
-    (package-refresh-contents))
-
-  ;; install the missing packages
-  (dolist (package package-list)
-    (unless (package-installed-p package)
-      (package-install package))))
-
-;; Always ask for y/n keypress instead of typing out 'yes' or 'no'
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Backups
-(setq make-backup-files nil) ; stop creating those backup~ files
-(setq auto-save-default nil) ; stop creating those #autosave# files
-
-;; General UI stuff
-(global-hl-line-mode t)
-(column-number-mode t)
-(menu-bar-mode -1)
-
-(setq inhibit-startup-message t)
-(setq visible-bell 'top-bottom)
-(setq use-dialog-box nil)
-
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
-
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
-(load-theme 'molokai t)
-(add-to-list 'default-frame-alist
-             '(font . "Hack-10:Normal"))
-
-;(defun contextual-menubar (&optional frame)
-;  "Display the menubar in FRAME (default: selected frame) if on a graphical display, but hide it if in terminal."
-;  (interactive)
-;  (set-frame-parameter frame 'menu-bar-lines (if (display-graphic-p frame) 1 0)))
-
-;(add-hook 'after-init-hook 'contextual-menubar)
-;(add-hook 'after-make-frame-functions 'contextual-menubar)
-
-;; Scroll line by line
-(setq scroll-step           1
-      scroll-conservatively 10000)
-
-;;; Windows related operations
-;; Undo & redo
-(when (fboundp 'winner-mode)
-      (winner-mode t))
-
-;; Resize: M-<up> etc.
-(load "win-resize")
-(global-set-key (kbd "M-<up>")    'win-resize-enlarge-horiz)
-(global-set-key (kbd "M-<down>")  'win-resize-minimize-horiz)
-(global-set-key (kbd "M-<left>")  'win-resize-enlarge-vert)
-(global-set-key (kbd "M-<right>") 'win-resize-minimize-vert)
-
-;; Navgating: Windmove uses C-<up> etc.
-(global-set-key (kbd "C-<up>")    'windmove-up)
-(global-set-key (kbd "C-<down>")  'windmove-down)
-(global-set-key (kbd "C-<left>")  'windmove-left)
-(global-set-key (kbd "C-<right>") 'windmove-right)
-
-;; Swap buffers: C-S-<up> etc.
-(require 'buffer-move)
-(global-set-key (kbd "C-S-<up>")    'buf-move-up)
-(global-set-key (kbd "C-S-<down>")  'buf-move-down)
-(global-set-key (kbd "C-S-<left>")  'buf-move-left)
-(global-set-key (kbd "C-S-<right>") 'buf-move-right)
-
-;; Smarter move
-;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
-(defun smarter-move-beginning-of-line (arg)
-    "Move point back to indentation of beginning of line.
-
-Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line.
-
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
-    (interactive "^p")
-    (setq arg (or arg 1))
-
-    ;; Move lines first
-    (when (/= arg 1)
-      (let ((line-move-visual nil))
-        (forward-line (1- arg))))
-
-    (let ((orig-point (point)))
-      (back-to-indentation)
-      (when (= orig-point (point))
-        (move-beginning-of-line 1))))
-
-;; remap C-a to `smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                'smarter-move-beginning-of-line)
-
-;; Tab behavior
-(defun set-custom-tab-behavior ()
-  "Use space instead of tabs."
-  (setq indent-tabs-mode nil)
-  (setq tab-width 2)
-  (setq default-tab-width tab-width)
-  (setq standard-indent tab-width)
-  (setq c-basic-offset tab-width)
-  (setq js-indent-level tab-width)
-  (setq tab-stop-list (number-sequence tab-width 200 tab-width)))
-
-(add-hook 'text-mode-hook 'set-custom-tab-behavior)
-(add-hook 'prog-mode-hook 'set-custom-tab-behavior)
-(add-hook 'css-mode-hook  'set-custom-tab-behavior)
-
-;; http://stackoverflow.com/questions/23692879/emacs24-backtab-is-undefined-how-to-define-this-shortcut-key
-(defun un-indent-by-removing-spaces ()
-  "Remove spaces from beginning of line."
-  (interactive)
-  (save-excursion
-    (save-match-data
-      (beginning-of-line)
-      ;; get rid of tabs at beginning of line
-      (when (looking-at "^\\s-+")
-        (untabify (match-beginning 0) (match-end 0)))
-      (when (looking-at (concat "^" (make-string tab-width ?\s)))
-        (replace-match "")))))
-
-(global-set-key (kbd "<backtab>") 'un-indent-by-removing-spaces)
-
-;; Remove trailing white spaces
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Put a new line at the end of file
-(setq require-final-newline t)
-
-;; http://stackoverflow.com/questions/3417438/closing-all-other-buffers-in-emacs
-(defun kill-other-buffers ()
-  "Kill all other buffers."
-  (interactive)
-  (mapc 'kill-buffer
-        (delq (current-buffer)
-              (remove-if-not
-               '(lambda (x) (or (buffer-file-name x)
-                                (eq 'dired-mode (buffer-local-value 'major-mode x))))
-               (buffer-list))))
-  (message "Other buffers killed"))
-
-(global-set-key (kbd "C-c C-k") 'kill-other-buffers)
-
-;; Folding
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-
-;; Auto indent
-(add-hook 'prog-mode-hook 'electric-indent-mode)
-
-;; ({[ Pairing
-(add-hook 'prog-mode-hook 'electric-pair-mode)
-
-;; Syntax checking
-(add-hook 'prog-mode-hook 'flycheck-mode)
-
-;; Line wrapping
-(set-default 'truncate-lines t)
-(setq truncate-partial-width-windows nil)
-
-(require 'tramp)
-(setq tramp-default-method "ssh")
-(add-to-list 'tramp-default-proxies-alist
-             '("\\`bibimbap\\'" "\\`root\\'" "/ssh:%h:"))
-
-;; Use xclip to copy/paste to the terminal from X.
-(require 'xclip)
-(xclip-mode t)
-;(turn-on-xclip) ;; this function is not call in rxvt
+;; Default browser
+(require 'browse-url)
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program (getenv "BROWSER"))
 
 ;; Treat asc file like gpg file
 (require 'epa-file)
-(setq epa-armor t)
-(setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
+(setq epa-armor t
+      epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
 (epa-file-name-regexp-update)
-
-;; Always ALWAYS use UTF-8
-(require 'iso-transl)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-
-;; Fix a weird bug with dead keys when Emacs runs in a GUI
-(add-hook 'emacs-lisp-mode-hook
-          (lambda ()
-            (global-set-key (kbd "<dead-acute> <SPC>")        "'")
-            (global-set-key (kbd "<dead-grave> <SPC>")        "`")
-            (global-set-key (kbd "<S-dead-tilde> <SPC>")      "~")
-            (global-set-key (kbd "<S-dead-diaeresis> <SPC>")  "\"")
-            (global-set-key (kbd "<S-dead-circumflex> <SPC>") "^")))
-
-;; Spell checking
-(require 'ispell)
-(setq ispell-program-name "aspell"
-      ispell-list-command "--list")
-
-(let ((langs '("american" "francais")))
-  (setq lang-ring (make-ring (length langs)))
-  (dolist (elem langs) (ring-insert lang-ring elem)))
-
-(defun ispell-cycle-languages ()
-  "Cycle thought available dictionaries."
-  (interactive)
-  (let ((lang (ring-ref lang-ring -1)))
-    (ring-insert lang-ring lang)
-    (ispell-change-dictionary lang)))
-
-(defun flyspell-check-next-highlighted-word ()
-  "Custom function to spell check next highlighted word."
-  (interactive)
-  (flyspell-goto-next-error)
-  (ispell-word))
-
-(add-hook 'prog-mode-hook 'flyspell-prog-mode)
-(add-hook 'text-mode-hook 'flyspell-mode)
-
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode nil))))
-
-(global-set-key (kbd "<f7>")     'ispell-word)
-(global-set-key (kbd "M-<f7>")   'ispell-cycle-languages)
-(global-set-key (kbd "C-S-<f7>") 'flyspell-check-previous-highlighted-word)
-(global-set-key (kbd "C-<f7>")   'flyspell-check-next-highlighted-word)
 
 ;; Accept self signed certificates
 (require 'starttls)
 (setq starttls-use-gnutls t
       starttls-gnutls-program  "gnutls-cli"
       starttls-extra-arguments '("--starttls" "--insecure"))
-
-;; Saner ediff default
-(require 'ediff)
-(setq ediff-diff-options "-w")
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-(defun command-line-diff (switch)
-  "Add a SWITCH to invoke Emacs in diff mode."
-  (let ((file1 (pop command-line-args-left))
-        (file2 (pop command-line-args-left)))
-    (ediff file1 file2)))
-
-(add-to-list 'command-switch-alist '("diff" . command-line-diff))
-
-(defun command-line-merge (switch)
-  "Add a SWITCH to invoke Emacs in merge mode."
-  (let ((file1 (pop command-line-args-left))
-        (file2 (pop command-line-args-left))
-        (file3 (pop command-line-args-left))
-        (file4 (pop command-line-args-left)))
-    (ediff-merge-files-with-ancestor file1 file2 file3 nil file4)))
-
-(add-to-list 'command-switch-alist '("merge" . command-line-merge))
-
-(require 'flx-ido)
-;(ido-mode 1)
-;(ido-everywhere 1)
-(flx-ido-mode 1)
-;; disable ido faces to see flx highlights.
-(setq ido-enable-flex-matching t)
-(setq ido-use-faces nil)
-
-(require 'ido-vertical-mode)
-(ido-vertical-mode 1)
-
-;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
-(require 'auto-complete)
-(global-auto-complete-mode t)
-
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
-;(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-;(eval-after-load 'tern
-;  '(progn
-;     (require 'tern-auto-complete)
-;     (tern-ac-setup)))
-
-(require 'linum)
-;(setq linum-format "%4d |")
-
-(require 'git-gutter)
-
-(defun set-linum-and-git-gutter-behavior ()
-  "Set up linum and git-gutter."
-  (if (display-graphic-p)
-      (progn
-        (git-gutter:linum-setup)
-        (linum-mode))
-    (custom-set-variables '(git-gutter:separator-sign "|"))
-    (set-face-foreground 'git-gutter:separator "grey"))
-
-  (git-gutter-mode))
-
-(add-hook 'text-mode-hook 'set-linum-and-git-gutter-behavior)
-(add-hook 'prog-mode-hook 'set-linum-and-git-gutter-behavior)
-(add-hook 'css-mode-hook  'set-linum-and-git-gutter-behavior)
-
-(require 'fill-column-indicator)
-(setq fci-rule-width 3)
-(setq fci-rule-color "grey")
-(setq fci-rule-column 80)
-(add-hook 'prog-mode-hook 'fci-mode)
-
-(require 'multiple-cursors)
-(global-set-key (kbd "C-c <down>") 'mc/mmlte--down)
-(global-set-key (kbd "C-c <up>")   'mc/mmlte--up)
-(global-set-key (kbd "C-c l")      'mc/edit-lines)
-(global-set-key (kbd "C-c d")      'mc/mark-next-like-this)
-(global-set-key (kbd "C-c k")      'mc/skip-to-next-like-this)
-(global-set-key (kbd "C-c u")      'mc/unmark-next-like-this)
-
-(require 'whitespace)
-(setq whitespace-style '(face empty lines-tail tabs tab-mark trailing))
-(add-hook 'prog-mode-hook 'whitespace-mode)
-
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-
-(require 'magit)
-(setq magit-last-seen-setup-instructions "1.4.0")
-
-(require 'haskell-mode)
-(add-hook 'haskell-mode-hook (lambda ()
-                               (turn-on-haskell-doc-mode)
-                               (turn-on-haskell-indent)))
-
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-
-(when (require 'projectile nil t)
-  (projectile-global-mode))
-
-(require 'helm-config)
-(setq
-   ;; always split to bottom
-   ;helm-always-two-windows t
-   ;; split current window and display to bottom
-   helm-split-window-in-side-p t
-   helm-split-window-default-side 'below)
-   ;; Fuzzy matching
-   ;helm-mode-fuzzy-match t
-   ;helm-completion-in-region-fuzzy-match t)
-
-(helm-mode t)
-;(helm-autoresize-mode t)
-
-(global-set-key (kbd "M-x")     'helm-M-x)
-(global-set-key (kbd "M-y")     'helm-show-kill-ring)
-(global-set-key (kbd "C-x b")   'helm-mini)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-
-;; rebind tab to run persistent action
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-;; make TAB works in terminal
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-;; list actions using C-z
-(define-key helm-map (kbd "C-z") 'helm-select-action)
-
-(when (require 'helm-projectile nil t)
-  (defun helm-projectile-switch-buffer ()
-    "Use Helm instead of ido to switch buffer in projectile."
-    (interactive)
-    (helm :sources helm-source-projectile-buffers-list
-          :buffer "*helm projectile buffers*"
-          :prompt (projectile-prepend-project-name "Switch to buffer: ")))
-
-  ;; Override some projectile keymaps
-  (eval-after-load 'projectile
-    '(progn
-       (define-key projectile-command-map (kbd "b") 'helm-projectile-switch-buffer)
-       (define-key projectile-command-map (kbd "f") 'helm-projectile)
-       (define-key projectile-command-map (kbd "p") 'helm-projectile-switch-project))))
-
-;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
-(when (require 'multi-term nil t)
-  (global-set-key (kbd "<f5>") 'multi-term)
-  (global-set-key (kbd "<C-next>") 'multi-term-next)
-  (global-set-key (kbd "<C-prior>") 'multi-term-prev)
-
-  (setq multi-term-buffer-name "term"))
-
-(when (require 'term nil t)
-  (setq term-bind-key-alist
-        (list (cons "C-c C-c" 'term-interrupt-subjob)
-              (cons "C-c C-j" 'term-line-mode)
-              (cons "C-c C-k" 'term-char-mode)
-              (cons "C-r"     'term-send-reverse-search-history)))
-
-  (defconst term-function-key-alist '((f1 . "\e[OP")
-                                      (f2 . "\e[OQ")
-                                      (f3 . "\e[OR")
-                                      (f4 . "\e[OS")))
-
-  (defun term-send-function-key ()
-    (interactive)
-    (let* ((char last-input-event)
-           (output (cdr (assoc char term-function-key-alist))))
-      (term-send-raw-string output)))
-
-  (dolist (spec term-function-key-alist)
-    (define-key term-raw-map
-      (read-kbd-macro (format "<%s>" (car spec)))
-      'term-send-function-key))
-
-  (defun term-handle-ansi-terminal-messages (message)
-    (while (string-match "\eAnSiT.+\n" message)
-      ;; Extract the command code and the argument.
-      (let* ((start (match-beginning 0))
-             (command-code (aref message (+ start 6)))
-             (argument
-              (save-match-data
-                (substring message
-                           (+ start 8)
-                           (string-match "\r?\n" message
-                                         (+ start 8))))))
-        ;; Delete this command from MESSAGE.
-        (setq message (replace-match "" t t message))
-
-        (cond ((= command-code ?c)
-               (setq term-ansi-at-dir argument))
-              ((= command-code ?h)
-               (setq term-ansi-at-host argument))
-              ((= command-code ?u)
-               (setq term-ansi-at-user argument))
-              ((= command-code ?e)
-               (save-excursion
-                 (find-file-other-window argument)))
-              ((= command-code ?x)
-               (save-excursion
-                 (find-file argument))))))
-
-    (when (and term-ansi-at-host term-ansi-at-dir term-ansi-at-user)
-      (setq buffer-file-name
-            (format "%s@%s:%s" term-ansi-at-user term-ansi-at-host term-ansi-at-dir))
-      (set-buffer-modified-p nil)
-        (setq default-directory (if (string= term-ansi-at-host (system-name))
-                                    (concatenate 'string term-ansi-at-dir "/")
-                                  (format "/%s@%s:%s/" term-ansi-at-user term-ansi-at-host term-ansi-at-dir))))
-    message))
-
-(require 'workgroups2)
-;; What to do on Emacs exit / workgroups-mode exit?
-(setq wg-emacs-exit-save-behavior           nil
-      wg-workgroups-mode-exit-save-behavior nil
-      ;; do nothing on start
-      wg-session-load-on-start              nil)
-(workgroups-mode 1)
-
-(require 'prodigy)
-(prodigy-define-service
-    :name "Testerize"
-    :cwd "~/code/Fasterize/testerize"
-    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
-    :args '("app.js")
-    :tags '(work fasterize devfe)
-    :port 3001)
-(prodigy-define-service
-    :name "Geonosis"
-    :cwd "~/code/Fasterize/geonosis"
-    :command "~/code/Fasterize/geonosis/sbt"
-    :args '("run" "-Dconfig.file=../FasterizeEngine/geonosis.conf")
-    :tags '(work fasterize devfe)
-    :port 9000)
-(prodigy-define-service
-    :name "FastAPI"
-    :cwd "~/code/Fasterize/fastapi"
-    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
-    :args '("app.js")
-    :tags '(work fasterize devfe)
-    :port 8101)
-(prodigy-define-service
-    :name "Engine"
-    :cwd "~/code/Fasterize/FasterizeEngine"
-    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
-    :args '("devfe")
-    :tags '(work fasterize devfe)
-    :port 8080)
-(prodigy-define-service
-    :name "Engine - .devfe.fasterized.net"
-    :cwd "~/code/Fasterize/FasterizeEngine"
-    :command "/home/loic/.nvm/v0.8.261/bin/supervisor"
-    :args '("--" "devfe" "--origin_port" "80" "--secure_origin_port" "443")
-    :tags '(work fasterize devfe)
-    :port 8080)
-(prodigy-define-service
-    :name "fasterize.com"
-    :cwd "~/code/Fasterize/fasterize.com"
-    :command "/home/loic/.rbenv/shims/rails"
-    :args '("s")
-    :tags '(work fasterize devfe)
-    :port 3000)
-
-;; autoload optional files
-(autoload 'notify "notify")
-(autoload 'offlineimap-get-password "offlineimap")
-(autoload 'my/jabber-start "init-jabber")
-(autoload 'my/mu4e-start "init-mu4e")
 
 ;;; init.el ends here

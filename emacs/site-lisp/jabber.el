@@ -1,9 +1,10 @@
+;; https://fasterize.hipchat.com/account/xmpp
+
 (require 'jabber)
 
-(setq jabber-account-list '(("lfontaine@mappyim"
-                              (:network-server . "mappyim")
-                              (:port . 5223)
-                              (:connection-type . ssl))))
+(setq jabber-account-list '(("139514_2672027@chat.hipchat.com"
+                              (:port . 5222)
+                              (:connection-type . starttls))))
 
 (setq jabber-history-enabled t
       jabber-use-global-history nil
@@ -38,9 +39,29 @@
 
 (add-hook 'jabber-alert-muc-hooks 'my/jabber-notify-alert-muc)
 
+;; this info is present on the hipchat xmpp info page
+(defvar hipchat-room-list '(
+            ("fasterize" . "139514_fasterize")
+            ("tech" . "139514_tech")))
+
+;; To join HipChat rooms easily
+(defun my/hipchat-join ()
+  (interactive)
+  (let* ((room-list (sort (mapcar 'car hipchat-room-list) 'string-lessp))
+         (selected-room (completing-read "Room name: " room-list))
+         (hipchat-mapping (cdr (assoc selected-room hipchat-room-list))))
+    (jabber-groupchat-join
+     (jabber-read-account)
+     (concat hipchat-mapping "@conf.hipchat.com")
+     "Loïc Fontaine"
+     t)))
+
 ;;; function to start jabber
-(defun my/jabber-start ()
+(defun my-jabber ()
+  (interactive)
   (setq initial-buffer-choice (lambda ()
                                 (jabber-display-roster)
                                 (get-buffer "*-jabber-roster-*")))
   (jabber-connect-all))
+
+(provide 'my-jabber)
