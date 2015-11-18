@@ -1,4 +1,5 @@
 ;; Spell checking
+(require 'hydra)
 (require 'ispell)
 
 (setq ispell-program-name "aspell"
@@ -8,14 +9,14 @@
   (setq lang-ring (make-ring (length langs)))
   (dolist (elem langs) (ring-insert lang-ring elem)))
 
-(defun ispell-cycle-languages ()
+(defun my/ispell-cycle-languages ()
   "Cycle thought available dictionaries."
   (interactive)
   (let ((lang (ring-ref lang-ring -1)))
     (ring-insert lang-ring lang)
     (ispell-change-dictionary lang)))
 
-(defun flyspell-check-next-highlighted-word ()
+(defun my/flyspell-check-next-highlighted-word ()
   "Custom function to spell check next highlighted word."
   (interactive)
   (flyspell-goto-next-error)
@@ -30,13 +31,13 @@
 (defhydra hydra-spellcheck (:body-pre (ispell-word)
                             :color red)
   "spellcheck"
-  ("l" ispell-cycle-languages "language")
-  ("n" flyspell-check-next-highlighted-word "next")
+  ("l" my/ispell-cycle-languages "language")
+  ("n" my/flyspell-check-next-highlighted-word "next")
   ("p" flyspell-check-previous-highlighted-word "prev")
   ("q" nil "cancel"))
 
-(defun my-ispell ()
+(defun my/spellcheck ()
   (interactive)
   (hydra-spellcheck/body))
 
-(provide 'my-ispell)
+(provide 'my/spellcheck)

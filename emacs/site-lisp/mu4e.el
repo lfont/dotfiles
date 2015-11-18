@@ -1,5 +1,4 @@
 ;;; http://vxlabs.com/2014/06/06/configuring-emacs-mu4e-with-nullmailer-offlineimap-and-multiple-identities/
-
 (require 'mu4e)
 
 ;; basic user information
@@ -8,9 +7,7 @@
 ;; a  list of user's e-mail addresses
 (setq mu4e-user-mail-address-list '("loicfontaine@fastmail.fm"
                                     "ljph.fontaine@gmail.com"
-                                    "channary.loic@gmail.com"
-                                    "loic.fontaine@valtech.fr"
-                                    "loic.fontaine.ext@mappy.com"))
+                                    "channary.loic@gmail.com"))
 
 ;; custom bookmarks
 (add-to-list 'mu4e-bookmarks
@@ -36,8 +33,7 @@
 (add-hook 'mu4e-index-updated-hook
           (defun my/mu4e-index-updated ()
             (start-process "mail-notify" nil "mail-notify.sh"
-                           (concat (getenv "HOME") "/Maildir/fastmail/INBOX")
-                           (concat (getenv "HOME") "/Maildir/mappy/INBOX"))))
+                           (concat (getenv "HOME") "/Maildir/fastmail/INBOX"))
 
 ;; set this to nil so signature is not included by default
 ;; you can include in message with C-c C-w
@@ -75,9 +71,9 @@
 (require 'smtpmail)
 (setq message-send-mail-function 'smtpmail-send-it)
 
-(defun my/mu4e-account-personal ()
+(defun my/mu4e-account-fastmail ()
   (interactive)
-  (message "Switching to personnal account...")
+  (message "Switching to fastmail account...")
 
   ;; the next are relative to `mu4e-maildir'
   ;; instead of strings, they can be functions too, see
@@ -103,48 +99,12 @@
         smtpmail-stream-type 'ssl
         smtpmail-smtp-service 465))
 
-(defun my/mu4e-account-valtech ()
-  (interactive)
-
-  ;; use common settings
-  (my/mu4e-account-personal)
-
-  (message "Switching to valtech account...")
-
-  ;; overrides some stuffs
-  (setq user-mail-address "loic.fontaine@valtech.fr"
-        mu4e-compose-signature "Loïc Fontaine\nloic.fontaine@valtech.fr\n"))
-
-(defun my/mu4e-account-mappy ()
-  (interactive)
-  (message "Switching to mappy account...")
-
-  (setq mu4e-sent-folder   "/mappy/Éléments envoyés"
-        mu4e-drafts-folder "/mappy/Brouillons"
-        mu4e-trash-folder  "/mappy/Éléments supprimés")
-
-  (setq mu4e-maildir-shortcuts
-        '(("/mappy/INBOX"               . ?i)
-          ("/mappy/Archives"            . ?a)
-          ("/mappy/Archives.jira"       . ?j)
-          ("/mappy/Archives.confluence" . ?c)
-          ("/mappy/Éléments envoyés"    . ?s)))
-
-  (setq user-mail-address "loic.fontaine.ext@mappy.com"
-        mu4e-compose-signature "Loïc Fontaine\nloic.fontaine.ext@mappy.com\n")
-
-  (setq smtpmail-smtp-server "exch01.mappy.priv"
-        smtpmail-stream-type 'starttls
-        smtpmail-smtp-service 587))
-
 ;; quickly change account
 (defun my/mu4e-bind-account (key account)
   (define-key mu4e-main-mode-map (kbd key) account)
   (define-key mu4e-headers-mode-map (kbd key) account))
 
-(my/mu4e-bind-account "<f1>" 'my/mu4e-account-personal)
-(my/mu4e-bind-account "<f2>" 'my/mu4e-account-valtech)
-(my/mu4e-bind-account "<f3>" 'my/mu4e-account-mappy)
+(my/mu4e-bind-account "<f1>" 'my/mu4e-account-fastmail)
 
 ;; when you reply to a message, use the identity that the mail was sent to
 ;; -- function that checks to, cc and bcc fields
@@ -164,19 +124,15 @@
                    ((my/mu4e-is-message-to msg (list "loicfontaine@fastmail.fm"
                                                      "ljph.fontaine@gmail.com"
                                                      "channary.loic@gmail.com"))
-                    (my/mu4e-account-personal))
-                   ((my/mu4e-is-message-to msg (list "loic.fontaine@valtech.fr"))
-                    (my/mu4e-account-valtech))
-                   ((my/mu4e-is-message-to msg (list "loic.fontaine.ext@mappy.com"))
-                    (my/mu4e-account-mappy)))))))
+                    (my/mu4e-account-personal)))))))
 
 ;; set default account
-(my/mu4e-account-personal)
+(my/mu4e-account-fastmail)
 
 ;; function to start mu4e
-(defun my-mu4e ()
+(defun my/mu4e ()
   (setq server-name "mail") ;; the server is used by offlineimap to request
   (server-start)            ;; the authinfo password
   (mu4e))
 
-(provide 'my-mu4e)
+(provide 'my/mu4e)

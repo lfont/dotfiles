@@ -1,9 +1,9 @@
 ;; Saner ediff default
 (require 'ediff)
 
-(setq ediff-diff-options "-w")
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-diff-options "-w"
+      ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
 
 (defun command-line-diff (switch)
   "Add a SWITCH to invoke Emacs in diff mode."

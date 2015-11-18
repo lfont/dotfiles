@@ -8,7 +8,7 @@
 ;(require 'windmove)
 ;; http://stackoverflow.com/questions/3417438/closing-all-other-buffers-in-emacs
 
-(defun my-buffer-kill-others ()
+(defun my/buffer-kill-others ()
   "Kill all other buffers."
   (interactive)
   (mapc 'kill-buffer
@@ -20,7 +20,7 @@
   (message "Other buffers killed"))
 
 ;; Enlarge/Shrink window
-(defun my-hydra-move-splitter-left (delta)
+(defun my/hydra-move-splitter-left (delta)
   "Move window splitter DELTA columns left."
   (interactive "p")
   (if (let ((windmove-wrap-around))
@@ -28,7 +28,7 @@
       (shrink-window-horizontally delta)
     (enlarge-window-horizontally delta)))
 
-(defun my-hydra-move-splitter-right (delta)
+(defun my/hydra-move-splitter-right (delta)
   "Move window splitter DELTA columns right."
   (interactive "p")
   (if (let ((windmove-wrap-around))
@@ -36,7 +36,7 @@
       (enlarge-window-horizontally delta)
     (shrink-window-horizontally delta)))
 
-(defun my-hydra-move-splitter-up (delta)
+(defun my/hydra-move-splitter-up (delta)
   "Move window splitter DELTA columns up."
   (interactive "p")
   (if (let ((windmove-wrap-around))
@@ -44,7 +44,7 @@
       (enlarge-window delta)
     (shrink-window delta)))
 
-(defun my-hydra-move-splitter-down (delta)
+(defun my/hydra-move-splitter-down (delta)
   "Move window splitter DELTA columns down."
   (interactive "p")
   (if (let ((windmove-wrap-around))
@@ -59,10 +59,10 @@
   ("j" windmove-down nil)
   ("k" windmove-up nil)
   ("l" windmove-right nil)
-  ("H" my-hydra-move-splitter-left nil)
-  ("J" my-hydra-move-splitter-down nil)
-  ("K" my-hydra-move-splitter-up nil)
-  ("L" my-hydra-move-splitter-right nil)
+  ("H" my/hydra-move-splitter-left nil)
+  ("J" my/hydra-move-splitter-down nil)
+  ("K" my/hydra-move-splitter-up nil)
+  ("L" my/hydra-move-splitter-right nil)
   ("v" (lambda ()
          (interactive)
          (split-window-right)
@@ -85,8 +85,8 @@
   ("q" nil "cancel")
   ("u" winner-undo "undo"))
 
-(defun my-window ()
+(defun my/window ()
   (interactive)
   (hydra-window/body))
 
-(provide 'my-window)
+(provide 'my/window)

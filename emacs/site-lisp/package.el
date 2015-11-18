@@ -2,26 +2,24 @@
 (require 'package)
 
 (let ((package-list '(helm
-                      projectile
                       helm-projectile
 
-                      magit
                       git-gutter
+                      magit
 
+                      projectile
                       auto-complete
-
                       flycheck
-
                       web-mode
                       js2-mode
                       less-css-mode
                       haskell-mode
 
+                      multiple-cursors
+
                       molokai-theme
                       spaceline
-
                       fill-column-indicator
-                      multiple-cursors
                       rainbow-delimiters
 
                       xclip
@@ -29,6 +27,7 @@
                       multi-term
 
                       hydra
+
                       ace-window
 
                       prodigy

@@ -1,5 +1,4 @@
 ;; https://fasterize.hipchat.com/account/xmpp
-
 (require 'jabber)
 
 (setq jabber-account-list '(("139514_2672027@chat.hipchat.com"
@@ -40,16 +39,16 @@
 (add-hook 'jabber-alert-muc-hooks 'my/jabber-notify-alert-muc)
 
 ;; this info is present on the hipchat xmpp info page
-(defvar hipchat-room-list '(
+(defvar my/jabber-hipchat-room-list '(
             ("fasterize" . "139514_fasterize")
             ("tech" . "139514_tech")))
 
 ;; To join HipChat rooms easily
-(defun my/hipchat-join ()
+(defun my/jabber-hipchat-join ()
   (interactive)
-  (let* ((room-list (sort (mapcar 'car hipchat-room-list) 'string-lessp))
+  (let* ((room-list (sort (mapcar 'car my/jabber-hipchat-room-list) 'string-lessp))
          (selected-room (completing-read "Room name: " room-list))
-         (hipchat-mapping (cdr (assoc selected-room hipchat-room-list))))
+         (hipchat-mapping (cdr (assoc selected-room my/jabber-hipchat-room-list))))
     (jabber-groupchat-join
      (jabber-read-account)
      (concat hipchat-mapping "@conf.hipchat.com")
@@ -57,11 +56,11 @@
      t)))
 
 ;;; function to start jabber
-(defun my-jabber ()
+(defun my/jabber ()
   (interactive)
   (setq initial-buffer-choice (lambda ()
                                 (jabber-display-roster)
                                 (get-buffer "*-jabber-roster-*")))
   (jabber-connect-all))
 
-(provide 'my-jabber)
+(provide 'my/jabber)

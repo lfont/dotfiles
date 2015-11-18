@@ -1,6 +1,12 @@
 ;; Syntax checking
 (add-hook 'prog-mode-hook 'flycheck-mode)
 
+;; ({[ Pairing
+(add-hook 'prog-mode-hook 'electric-pair-mode)
+
+;; Folding
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
 ;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 ;(require 'auto-complete)
 (global-auto-complete-mode t)
