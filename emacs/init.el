@@ -1,51 +1,45 @@
 ;;; init.el --- user settings
 ;;; Commentary:
-;;; https://github.com/mklappstuhl/dotfiles/blob/master/emacs.d/init.el
-
 ;;; Code:
+
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lib/"))
 (defconst my/user-lisp (expand-file-name "~/.emacs.d/site-lisp/"))
 
 ;; load modules
-(defun my-load (file)
-  "Load FILE from user site-lisp."
-  (load (concat my/user-lisp file)))
+(defconst my/modules '("package"
+                       "ui"
+                       "editor"
+                       "indent"
+                       "helm"
+                       "ediff"
+                       "code"))
 
-(my-load "package")
-(my-load "ui")
-(my-load "editor")
-(my-load "indent")
-(my-load "helm")
-(my-load "ediff")
-(my-load "git")
-(my-load "code")
+(dolist (module my/modules)
+  (load (concat my/user-lisp module)))
 
 ;; autoload optional modules
-(defun my/autoload (function file &optional docstring interactive)
-  "Autoload file from user site-lisp when function is called.
+(defconst my/autoloaded-modules '((prodigy "prodigy" "<f6>")
+                                  (multi-term "multi-term" "<f5>")
+                                  (my/jabber "jabber")
+                                  (my/mu4e "mu4e")
+                                  (my/spellcheck "spellcheck" "C-c s")
+                                  (my/cursor "cursor" "C-c c")
+                                  (my/line "line" "C-c l")
+                                  (my/window "window" "C-c w")))
 
-FUNCTION is the symbol of the function.
-FILE is the file to load.
-DOCSTRING is an optional documentation string.
-INTERACTIVE can be set if FUNCTION call be called interactively."
-  (autoload function (concat my/user-lisp file) docstring interactive nil))
+(dolist (module my/autoloaded-modules)
+  (let ((function (car module))
+        (file (nth 1 module))
+        (key-binding (nth 2 module)))
+    (autoload function (concat my/user-lisp file)
+      "Autoloaded module from user's site-lisp"
+      (if key-binding t nil)
+      nil)
+    (when key-binding
+      (global-set-key (kbd key-binding) function))))
 
-(my/autoload 'authinfo-get-password "authinfo-get-password")
-(my/autoload 'prodigy "prodigy" "Launch prodigy." t)
-(my/autoload 'multi-term "multi-term" "Launch multi-term." t)
-(my/autoload 'my/jabber "jabber" "Launch jabber client." t)
-(my/autoload 'my/mu4e "mu4e")
-(my/autoload 'my/spellcheck "spellcheck" "Launch spell checker." t)
-(my/autoload 'my/cursor "cursor" "Manage cursors." t)
-(my/autoload 'my/line "line" "Manage lines." t)
-(my/autoload 'my/window "window" "Manage windows." t)
-
-;; autoload key bindings
-(global-set-key (kbd "<f5>") 'multi-term)
-(global-set-key (kbd "C-c s") 'my/spellcheck)
-(global-set-key (kbd "C-c c") 'my/cursor)
-(global-set-key (kbd "C-c g") 'my/line)
-(global-set-key (kbd "C-c w") 'my/window)
+;; autoload library
+(autoload 'authinfo-get-password "authinfo-get-password")
 
 ;; Default browser
 (require 'browse-url)

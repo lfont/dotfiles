@@ -37,8 +37,9 @@
                       jabber)))
 
   ;; list the repositories containing them
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t)
+  (setq package-archives
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+          ("melpa" . "https://melpa.org/packages/")))
 
   ;; activate all the packages (in particular autoloads)
   (package-initialize)

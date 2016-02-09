@@ -58,6 +58,8 @@
 ;;; function to start jabber
 (defun my/jabber ()
   (interactive)
+  (setq server-name "jabber")
+  (server-start)
   (setq initial-buffer-choice (lambda ()
                                 (jabber-display-roster)
                                 (get-buffer "*-jabber-roster-*")))

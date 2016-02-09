@@ -1,6 +1,6 @@
 (require 'prodigy)
 (require 'nvm)
-(require 'rbenv)
+;(require 'rbenv)
 
 (prodigy-define-service
     :name "Testerize"
@@ -11,7 +11,8 @@
     :port 3001
     :tags '(work fasterize devfe)
     :init-async (lambda (done)
-                  (nvm-use "0.8.261" done)))
+                  (nvm-use "0.12.7" done)))
+
 (prodigy-define-service
     :name "Geonosis"
     :cwd "~/code/Fasterize/geonosis"
@@ -20,6 +21,7 @@
     :args '("run" "-Dconfig.file=../FasterizeEngine/geonosis.conf")
     :port 9000
     :tags '(work fasterize devfe))
+
 (prodigy-define-service
     :name "FastAPI"
     :cwd "~/code/Fasterize/fastapi"
@@ -30,26 +32,29 @@
     :tags '(work fasterize devfe)
     :init-async (lambda (done)
                   (nvm-use "0.8.261" done)))
+
 (prodigy-define-service
     :name "Engine"
     :cwd "~/code/Fasterize/FasterizeEngine"
-    :path "~/.nvm/versions/node/v0.12.7/bin"
+    :path "~/.nvm/versions/node/v0.12.9/bin"
     :command "supervisor"
     :args '("devfe")
     :port 8080
     :tags '(work fasterize devfe)
     :init-async (lambda (done)
-                  (nvm-use "0.12.7" done)))
+                  (nvm-use "0.12.9" done)))
+
 (prodigy-define-service
     :name "Engine - .devfe.fasterized.net"
     :cwd "~/code/Fasterize/FasterizeEngine"
-    :path "~/.nvm/versions/node/v0.12.7/bin"
+    :path "~/.nvm/versions/node/v0.12.9/bin"
     :command "supervisor"
     :args '("--" "devfe" "--origin_port" "80" "--secure_origin_port" "443")
     :port 8080
     :tags '(work fasterize devfe)
     :init-async (lambda (done)
-                  (nvm-use "0.12.7" done)))
+                  (nvm-use "0.12.9" done)))
+
 (prodigy-define-service
     :name "fasterize.com"
     :cwd "~/code/Fasterize/fasterize.com"
