@@ -1,10 +1,10 @@
 [Unit]
-Description=Lock X session using slock
+Description=Lock X session
 
 [Service]
 User=%I
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/xlock
+ExecStart=/usr/bin/slock
 
 [Install]
 WantedBy=sleep.target

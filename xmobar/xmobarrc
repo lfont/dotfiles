@@ -1,4 +1,4 @@
-Config { font = "xft:Terminus-12:Regular"
+Config { font = "xft:Hack-10:Normal"
        , borderColor = "black"
        , border = FullB
        , bgColor = "black"

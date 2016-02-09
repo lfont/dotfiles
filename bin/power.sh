@@ -23,14 +23,14 @@ case $CMD in
         if [ $(which systemctl) &>/dev/null ]; then
             systemctl suspend
         else
-            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend && xlock
+            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Suspend && slock
         fi
         ;;
     ZZZ)
         if [ $(which systemctl) &>/dev/null ]; then
             systemctl hibernate
         else
-            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate && xlock
+            dbus-send --system --print-reply --dest="org.freedesktop.UPower" /org/freedesktop/UPower org.freedesktop.UPower.Hibernate && slock
         fi
         ;;
     *)
