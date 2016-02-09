@@ -1,3 +1,5 @@
+# -*-sh-*-
+
 # Path to your oh-my-zsh installation.
 export ZSH=/home/loic/.oh-my-zsh
 
@@ -47,27 +49,40 @@ ENABLE_CORRECTION="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git autojump nvm zsh-syntax-highlighting history-substring-search)
 
+# User configuration
+source $ZSH/oh-my-zsh.sh
+
+# Enable support for bash completion
+autoload -U +X bashcompinit && bashcompinit
+
+# Initialization of external tools
+if command -v gpg-connect-agent >/dev/null; then
+  /usr/bin/gpg-connect-agent --quiet /bye >/dev/null
+fi
+
 if command -v rbenv >/dev/null; then
-	 eval "$(rbenv init -)"
+  eval "$(rbenv init -)"
 fi
 
 if command -v direnv >/dev/null; then
-	 eval "$(direnv hook zsh)"
+  eval "$(direnv hook zsh)"
+fi
+
+if command -v stack >/dev/null; then
+  eval "$(stack --bash-completion-script "$(which stack)")"
 fi
 
 if [ -x ~/code/Fasterize/fstrz/bin/fstrz ]; then
-	 eval "$(~/code/Fasterize/fstrz/bin/fstrz init -)"
+  eval "$(~/code/Fasterize/fstrz/bin/fstrz init -)"
 fi
 
-# User configuration
-source $ZSH/oh-my-zsh.sh
+if [ -e /usr/share/doc/pkgfile/command-not-found.zsh ]; then
+  source /usr/share/doc/pkgfile/command-not-found.zsh
+fi
 
 # bind P and N for EMACS mode
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
-
-# init gpg agent
-gpg-connect-agent --quiet /bye >/dev/null
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -80,38 +95,89 @@ alias ohmyzsh="e ~/.oh-my-zsh"
 
 # tools
 alias root="sudo -i"
-alias term="urxvt -e"
-alias pass="~/bin/kpcli.pl --kdb ~/AppData/KeePassX/default.kdbx"
+alias open="urxvt -e"
+alias tm="tmux attach -t term || tmux new -s term"
+alias tme="tmux attach -t emacs || tmux new -s emacs 'emacs -nw -f server-start'"
+alias tsh="cd ~/code/Turtle-Extensions && stack ghci --no-load; cd -"
 
 # pacman (https://wiki.archlinux.org/index.php/Pacman_tips)
-alias pacupg="yaourt -Syu"          # Synchronize with repositories and then upgrade packages that are out of date on the local system.
-alias pacdl="yaourt -Sw"            # Download specified package(s) as .tar.xz ball
-alias pacin="yaourt -S"             # Install specific package(s) from the repositories
-alias pacins="yaourt -U"            # Install specific package not from the repositories but from a file
-alias pacre="yaourt -R"             # Remove the specified package(s), retaining its configuration(s) and required dependencies
-alias pacrem="yaourt -Rns"          # Remove the specified package(s), its configuration(s) and unneeded dependencies
-alias pacrep="yaourt -Si"           # Display information about a given package in the repositories
-alias pacreps="yaourt -Ss"          # Search for package(s) in the repositories
-alias pacloc="yaourt -Qi"           # Display information about a given package in the local database
-alias paclocs="yaourt -Qs"          # Search for package(s) in the local database
-alias paclo="yaourt -Qdt"           # List all packages which are orphaned
-alias paclx="yaourt -Qen"   	      # List explicitly installed packages availble in the official repository
-alias paclxe="yaourt -Qem"          # List explicitly installed packages not avaible in the official repository
-alias pacc="yaourt -Scc"            # Clean cache - delete all the package files in the cache
-alias paclf="yaourt -Ql"            # List all files installed by a given package
-alias pacown="yaourt -Qo"           # Show package(s) owning the specified file(s)
-alias pacexpl="yaourt -D --asexp"   # Mark one or more installed packages as explicitly installed
-alias pacimpl="yaourt -D --asdep"   # Mark one or more installed packages as non explicitly installed
+alias pacupg="yaourt -Syu"        # Synchronize with repositories and then upgrade packages that are out of date on the local system.
+alias pacdl="yaourt -Sw"          # Download specified package(s) as .tar.xz ball
+alias pacin="yaourt -S"           # Install specific package(s) from the repositories
+alias pacins="yaourt -U"          # Install specific package not from the repositories but from a file
+alias pacre="yaourt -R"           # Remove the specified package(s), retaining its configuration(s) and required dependencies
+alias pacrem="yaourt -Rns"        # Remove the specified package(s), its configuration(s) and unneeded dependencies
+alias pacrep="yaourt -Si"         # Display information about a given package in the repositories
+alias pacreps="yaourt -Ss"        # Search for package(s) in the repositories
+alias pacloc="yaourt -Qi"         # Display information about a given package in the local database
+alias paclocs="yaourt -Qs"        # Search for package(s) in the local database
+alias paclo="yaourt -Qdt"         # List all packages which are orphaned
+alias paclx="yaourt -Qen"         # List explicitly installed packages availble in the official repository
+alias paclxe="yaourt -Qem"        # List explicitly installed packages not avaible in the official repository
+alias pacc="yaourt -Scc"          # Clean cache - delete all the package files in the cache
+alias paclf="yaourt -Ql"          # List all files installed by a given package
+alias pacown="yaourt -Qo"         # Show package(s) owning the specified file(s)
+alias pacexpl="yaourt -D --asexp" # Mark one or more installed packages as explicitly installed
+alias pacimpl="yaourt -D --asdep" # Mark one or more installed packages as non explicitly installed
 
 # Emacs: edit file from an Emacs shell (http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/)
 if [ "${TERM}x" = "eterm-colorx" ]; then
-    alias e="print -P '\eAnSiTe'"
-    alias x="print -P '\eAnSiTx'"
+  alias e="print -P '\eAnSiTe'"
+  alias x="print -P '\eAnSiTx'"
 else
-    alias e="emacsclient -t -a mg"
-    alias x="emacsclient -t -a mg"
+  alias e="emacsclient -t -a mg"
+  alias x="emacsclient -t -a mg"
 fi
 
+function authinfopwd() {
+  local pwd_str=$(emacsclient -e "(authinfo-get-password \"$1\" \"$2\")")
+  echo $(echo $pwd_str | sed "s/\(^\"\)\|\(\"$\)//g")
+}
+
 # fstrz: Fasterize tools
-alias fstup="fstrz host up cache01-devfe web01-devfe graphite01-devfe"
-alias fstdown="fstrz host halt cache01-devfe web01-devfe graphite01-devfe"
+alias fsup="fstrz host up cache01-devfe web01-devfe"
+alias fsdown="fstrz host halt cache01-devfe web01-devfe"
+alias fsssh="fstrz host ssh"
+alias fsreplzoo="fstrz zookeeper repl"
+alias fsreplmongo="fstrz mongodb repl"
+alias fsconfupcustomer="fstrz config customer update_default -e devfe"
+alias fsconfupengine="fstrz config provision --environment devfe"
+alias fsconfup="fsconfupengine && fsconfupcustomer"
+
+function fsconfsetattr() {
+  fstrz config customer set_attr -e devfe --attribute="$1" --value="$2"
+}
+
+function fsconfrestore() {
+  local CONFID="/$1"
+  if [ "$CONFID" = "/" ]; then
+      CONFID=""
+  fi
+  j chef-repo \
+    && cap devfe zookeeper:backup:restore_from_env -s zk_path=/config/customer_config${CONFID} -s src_env=dc1 \
+    ; cd -
+}
+
+function fsdbrestore() {
+  case "$1" in
+    zoo)
+      # import ZK cache01-devfe
+      fsconfrestore
+      ;;
+    sql-local)
+      # import MySQL dans la base local
+      j chef-repo \
+        && cap devfe mysql:backup:local:restore_from_env -s src_env=dc1 -s password="$(authinfopwd mysql.local)" \
+        ; cd -
+      ;;
+    sql-web01)
+      # import MySQL dans la base de web01-devfe
+      j chef-repo \
+        && cap devfe mysql:backup:restore_from_env -s src_env=dc1 -s password="$(authinfopwd mysql.web01)" \
+        ; cd -
+      ;;
+    *)
+      echo "usage: fsdbrestore zoo|sql-local|sql-web01"
+      ;;
+  esac
+}

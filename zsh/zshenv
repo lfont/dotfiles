@@ -1,6 +1,6 @@
-export DE="xfce"
-export DESKTOP_SESSION="XFCE"
-export XDG_MENU_PREFIX="xfce-"
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export XDG_MENU_PREFIX="lxde-"
 
 export VISUAL="emacsclient -c"
 export BROWSER="firefox-aurora"
@@ -8,6 +8,8 @@ export BROWSER="firefox-aurora"
 export PERL_MB_OPT="--install_base \"/home/loic/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=/home/loic/perl5"
 export PERL5LIB=/home/loic/perl5/lib/perl5
+
+export QT_SELECT=4
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -30,12 +32,13 @@ export GPG_TTY=$(tty)
 
 if [ -f ~/.gpg-agent-info ]; then
    . ~/.gpg-agent-info
-else
-    unset SSH_AGENT_PID
-    if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-        export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
-    fi
 fi
+#else
+#    unset SSH_AGENT_PID
+#    if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+#        export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+#    fi
+#fi
 
 # OpenBSD's packages
 if [[ $(uname) == OpenBSD ]]; then
