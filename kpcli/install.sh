@@ -6,12 +6,13 @@ SHA256=947b7b0485215f72e14bb8936c847abb583253c597f58234650922270259049c
 file_path=$(f_install_file http://sourceforge.net/projects/kpcli/files/kpcli-$VERSION.pl $SHA256)
 
 if [[ ! -e $file_path ]]; then
-    echo 'Remote file is invalid'
-    exit 1
+  echo 'Remote file is invalid'
+  exit 1
 fi
 
 chmod +x $file_path
 f_link_command $file_path kpcli.pl
+f_link_command $(pwd)/kpcli/pass.sh pass.sh
 
 PERL_PACKAGES="Crypt::Rijndael
                Term::ReadKey
@@ -29,7 +30,7 @@ PERL_PACKAGES="Crypt::Rijndael
                Sub::Install"
 
 for p in $PERL_PACKAGES; do
-    perl -MCPAN -e "notest install '$p'"
+  perl -MCPAN -e "notest install '$p'"
 done
 
 PATCH=$(pwd)/kpcli/Xclip.patch
