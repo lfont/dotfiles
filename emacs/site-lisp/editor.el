@@ -16,6 +16,13 @@
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
 
+;; Leader key
+;; http://emacs.stackexchange.com/questions/12961/how-can-i-globally-replace-c-c-with-another-key-binding
+;(define-key input-decode-map (kbd "<M-SPC>") (kbd "<leader>"))
+(define-key key-translation-map (kbd "<M-SPC>") (kbd "C-c"))
+(global-set-key (kbd "C-c M-s") 'save-buffer)
+(global-set-key (kbd "C-c M-c") 'save-buffers-kill-terminal)
+
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun my/move-beginning-of-line (arg)
@@ -26,7 +33,7 @@ If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
 the beginning of the line.
 
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+If ARG is not nil or 1, move forward ARG - 1 lines first. If
 point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
   (setq arg (or arg 1))
@@ -61,3 +68,9 @@ point reaches the beginning or end of the buffer, stop there."
 (setq tramp-default-method "sshx")
 (add-to-list 'tramp-default-proxies-alist
              '("\\`bibimbap\\'" "\\`root\\'" "/ssh:%h:"))
+
+;; Treat asc file like gpg file
+(require 'epa-file)
+(setq epa-armor t
+      epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
+(epa-file-name-regexp-update)

@@ -19,7 +19,7 @@
 
 ;; autoload optional modules
 (defconst my/autoloaded-modules '((prodigy "prodigy" "<f6>")
-                                  (multi-term "multi-term" "<f5>")
+                                  (my/multi-term "multi-term" "<f5>")
                                   (my/jabber "jabber")
                                   (my/mu4e "mu4e")
                                   (my/spellcheck "spellcheck" "C-c s")
@@ -45,12 +45,6 @@
 (require 'browse-url)
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program (getenv "BROWSER"))
-
-;; Treat asc file like gpg file
-(require 'epa-file)
-(setq epa-armor t
-      epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
-(epa-file-name-regexp-update)
 
 ;; Accept self signed certificates
 (require 'starttls)

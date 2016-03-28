@@ -29,6 +29,7 @@
                       hydra
 
                       ace-window
+                      popwin
 
                       prodigy
                       nvm

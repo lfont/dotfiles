@@ -46,3 +46,8 @@
 (spaceline-emacs-theme)
 (setq powerline-height 18
       powerline-default-separator 'wave)
+
+(require 'popwin)
+(popwin-mode 1)
+(setq popwin:popup-window-height 25)
+(push "^term<" popwin:special-display-config)

@@ -13,7 +13,8 @@
 
 ;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
 ;(require 'auto-complete)
-(global-auto-complete-mode t)
+(ac-config-default)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
 
 ;(require 'projectile)
 (projectile-global-mode)

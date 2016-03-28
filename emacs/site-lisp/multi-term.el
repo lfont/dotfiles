@@ -2,27 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;; http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/
-(require 'multi-term)
-(setq multi-term-buffer-name "term")
-
-(add-to-list 'term-unbind-key-list "C-a")
-(add-to-list 'term-unbind-key-list "C-e")
-
-(defun my/multi-term-rename-buffer (new-name)
-  (interactive "MRename buffer (to new name): ")
-  (rename-buffer (format "*%s<%s>*"
-                         multi-term-buffer-name
-                         new-name)))
-
-(add-to-list 'term-bind-key-alist '("C-c r" . my/multi-term-rename-buffer))
-(add-to-list 'term-bind-key-alist '("C-c C-k" . term-char-mode))
-(add-to-list 'term-bind-key-alist '("C-c C-j" . term-line-mode))
-(add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-(add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
-(add-to-list 'term-bind-key-alist '("M-a" . term-send-home))
-(add-to-list 'term-bind-key-alist '("M-e" . term-send-end))
-
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (require 'term)
 (setq term-buffer-maximum-size 10000)
@@ -68,5 +47,58 @@
                                       term-ansi-at-host
                                       term-ansi-at-dir))))
   message)
+
+;; http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/
+(require 'multi-term)
+(setq multi-term-buffer-name "term")
+
+(add-to-list 'term-unbind-key-list "C-g")
+
+(defun my/multi-term-rename-buffer (new-name)
+  (interactive "MRename buffer (to new name): ")
+  (rename-buffer (format "*%s<%s>*"
+                         multi-term-buffer-name
+                         new-name)))
+
+(add-to-list 'term-bind-key-alist '("C-c r" . my/multi-term-rename-buffer))
+(add-to-list 'term-bind-key-alist '("C-c C-k" . term-char-mode))
+(add-to-list 'term-bind-key-alist '("C-c C-j" . term-line-mode))
+(add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
+(add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
+
+(defun my/multi-term-is-term (b)
+  (eq 'term-mode
+      (with-current-buffer b major-mode)))
+
+(defun my/multi-term-get-terms (buffers)
+  (cl-remove-if (lambda (b)
+                  (not
+                   (my/multi-term-is-term b)))
+                buffers))
+
+(defun my/multi-term-get-term (cwd terms)
+  (car (cl-remove-if (lambda (b)
+                       (not
+                        (string-equal cwd
+                                      (let ((name (buffer-file-name b)))
+                                        (string-match ":\\(.*\\)" name)
+                                        (expand-file-name (match-string 1 name))))))
+                     terms)))
+
+(require 'f)
+(defun my/multi-term ()
+  (interactive)
+  (if (my/multi-term-is-term (current-buffer))
+      (popwin:close-popup-window)
+    (progn
+      (popwin:display-buffer-1
+       (let* ((cwd (f-dirname (or buffer-file-name "~/nil")))
+              (term (my/multi-term-get-term cwd (my/multi-term-get-terms (buffer-list)))))
+         (or term
+             (save-window-excursion
+               (call-interactively 'multi-term))))
+       :default-config-keywords '(:stick t)))))
+
+(provide 'my/multi-term)
 
 ;;; multi-term.el ends here
