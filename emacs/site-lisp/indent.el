@@ -1,9 +1,12 @@
-;;; indent.el -- Indentation setup.
+;;; init-indent.el -- Indentation setup.
 ;;; Commentary:
 ;;; Code:
 
 ;; Auto indent
-(add-hook 'prog-mode-hook 'electric-indent-mode)
+(use-package electric
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook 'electric-indent-mode))
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil
@@ -29,4 +32,6 @@
 
 (global-set-key (kbd "<backtab>") 'my/indent-remove-leading-spaces)
 
-;;; indent.el ends here
+(provide 'init-indent)
+
+;;; init-indent.el ends here

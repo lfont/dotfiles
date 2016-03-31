@@ -1,3 +1,7 @@
+;;; init-editor.el --- editor settings
+;;; Commentary:
+;;; Code:
+
 ;; Backups
 (setq make-backup-files nil ; stop creating those backup~ files
       auto-save-default nil) ; stop creating those #autosave# files
@@ -23,6 +27,15 @@
 (global-set-key (kbd "C-c M-s") 'save-buffer)
 (global-set-key (kbd "C-c M-c") 'save-buffers-kill-terminal)
 
+;; Fix a weird bug with dead keys when Emacs runs in a GUI
+(add-hook 'emacs-lisp-mode-hook
+          (lambda ()
+            (global-set-key (kbd "<dead-acute> <SPC>")        "'")
+            (global-set-key (kbd "<dead-grave> <SPC>")        "`")
+            (global-set-key (kbd "<S-dead-tilde> <SPC>")      "~")
+            (global-set-key (kbd "<S-dead-diaeresis> <SPC>")  "\"")
+            (global-set-key (kbd "<S-dead-circumflex> <SPC>") "^")))
+
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun my/move-beginning-of-line (arg)
@@ -33,7 +46,7 @@ If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
 the beginning of the line.
 
-If ARG is not nil or 1, move forward ARG - 1 lines first. If
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
 point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
   (setq arg (or arg 1))
@@ -52,25 +65,31 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key [remap move-beginning-of-line]
                 'my/move-beginning-of-line)
 
-;; Use xclip to copy/paste to the terminal from X.
-;(require 'xclip)
-(xclip-mode t)
-;(turn-on-xclip) ;; this function is not call in rxvt
+;; Auto revert buffer on file change
+(use-package autorevert
+  :diminish auto-revert-mode)
 
 ;; Always ALWAYS use UTF-8
-(require 'iso-transl)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
+(use-package iso-transl
+  :config
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8))
 
-;; Remote file access
-(require 'tramp)
-(setq tramp-default-method "sshx")
-(add-to-list 'tramp-default-proxies-alist
-             '("\\`bibimbap\\'" "\\`root\\'" "/ssh:%h:"))
+;; Use xclip to copy/paste to the terminal from X.
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode t))
+;(turn-on-xclip) ;; this function is not call in rxvt
 
-;; Treat asc file like gpg file
-(require 'epa-file)
-(setq epa-armor t
-      epa-file-name-regexp "\\.\\(gpg\\|asc\\)$")
-(epa-file-name-regexp-update)
+(use-package whitespace
+  :defer t
+  :diminish whitespace-mode
+  :init
+  (setq whitespace-style '(face empty lines-tail tabs tab-mark trailing))
+  (add-hook 'prog-mode-hook 'whitespace-mode))
+
+(provide 'init-editor)
+
+;;; init-editor.el ends here
