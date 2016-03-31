@@ -2,6 +2,7 @@
 
 ln -s $(pwd)/emacs/lib ~/.emacs.d/
 ln -s $(pwd)/emacs/site-lisp ~/.emacs.d/
+ln -s $(pwd)/emacs/load.d ~/.emacs.d/
 
 for module in ~/.emacs.d/lib/*.el; do
   emacs --batch -f batch-byte-compile "$module"

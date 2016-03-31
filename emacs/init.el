@@ -27,6 +27,6 @@
 ;; load user's settings
 (use-package load-dir
   :init
-  (setq load-dirs "~/.emacs.d/site-lisp/"))
+  (setq load-dirs t))
 
 ;;; init.el ends here
