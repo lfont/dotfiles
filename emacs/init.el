@@ -26,6 +26,7 @@
 
 ;; load user's settings
 (use-package load-dir
+  :ensure t
   :init
   (setq load-dirs t))
 
