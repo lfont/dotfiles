@@ -18,8 +18,7 @@ if [[ $(gpg-agent --version | head -n 1 | awk '{print $3}') < 2.1 ]]; then
 fi
 
 ## Remaps CapsLock
-#setxkbmap -layout us -variant intl -option ctrl:swapcaps
-setxkbmap -layout us -variant intl
+setxkbmap -layout us -variant intl -option ctrl:swapcaps
 
 ## Set keyboard settings - 250 ms delay and 25 cps (characters per second) repeat rate.
 ## Adjust the values according to your preferances.
@@ -31,9 +30,6 @@ xset b off
 ## Set screen display settings
 xset s 300 60
 xset dpms 600 700 800
-
-## Lock the screen on inactivity
-xsidle.sh slock &
 
 ## Detect and configure touchpad. See 'man synclient' for more info.
 if [ -x /bin/synclient ]; then

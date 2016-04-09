@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Always verify certificate validity
+(use-package gnutls
+  :init
+  (setq gnutls-verify-error t))
+
 ;; Remote file access
 (use-package tramp
   :defer t
@@ -25,13 +30,6 @@
   :init
   (setq browse-url-browser-function 'browse-url-generic
         browse-url-generic-program (getenv "BROWSER")))
-
-;; Accept self signed certificates
-(use-package starttls
-  :init
-  (setq starttls-use-gnutls t
-        starttls-gnutls-program  "gnutls-cli"
-        starttls-extra-arguments '("--starttls" "--insecure")))
 
 ;; Get password from authinfo.gpg
 (use-package authinfo-get-password

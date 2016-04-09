@@ -2,6 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'server)
+(unless (server-running-p)
+  (server-start))
+
+;; setup package.el
 (require 'package)
 (setq package-enable-at-startup nil)
 

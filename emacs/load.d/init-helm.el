@@ -5,6 +5,7 @@
 (use-package helm
   :ensure t
   :diminish helm-mode
+  :demand t
   :bind (("M-x"     . helm-M-x)
          ("M-y"     . helm-show-kill-ring)
          ("C-x b"   . helm-mini)
@@ -32,6 +33,7 @@
    helm-mode-fuzzy-match t
    helm-completion-in-region-fuzzy-match t)
   :config
+  (ido-mode -1)
   (helm-mode 1)
 
   (use-package helm-projectile

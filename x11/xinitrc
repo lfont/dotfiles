@@ -1,7 +1,10 @@
+# -*-sh-*-
 . ~/dotfiles/x11/xprofile
 
+xhost +SI:localuser:$USER
+
 if command -v systemctl >/dev/null; then
-    exec xmonad
+  exec emacs --eval "(with-eval-after-load \"init-exwm\" (exwm-enable))"
 else
-    exec ck-launch-session xmonad
+  exec ck-launch-session emacs --eval "(with-eval-after-load \"init-exwm\" (exwm-enable))"
 fi

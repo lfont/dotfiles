@@ -1,17 +1,16 @@
-export PATH="$HOME/bin:$HOME/perl5/bin:$PATH"
-export MANPATH="$HOME/perl5/man/man:/usr/local/man:$MANPATH"
+# -*-sh-*-
+export PATH="$HOME/bin:$PATH"
 
 ## Launches a gnome-keyring instance
 if command -v gnome-keyring-daemon >/dev/null; then
-    #if ! pgrep -f gnome-keyring-daemon >/dev/null; then
-        eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-        export SSH_AUTH_SOCK
-    #fi
+    eval $(killall gnome-keyring-daemon)
+    eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+    export SSH_AUTH_SOCK
 fi
 
 ## Start an Emacs server (this works with emacs-lucid)
-if command -v emacs >/dev/null; then
-    if ! tmux has -t emacs; then
-        tmux new -s emacs -d "emacs -nw -f server-start"
-    fi
-fi
+#if command -v emacs >/dev/null; then
+#    if ! tmux has -t emacs; then
+#        tmux new -s emacs -d "emacs -nw"
+#    fi
+#fi

@@ -5,6 +5,7 @@
 ;; Syntax checking
 (use-package flycheck
   :ensure t
+  :diminish "fc"
   :defer t
   :init
   (add-hook 'prog-mode-hook 'flycheck-mode))
@@ -21,19 +22,20 @@
   :init
   (add-hook 'prog-mode-hook 'hs-minor-mode))
 
-;;; http://stackoverflow.com/questions/8095715/emacs-auto-complete-mode-at-startup
-(use-package auto-complete
-  :ensure t
-  :diminish auto-complete-mode
-  :config
-  (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-  (ac-config-default))
-
 ;; Project management
 (use-package projectile
   :ensure t
-  :config
-  (projectile-global-mode))
+  :defer t
+  :init
+  (setq projectile-mode-line '(:eval
+                               (if
+                                   (file-remote-p default-directory)
+                                   " pt"
+                                 (format " pt[%s]"
+                                         (projectile-project-name)))))
+
+  (add-hook 'text-mode-hook 'projectile-mode)
+  (add-hook 'prog-mode-hook 'projectile-mode))
 
 ;; Extra modes
 (use-package js2-mode

@@ -54,7 +54,6 @@
   (use-package multi-term :ensure t)
   (use-package popwin     :ensure t)
   (use-package f          :ensure t)
-  (require 'cl)
 
   (setq multi-term-buffer-name "term")
 

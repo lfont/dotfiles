@@ -12,10 +12,13 @@
 
 (global-hl-line-mode t)
 (column-number-mode t)
+
+;; Make more room
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
+(fringe-mode '(nil . 0))
 
 ;; Font
 (add-to-list 'default-frame-alist
@@ -36,14 +39,6 @@
         fci-rule-color "grey29"
         fci-rule-column 80)
   (add-hook 'prog-mode-hook 'fci-mode))
-
-(use-package spaceline-config
-  :ensure spaceline
-  :init
-  (setq powerline-height 18
-        powerline-default-separator 'wave)
-  :config
-  (spaceline-emacs-theme))
 
 (use-package popwin
   :ensure t

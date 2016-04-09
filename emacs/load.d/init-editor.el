@@ -38,7 +38,7 @@
 
 ;; Smarter move
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
-(defun my/move-beginning-of-line (arg)
+(defun my/editor-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
 
 Move point to the first non-whitespace character on this line.
@@ -61,9 +61,23 @@ point reaches the beginning or end of the buffer, stop there."
     (when (= orig-point (point))
       (move-beginning-of-line 1))))
 
-;; remap C-a to `my/move-beginning-of-line'
+;; remap C-a to `my/editor-move-beginning-of-line'
 (global-set-key [remap move-beginning-of-line]
-                'my/move-beginning-of-line)
+                'my/editor-move-beginning-of-line)
+
+;; http://stackoverflow.com/questions/3417438/closing-all-other-buffers-in-emacs
+(defun my/editor-kill-others-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer
+        (delq (current-buffer)
+              (cl-remove-if-not
+               '(lambda (x) (or (buffer-file-name x)
+                                (eq 'dired-mode (buffer-local-value 'major-mode x))))
+               (buffer-list))))
+  (message "Other buffers killed"))
+
+(global-set-key (kbd "C-x K") 'my/editor-kill-others-buffers)
 
 ;; Auto revert buffer on file change
 (use-package autorevert
