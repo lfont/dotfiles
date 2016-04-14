@@ -23,10 +23,6 @@
   :config
   (use-package xelb :load-path "~/.emacs.d/site-lisp/xelb/")
 
-  ;; Safely start a process from EXWM
-  (defun my/exwm-start-process (process)
-    (start-process-shell-command process nil process))
-
   ;; Rename buffer based on its class / title
   ;; (add-hook 'exwm-update-class-hook
   ;;           (lambda ()
@@ -54,7 +50,7 @@
   (exwm-input-set-key (kbd "s-p")
                       (lambda (command)
                         (interactive (list (read-shell-command "Run: ")))
-                        (my/exwm-start-process command)))
+                        (start-process-shell-command command nil command)))
 
   ;; 's-<tab>: Switch buffer
   (defun my/exwm-buffer-switch ()
@@ -78,7 +74,7 @@
   (defun my/exwm-global-command (key command)
     (exwm-input-set-key (kbd key) (lambda ()
                                     (interactive)
-                                    (my/exwm-start-process command))))
+                                    (start-process-shell-command command nil command))))
 
   (my/exwm-global-command "<XF86AudioRaiseVolume>" "audio-volume.sh up")
   (my/exwm-global-command "<XF86AudioLowerVolume>" "audio-volume.sh down")
@@ -111,21 +107,18 @@
   (exwm-systemtray-enable)
 
   ;; Services
-  (defun my/exwm-kill-process (process)
-    (let* ((name (car (split-string process)))
-           (kill (concat "pkill " name)))
-      (my/exwm-start-process kill)))
-
   (defun my/exwm-start-processes (processes)
     (let ((delay 0))
       (dolist (process processes)
-        (run-at-time (format "%d sec" delay) nil (lambda ()
-                                                   (my/exwm-start-process process)))
-        (setq delay (+ delay 1))))
-
-    (add-hook 'kill-emacs-hook (lambda ()
-                                 (dolist (process processes)
-                                   (my/exwm-kill-process process)))))
+        (let ((program (car (split-string process))))
+          (run-at-time (format "%d sec" delay) nil
+                       (lambda ()
+                         (start-process-shell-command process nil process)
+                         (add-hook 'kill-emacs-hook
+                                   (lambda ()
+                                     (start-process (concat "pkill " program)
+                                                    nil "pkill" program)) t)))
+          (setq delay (+ delay 1))))))
 
   (add-hook 'exwm-init-hook
             (lambda ()

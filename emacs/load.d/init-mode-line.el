@@ -27,9 +27,10 @@
     (when (fboundp 'exwm-workspace-switch)
       (let* ((num (cl-position (selected-frame) exwm-workspace--list))
              (str (when num (int-to-string num))))
-        (if spaceline-workspace-numbers-unicode
-            (spaceline--unicode-number str)
-          (propertize str 'face 'bold)))))
+        (when str
+          (if spaceline-workspace-numbers-unicode
+              (spaceline--unicode-number str)
+            (propertize str 'face 'bold))))))
 
   (spaceline-emacs-theme)
   (with-eval-after-load "helm" (spaceline-helm-mode)))

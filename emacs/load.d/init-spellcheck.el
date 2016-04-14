@@ -6,8 +6,7 @@
   :defer t
   :diminish flyspell-mode
   :init
-  (setq ispell-program-name "aspell"
-        ispell-list-command "--list"
+  (setq ispell-list-command "--list"
         ispell-dictionary "american")
 
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
