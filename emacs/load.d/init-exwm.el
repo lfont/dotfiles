@@ -144,7 +144,7 @@
   (add-hook 'exwm-randr-screen-change-hook
             (lambda ()
               (start-process-shell-command
-               "xrandr" nil "xrandr --output HDMI2 --left-of eDP1 --auto")))
+               "xrandr" nil "xrandr --output eDP1 --primary --output HDMI2 --left-of eDP1 --auto")))
   (exwm-randr-enable)
 
   ;; Date & time
