@@ -14,7 +14,7 @@ fi
 
 ## Launches a gpg-agent instance
 if [[ $(gpg-agent --version | head -n 1 | awk '{print $3}') < 2.1 ]]; then
-   eval $(gpg-agent --daemon --sh --write-env-file ~/.gpg-agent-info)
+    eval $(gpg-agent --daemon --sh --write-env-file ~/.gpg-agent-info)
 fi
 
 ## Remaps CapsLock
@@ -31,25 +31,19 @@ xset b off
 xset s 300 60
 xset dpms 600 700 800
 
-## Detect and configure touchpad. See 'man synclient' for more info.
-if [ -x /bin/synclient ]; then
-    synclient ClickFinger1=0
-    synclient ClickFinger2=0
-    synclient ClickFinger3=0
-    synclient RightButtonAreaLeft=0
-    synclient RightButtonAreaTop=0
-    synclient VertScrollDelta=-111
-    synclient HorizScrollDelta=-111
-    #synclient VertHysteresis=40
-    #synclient HorizHysteresis=40
-    synclient TapButton1=1
-    synclient TapButton2=3
-    synclient TapButton3=2
-    synclient PalmDetect=1
-    synclient VertTwoFingerScroll=1
-    synclient HorizTwoFingerScroll=1
+## Detect and configure touchpad/mouse. See 'man xinput' for more info.
+xinput list | grep "SynPS/2 Synaptics TouchPad"
+if [ $? -eq 0 ]; then
+    #xinput set-prop "SynPS/2 Synaptics TouchPad" 304 -111 -111
+    #xinput set-prop "SynPS/2 Synaptics TouchPad" 311 0 0 0 0 1 3 2
+    xinput set-prop "SynPS/2 Synaptics TouchPad" 279 1
+    xinput set-prop "SynPS/2 Synaptics TouchPad" 291 1
+fi
 
-    syndaemon -t -k -i 2 -d &
+xinput list | grep "Logitech Anywhere MX"
+if [ $? -eq 0 ]; then
+    #xinput set-prop "Logitech Anywhere MX" 279 -1 -1 -1
+    xinput set-prop "Logitech Anywhere MX" 279 1
 fi
 
 ## Restore screen layout
