@@ -97,7 +97,7 @@ alias ohmyzsh="e ~/.oh-my-zsh"
 alias root="sudo -i"
 alias open="urxvt -e"
 alias tm="tmux attach -t term || tmux new -s term"
-alias tme="tmux attach -t emacs || tmux new -s emacs 'emacs -nw -f server-start'"
+alias tme="tmux attach -t emacs || tmux new -s emacs 'emacs -nw'"
 alias tsh="cd ~/code/Turtle-Extensions && stack ghci --no-load; cd -"
 
 # pacman (https://wiki.archlinux.org/index.php/Pacman_tips)
@@ -128,11 +128,6 @@ else
   alias e="emacsclient -t -a mg"
   alias x="emacsclient -t -a mg"
 fi
-
-function authinfopwd() {
-  local pwd_str=$(emacsclient -e "(authinfo-get-password \"$1\" \"$2\")")
-  echo $(echo $pwd_str | sed "s/\(^\"\)\|\(\"$\)//g")
-}
 
 # fstrz: Fasterize tools
 alias fsup="fstrz host up cache01-devfe web01-devfe"
@@ -167,13 +162,13 @@ function fsdbrestore() {
     sql-local)
       # import MySQL dans la base local
       j chef-repo \
-        && cap devfe mysql:backup:local:restore_from_env -s src_env=dc1 -s password="$(authinfopwd mysql.local)" \
+        && cap devfe mysql:backup:local:restore_from_env -s src_env=dc1 -s password="$(pass show fasterize/mysql.local | head -n 1)" \
         ; cd -
       ;;
     sql-web01)
       # import MySQL dans la base de web01-devfe
       j chef-repo \
-        && cap devfe mysql:backup:restore_from_env -s src_env=dc1 -s password="$(authinfopwd mysql.web01)" \
+        && cap devfe mysql:backup:restore_from_env -s src_env=dc1 -s password="$(pass show fasterize/mysql.web01 | head -n 1)" \
         ; cd -
       ;;
     *)
