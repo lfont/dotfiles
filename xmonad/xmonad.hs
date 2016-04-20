@@ -61,7 +61,7 @@ myManageHook = composeAll . concat $
     where
       viewShift          = doF . liftM2 (.) W.greedyView W.shift
       myShiftClassesWWW  = [ "Firefox", "Chromium" ]
-      myShiftTitlesWWW   = [ "pass" ]
+      myShiftTitlesWWW   = [ ]
       myShiftTitlesChats = [ "mail", "jabber" ]
       myFloatResources   = [ "xfce4-appfinder" ]
       myIgnoreResources  = [ "stalonetray" ]
@@ -92,7 +92,6 @@ myKeys (XConfig {modMask = modm}) = M.fromList $
         ((modm .|. controlMask,            xK_f),                    spawn "pcmanfm"),
         ((modm .|. controlMask,            xK_m),                    spawn "mail.sh"),
         ((modm .|. controlMask,            xK_j),                    spawn "jabber.sh"),
-        ((modm .|. controlMask,            xK_p),                    spawn "pass.sh"),
         -- Audio volume
         ((0,                               xF86XK_AudioRaiseVolume), spawn "audio-volume.sh up"),
         ((0,                               xF86XK_AudioLowerVolume), spawn "audio-volume.sh down")
@@ -113,6 +112,7 @@ myStartupHook = do
   spawnOnce "xfce4-volumed"
   spawnOnce "pcmanfm --daemon-mode"
   spawnOnce "syncthing -no-browser -logflags=3"
+  spawnOnce "btsync --config ~/.config/btsync/sync.conf"
   -- systray
   spawnOnce "stalonetray"
   spawnOnce "pasystray"
