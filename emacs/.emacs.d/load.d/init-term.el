@@ -4,6 +4,7 @@
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (use-package term
+  :load-path "~/.emacs.d/site-lisp/"
   :bind (("<f5>" . my/multi-term))
   :config
   (setq term-buffer-maximum-size 10000)
@@ -59,17 +60,18 @@
 
   (add-to-list 'term-unbind-key-list "C-g")
 
-  (defun my/multi-term-rename-buffer (new-name)
-    (interactive "MRename buffer (to new name): ")
-    (rename-buffer (format "*%s<%s>*"
-                           multi-term-buffer-name
-                           new-name)))
-
+  (add-to-list 'term-bind-key-alist '("C-c n" . multi-term))
   (add-to-list 'term-bind-key-alist '("C-c r" . my/multi-term-rename-buffer))
   (add-to-list 'term-bind-key-alist '("C-c C-k" . term-char-mode))
   (add-to-list 'term-bind-key-alist '("C-c C-j" . term-line-mode))
   (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
   (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
+
+  (defun my/multi-term-rename-buffer (new-name)
+    (interactive "MRename buffer (to new name): ")
+    (rename-buffer (format "*%s<%s>*"
+                           multi-term-buffer-name
+                           new-name)))
 
   (defun my/multi-term-is-term (b)
     (eq 'term-mode
@@ -101,7 +103,32 @@
            (or term
                (save-window-excursion
                  (call-interactively 'multi-term))))
-         :default-config-keywords '(:height 25 :stick t))))))
+         :default-config-keywords '(:height 25 :stick t)))))
+
+  ;; http://stackoverflow.com/questions/2396680/let-emacs-send-fn-keys-to-programs-in-ansi-term
+  (defconst my/term-function-key-alist '((f1  . "\eOP")
+                                         (f2  . "\eOQ")
+                                         (f3  . "\eOR")
+                                         (f4  . "\eOS")
+                                         (f5  . "\e[15~")
+                                         (f6  . "\e[17~")
+                                         (f7  . "\e[18~")
+                                         (f8  . "\e[19~")
+                                         (f9  . "\e[20~")
+                                         (f10 . "\e[21~")
+                                         (f11 . "\e[23~")
+                                         (f12 . "\e[24~")))
+
+  (defun my/term-send-function-key ()
+    (interactive)
+    (let* ((char last-input-event)
+           (output (cdr (assoc char my/term-function-key-alist))))
+      (term-send-raw-string output)))
+
+  (dolist (spec my/term-function-key-alist)
+    (define-key term-raw-map
+      (read-kbd-macro (format "<%s>" (car spec)))
+      'my/term-send-function-key)))
 
 (provide 'init-term)
 
