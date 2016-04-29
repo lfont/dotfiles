@@ -22,15 +22,16 @@
   :config
   (use-package hydra :ensure t)
 
-  (defhydra hydra-git (:color red)
+  (defhydra hydra-git ()
     "git"
-    ("j" git-gutter:next-hunk "next hunk")
-    ("k" git-gutter:previous-hunk "prev hunk")
-    ("t" git-gutter:toggle "toggle")
-    ("s" magit-status "status")
+    ("n" git-gutter:next-hunk "next hunk")
+    ("p" git-gutter:previous-hunk "prev hunk")
+    ("g" git-gutter:toggle "gutter")
+    ("s" magit-status "status" :color blue)
     ("l" magit-log-buffer-file "file log")
     ("b" magit-blame "blame")
-    ("q" nil "cancel" :color blue)))
+    ("q" (when (fboundp 'my/hydra-modes-pop)
+           (my/hydra-modes-pop)) "cancel" :color blue)))
 
 (provide 'init-git)
 

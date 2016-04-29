@@ -47,7 +47,7 @@
                         `(lambda () (interactive) (exwm-workspace-switch ,i))))
 
   ;; 's-p': Launch application
-  (exwm-input-set-key (kbd "s-p")
+  (exwm-input-set-key (kbd "s-o")
                       (lambda (command)
                         (interactive (list (read-shell-command "Run: ")))
                         (start-process-shell-command command nil command)))
@@ -132,15 +132,15 @@
                                          ; systray
                                          "xfce4-power-manager"
                                          "nm-applet"
-                                         "blueman-applet"
-                                         "pasystray"
                                          "clipit"
-                                         "skype"))) t)
+                                         "skype"
+                                         "blueman-applet"
+                                         "pasystray"))) t)
 
   ;; Multi monitor support
   (require 'exwm-randr)
-  (setq exwm-randr-workspace-output-plist '(0 "eDP1" 1 "eDP1" 2 "eDP1"
-                                            3 "HDMI2" 4 "HDMI2" 5 "HDMI2"))
+  (setq exwm-randr-workspace-output-plist '(0 "HDMI2" 1 "HDMI2" 2 "HDMI2" 3 "HDMI2"
+                                            4 "eDP1" 5 "eDP1"))
   (add-hook 'exwm-randr-screen-change-hook
             (lambda ()
               (start-process-shell-command

@@ -38,13 +38,13 @@
       (flyspell-goto-next-error)
       (ispell-word))
 
-    (defhydra hydra-spellcheck (:body-pre (ispell-word)
-                                :color red)
+    (defhydra hydra-spellcheck (:body-pre (ispell-word))
       "spellcheck"
       ("l" my/ispell-cycle-languages "language")
       ("n" my/flyspell-check-next-highlighted-word "next")
       ("p" flyspell-check-previous-highlighted-word "prev")
-      ("q" nil "cancel"))))
+      ("q" (when (fboundp 'my/hydra-modes-pop)
+             (my/hydra-modes-pop)) "cancel" :color blue))))
 
 (provide 'init-spellcheck)
 

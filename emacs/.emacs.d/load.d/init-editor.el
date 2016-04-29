@@ -20,13 +20,6 @@
 (set-default 'truncate-lines t)
 (setq truncate-partial-width-windows nil)
 
-;; Leader key
-;; http://emacs.stackexchange.com/questions/12961/how-can-i-globally-replace-c-c-with-another-key-binding
-;(define-key input-decode-map (kbd "<M-SPC>") (kbd "<leader>"))
-(define-key key-translation-map (kbd "<M-SPC>") (kbd "C-c"))
-(global-set-key (kbd "C-c M-s") 'save-buffer)
-(global-set-key (kbd "C-c M-c") 'save-buffers-kill-terminal)
-
 ;; Fix a weird bug with dead keys when Emacs runs in a GUI
 (add-hook 'emacs-lisp-mode-hook
           (lambda ()

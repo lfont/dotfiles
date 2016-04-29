@@ -20,6 +20,7 @@
          ;; Override some projectile keymaps
          :map projectile-command-map
          ("b" . helm-projectile-switch-buffer)
+         ("d" . helm-projectile-find-dir)
          ("f" . helm-projectile)
          ("p" . helm-projectile-switch-project))
   :init

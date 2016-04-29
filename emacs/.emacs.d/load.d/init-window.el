@@ -5,26 +5,41 @@
 ;; Undo & redo
 (use-package winner
   :demand t
-  :bind (("M-C-p"   . winner-undo)
-         ("M-C-S-p" . winner-redo))
+  :init
+  (with-eval-after-load "init-exwm"
+    (add-hook 'my/exwm-config-hook
+              (lambda ()
+                ; undo, redo
+                (exwm-input-set-key (kbd "s-u") 'winner-undo)
+                (exwm-input-set-key (kbd "s-C-u") 'winner-redo))))
   :config
   (winner-mode t))
 
 ;; Window management
 (use-package windmove
   :ensure t
-  :bind (; move
-         ("M-C-h" . windmove-left)
-         ("M-C-j" . windmove-down)
-         ("M-C-k" . windmove-up)
-         ("M-C-l" . windmove-right)
-         ; resize
-         ("M-C-S-h" . my/windresize-left)
-         ("M-C-S-j" . my/windresize-down)
-         ("M-C-S-k" . my/windresize-up)
-         ("M-C-S-l" . my/windresize-right))
+  :commands (windmove-left
+             windmove-down
+             windmove-up
+             windmove-right
+             my/windresize-left
+             my/windresize-down
+             my/windresize-up
+             my/windresize-right)
   :init
-  (global-unset-key (kbd "M-C-h"))
+  (with-eval-after-load "init-exwm"
+    (add-hook 'my/exwm-config-hook
+              (lambda ()
+                ; move
+                (exwm-input-set-key (kbd "s-b") 'windmove-left)
+                (exwm-input-set-key (kbd "s-n") 'windmove-down)
+                (exwm-input-set-key (kbd "s-p") 'windmove-up)
+                (exwm-input-set-key (kbd "s-f") 'windmove-right)
+                ; resize
+                (exwm-input-set-key (kbd "s-C-b") 'my/windresize-left)
+                (exwm-input-set-key (kbd "s-C-n") 'my/windresize-down)
+                (exwm-input-set-key (kbd "s-C-p") 'my/windresize-up)
+                (exwm-input-set-key (kbd "s-C-f") 'my/windresize-right))))
   :config
   ;; Enlarge/Shrink window
   (defun my/windresize-left (delta)
@@ -62,7 +77,7 @@
 ;; Advanced window management
 (use-package ace-window
   :ensure t
-  :bind (("M-p" . ace-window))
+  :commands ace-window
   :init
   (setq aw-dispatch-always t
         aw-dispatch-alist
@@ -73,6 +88,12 @@
           (?h my/window-split-horz " Ace - Split Horz Window")
           (?i delete-other-windows " Ace - Maximize Window")
           (?o delete-other-windows)))
+
+  (with-eval-after-load "init-exwm"
+    (add-hook 'my/exwm-config-hook
+              (lambda ()
+                ; advanced
+                (exwm-input-set-key (kbd "s-l") 'ace-window))))
   :config
   ;(ace-window-display-mode t)
 
@@ -84,24 +105,21 @@
     (aw-split-window-horz window)
     (windmove-right)))
 
-(with-eval-after-load "init-exwm"
-  (add-hook 'my/exwm-config-hook
-            (lambda ()
-              ; undo, redo
-              (exwm-input-set-key (kbd "s-u") 'winner-undo)
-              (exwm-input-set-key (kbd "s-C-u") 'winner-redo)
-              ; move
-              (exwm-input-set-key (kbd "s-h") 'windmove-left)
-              (exwm-input-set-key (kbd "s-j") 'windmove-down)
-              (exwm-input-set-key (kbd "s-k") 'windmove-up)
-              (exwm-input-set-key (kbd "s-l") 'windmove-right)
-              ; resize
-              (exwm-input-set-key (kbd "s-C-h") 'my/windresize-left)
-              (exwm-input-set-key (kbd "s-C-j") 'my/windresize-down)
-              (exwm-input-set-key (kbd "s-C-k") 'my/windresize-up)
-              (exwm-input-set-key (kbd "s-C-l") 'my/windresize-right)
-              ; advanced
-              (exwm-input-set-key (kbd "s-C-p") 'ace-window))))
+(use-package hydra
+  :ensure t
+  :bind (("C-c l" . hydra-window-layout/body))
+  :config
+  (defhydra hydra-window-layout ()
+    "layout"
+    ("a" ace-window "ace" :color blue)
+    ("p" windmove-up "up")
+    ("f" windmove-right "right")
+    ("n" windmove-down "down")
+    ("b" windmove-left "left")
+    ("u" winner-undo "undo")
+    ("U" winner-redo "redo")
+    ("q" (when (fboundp 'my/hydra-modes-pop)
+           (my/hydra-modes-pop)) "cancel" :color blue)))
 
 (provide 'init-window)
 
