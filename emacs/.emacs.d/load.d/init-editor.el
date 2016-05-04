@@ -17,8 +17,12 @@
       scroll-conservatively 10000)
 
 ;; Line wrapping
-(set-default 'truncate-lines t)
-(setq truncate-partial-width-windows nil)
+(defun my/editor-disable-wrapping ()
+  (setq truncate-lines t)
+  (setq truncate-partial-width-windows nil))
+
+(add-hook 'prog-mode-hook 'my/editor-disable-wrapping)
+(add-hook 'term-mode-hook 'my/editor-disable-wrapping)
 
 ;; Fix a weird bug with dead keys when Emacs runs in a GUI
 (add-hook 'emacs-lisp-mode-hook
