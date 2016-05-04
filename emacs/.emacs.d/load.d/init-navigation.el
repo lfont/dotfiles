@@ -90,7 +90,7 @@
   (modalka-define-kbd "<" "M-<")
   (modalka-define-kbd ">" "M->")
   (modalka-define-kbd "/" "C-/")
-  (modalka-define-kbd "SPC" "C-c m")
+  (modalka-define-kbd "SPC" "C-SPC")
 
   (modalka-define-kbd "0" "C-0")
   (modalka-define-kbd "1" "C-1")
@@ -120,7 +120,7 @@
   (modalka-define-kbd "j" "C-c e j")
   (modalka-define-kbd "k" "C-k")
   (modalka-define-kbd "l" "C-c e l")
-  (modalka-define-kbd "m" "C-SPC")
+  (modalka-define-kbd "m" "C-c m")
   (modalka-define-kbd "n" "C-n")
   (modalka-define-kbd "p" "C-p")
   (modalka-define-kbd "s" "C-x c M-s o")
