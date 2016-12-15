@@ -16,6 +16,12 @@
   :init
   (add-hook 'prog-mode-hook 'electric-pair-mode))
 
+(use-package rainbow-delimiters
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
 ;; Folding
 (use-package hideshow
   :defer t
@@ -34,10 +40,11 @@
                                  (format " pt[%s]"
                                          (projectile-project-name)))))
 
+  (add-hook 'conf-mode-hook 'projectile-mode)
   (add-hook 'text-mode-hook 'projectile-mode)
   (add-hook 'prog-mode-hook 'projectile-mode))
 
-;; Extra modes
+;; Languages modes
 (use-package js2-mode
   :ensure t
   :mode (("\\.js\\'"   . js2-mode)
@@ -49,6 +56,10 @@
                               (flycheck-locate-config-file-ancestor-directories
                                "node_modules/.bin/eslint" nil)))))
 
+(use-package web-mode
+  :ensure t
+  :mode "\\.html?\\'")
+
 (use-package haskell-mode
   :ensure t
   :defer t
@@ -57,15 +68,13 @@
                                  (turn-on-haskell-doc-mode)
                                  (turn-on-haskell-indent))))
 
-(use-package web-mode
+(use-package purescript-mode
   :ensure t
-  :mode "\\.html?\\'")
+  :defer t)
 
-(use-package rainbow-delimiters
+(use-package nix-mode
   :ensure t
-  :defer t
-  :init
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+  :defer t)
 
 (provide 'init-code)
 

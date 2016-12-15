@@ -4,14 +4,18 @@
 ;;; Code:
 
 (defvar my/exwm-config-hook nil
-  "Hook called when package's config is executed")
+  "Hook called when package's config is executed.")
 
 (use-package exwm
-  :load-path "~/.emacs.d/site-lisp/exwm/"
+  ;:load-path "~/.emacs.d/site-lisp/exwm/"
+  :ensure t
   :commands exwm-enable
-  :bind (("C-c b" . exwm-workspace-switch-to-buffer)
+  :bind (("C-c b"   . exwm-workspace-switch-to-buffer)
+         ("C-c s"   . exwm-workspace-swap)
+         ("C-c C-m" . exwm-workspace-move-window)
          :map exwm-mode-map
          ("C-c b" . exwm-workspace-switch-to-buffer)
+         ("C-c s" . exwm-workspace-swap)
          ("C-q"   . exwm-input-send-next-key))
   :init
   ;; (setq debug-on-error t
@@ -21,19 +25,24 @@
 
   (setq exwm-workspace-number 6)
   :config
-  (use-package xelb :load-path "~/.emacs.d/site-lisp/xelb/")
+  ;(use-package xelb :load-path "~/.emacs.d/site-lisp/xelb/")
+  (use-package s    :ensure t)
 
-  ;; Rename buffer based on its class / title
-  ;; (add-hook 'exwm-update-class-hook
-  ;;           (lambda ()
-  ;;             (exwm-workspace-rename-buffer (concat exwm-title " (" exwm-class-name ")"))))
-
+  ;; Rename buffer based on its title / class
   (add-hook 'exwm-update-title-hook
             (lambda ()
-              (exwm-workspace-rename-buffer (concat exwm-title " - " exwm-class-name))))
+              (if (s-contains? exwm-class-name exwm-title t)
+                  (exwm-workspace-rename-buffer exwm-title)
+                (exwm-workspace-rename-buffer (concat exwm-title " - " exwm-class-name)))))
 
   ;; Local key binding prefix for line mode
   (push ?\C-q exwm-input-prefix-keys)
+
+  ;; (add-hook 'exwm-manage-finish-hook
+  ;;           (lambda ()
+  ;;             (when (and exwm-class-name
+  ;;                        (string= exwm-class-name "URxvt"))
+  ;;               (setq-local exwm-input-prefix-keys '()))))
 
   ;; 's-q': Reset
   (exwm-input-set-key (kbd "s-q") #'exwm-reset)
@@ -46,7 +55,7 @@
     (exwm-input-set-key (kbd (format "s-%d" i))
                         `(lambda () (interactive) (exwm-workspace-switch ,i))))
 
-  ;; 's-p': Launch application
+  ;; 's-o': Launch application
   (exwm-input-set-key (kbd "s-o")
                       (lambda (command)
                         (interactive (list (read-shell-command "Run: ")))
@@ -55,12 +64,12 @@
   ;; 's-<tab>: Switch buffer
   (defun my/exwm-buffer-switch ()
     (interactive)
-    (let* ((current-buffers (remove-if-not (lambda (b)
-                                             (with-current-buffer b
-                                               (eq exwm--frame exwm-workspace--current)))
-                                           (mapcar (lambda (pair)
-                                                     (cdr pair))
-                                                   exwm--id-buffer-alist)))
+    (let* ((current-buffers (cl-remove-if-not (lambda (b)
+                                                (with-current-buffer b
+                                                  (eq exwm--frame exwm-workspace--current)))
+                                              (mapcar (lambda (pair)
+                                                        (cdr pair))
+                                                      exwm--id-buffer-alist)))
            (current-buffer-position (cl-position (current-buffer) current-buffers))
            (next-buffer (if (or (not current-buffer-position)
                                 (= current-buffer-position (- (length current-buffers) 1)))
@@ -78,13 +87,11 @@
 
   (my/exwm-global-command "<XF86AudioRaiseVolume>" "audio-volume.sh up")
   (my/exwm-global-command "<XF86AudioLowerVolume>" "audio-volume.sh down")
-  (my/exwm-global-command "s-C-t" "urxvt")
-  (my/exwm-global-command "s-C-s" "slock")
-  (my/exwm-global-command "s-C-f" "pcmanfm")
-  (my/exwm-global-command "s-C-w" (getenv "BROWSER"))
-  (my/exwm-global-command "s-C-e" (getenv "VISUAL"))
-  ;(my/exwm-global-command "s-C-m" "mail.sh")
-  ;(my/exwm-global-command "s-C-c" "jabber.sh")
+  (my/exwm-global-command "s-M-t" "urxvt -e bash -c 'tmux attach -t term || tmux new -s term'")
+  (my/exwm-global-command "s-M-l" "slock")
+  (my/exwm-global-command "s-M-f" "pcmanfm")
+  (my/exwm-global-command "s-M-w" (getenv "BROWSER"))
+  (my/exwm-global-command "s-M-e" (getenv "VISUAL"))
 
   ;; Hook for load.d modules
   (run-hooks 'my/exwm-config-hook)
@@ -100,7 +107,10 @@
      ([?\M-v] . prior)
      ([?\C-v] . next)
      ([?\C-d] . delete)
-     ([?\C-k] . (S-end delete))))
+     ([?\C-k] . (S-end delete))
+     ([?\M-w] . (?\C-c))
+     ([?\C-w] . (?\C-x))
+     ([?\C-y] . (?\C-v))))
 
   ;; System tray
   (require 'exwm-systemtray)
@@ -125,7 +135,6 @@
               (my/exwm-start-processes '(; background services
                                          "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
                                          "xsidle.sh slock"
-                                         "xfce4-volumed"
                                          "pcmanfm --daemon-mode"
                                          "syncthing -no-browser -logflags=3"
                                          "btsync --config ~/.config/btsync/sync.conf"
@@ -133,27 +142,32 @@
                                          "xfce4-power-manager"
                                          "nm-applet"
                                          "clipit"
-                                         "skype"
                                          "blueman-applet"
                                          "pasystray"))) t)
 
   ;; Multi monitor support
   (require 'exwm-randr)
-  (setq exwm-randr-workspace-output-plist '(0 "HDMI2" 1 "HDMI2" 2 "HDMI2" 3 "HDMI2"
-                                            4 "eDP1" 5 "eDP1"))
+  (setq exwm-randr-workspace-output-plist '(0 "HDMI-2" 1 "HDMI-2" 2 "HDMI-2"
+                                            3 "eDP-1" 4 "eDP-1" 5 "eDP-1"))
   (add-hook 'exwm-randr-screen-change-hook
             (lambda ()
               (start-process-shell-command
-               "xrandr" nil "xrandr --output eDP1 --primary --output HDMI2 --left-of eDP1 --auto")))
+               "xrandr" nil "xrandr --output eDP-1 --primary --output HDMI-2 --left-of eDP-1 --auto")))
   (exwm-randr-enable)
 
   ;; Date & time
-  (use-package time
+  (use-package minibuffer-line
+    :ensure t
     :init
-    (setq display-time-default-load-average nil
-          display-time-day-and-date nil)
+    (setq minibuffer-line-refresh-interval 20
+          minibuffer-line-format '((:eval
+                                    (format-time-string "%a %Y/%m/%d %I:%M %p"))))
     :config
-    (display-time-mode t)))
+    (custom-set-faces
+     '(minibuffer-line ((t (:height 1.0
+                            :weight regular
+                            :foreground "LightBlue3")))))
+    (minibuffer-line-mode)))
 
 (provide 'init-exwm)
 

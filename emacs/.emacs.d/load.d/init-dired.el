@@ -13,7 +13,7 @@
         dired-clean-up-buffers-too              t        ; kill buffers for deleted files
         dired-dwim-target                       t        ; guess target directory
         dired-keep-marker-copy                  nil      ; don't mark copied files
-        dired-listing-switches                  "-GAlh --group-directories-first"
+        dired-listing-switches                  "-GAlh --group-directories-first --quoting-style=literal"
         dired-recursive-copies                  'always  ; don't ask me, just do it
         dired-recursive-deletes                 'always  ; ^
         image-dired-show-all-from-dir-max-files 127      ; a bit more

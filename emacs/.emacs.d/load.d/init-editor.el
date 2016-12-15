@@ -87,6 +87,8 @@ point reaches the beginning or end of the buffer, stop there."
   (set-keyboard-coding-system 'utf-8)
   (prefer-coding-system 'utf-8))
 
+(set-language-environment "UTF-8")
+
 ;; Use xclip to copy/paste to the terminal from X.
 (use-package xclip
   :ensure t

@@ -11,10 +11,10 @@
 (use-package tramp
   :defer t
   :init
-  (setq tramp-default-method "sshx")
-  :config
-  (add-to-list 'tramp-default-proxies-alist
-               '(".*" "\\`root\\'" "/sshx:%h:")))
+  (setq tramp-default-method "sshx"))
+  ;; :config
+  ;; (add-to-list 'tramp-default-proxies-alist
+  ;;              '(".*" "root" "/sshx:%h:")))
 
 ;; Treat asc file like gpg file
 (use-package epa-file

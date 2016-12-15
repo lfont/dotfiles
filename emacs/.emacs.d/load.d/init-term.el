@@ -4,10 +4,11 @@
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (use-package term
+  :disabled t
   :load-path "~/.emacs.d/site-lisp/"
   :bind (("<f5>" . my/multi-term))
   :config
-  (setq term-buffer-maximum-size 10000)
+  (setq term-buffer-maximum-size 0)
 
   (defun term-handle-ansi-terminal-messages (message)
     (while (string-match "\eAnSiT.+\n" message)
@@ -54,18 +55,20 @@
   ;; http://rawsyntax.com/blog/learn-emacs-zsh-and-multi-term/
   (use-package multi-term :ensure t)
   (use-package popwin     :ensure t)
-  (use-package f          :ensure t)
 
   (setq multi-term-buffer-name "term")
 
+  ;; Keys captured by Emacs
   (add-to-list 'term-unbind-key-list "C-g")
 
-  (add-to-list 'term-bind-key-alist '("C-c n" . multi-term))
-  (add-to-list 'term-bind-key-alist '("C-c r" . my/multi-term-rename-buffer))
+  ;; Keys captured by term
+  (add-to-list 'term-bind-key-alist '("C-c n"   . multi-term))
+  (add-to-list 'term-bind-key-alist '("C-c r"   . my/multi-term-rename-buffer))
   (add-to-list 'term-bind-key-alist '("C-c C-k" . term-char-mode))
   (add-to-list 'term-bind-key-alist '("C-c C-j" . term-line-mode))
-  (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-  (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))
+  (add-to-list 'term-bind-key-alist '("C-y"     . my/term-paste))
+  (add-to-list 'term-bind-key-alist '("M-["     . multi-term-prev))
+  (add-to-list 'term-bind-key-alist '("M-]"     . multi-term-next))
 
   (defun my/multi-term-rename-buffer (new-name)
     (interactive "MRename buffer (to new name): ")
@@ -83,27 +86,23 @@
                      (my/multi-term-is-term b)))
                   buffers))
 
-  (defun my/multi-term-get-term (cwd terms)
-    (car (cl-remove-if (lambda (b)
-                         (not
-                          (string-equal cwd
-                                        (let ((name (buffer-file-name b)))
-                                          (string-match ":\\(.*\\)" name)
-                                          (expand-file-name (match-string 1 name))))))
-                       terms)))
-
   (defun my/multi-term ()
     (interactive)
     (if (my/multi-term-is-term (current-buffer))
         (popwin:close-popup-window)
-      (progn
-        (popwin:display-buffer-1
-         (let* ((cwd (f-dirname (or buffer-file-name "~/nil")))
-                (term (my/multi-term-get-term cwd (my/multi-term-get-terms (buffer-list)))))
-           (or term
-               (save-window-excursion
-                 (call-interactively 'multi-term))))
-         :default-config-keywords '(:height 25 :stick t)))))
+      (popwin:display-buffer-1
+       (let ((terms (my/multi-term-get-terms (buffer-list))))
+         (if terms
+             (car terms)
+           (save-window-excursion
+             (call-interactively 'multi-term))))
+       :default-config-keywords '(:height 25 :stick t))))
+
+  (defun my/term-paste (&optional string)
+    (interactive)
+    (process-send-string
+     (get-buffer-process (current-buffer))
+     (if string string (current-kill 0))))
 
   ;; http://stackoverflow.com/questions/2396680/let-emacs-send-fn-keys-to-programs-in-ansi-term
   (defconst my/term-function-key-alist '((f1  . "\eOP")

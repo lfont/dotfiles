@@ -83,10 +83,12 @@
   (setq-default cursor-type '(bar . 1))
   (setq modalka-cursor-type 'box)
 
+  (add-hook 'conf-mode-hook #'modalka-mode)
   (add-hook 'text-mode-hook #'modalka-mode)
   (add-hook 'prog-mode-hook #'modalka-mode)
   :config
   (modalka-define-kbd "%" "M-%")
+  (modalka-define-kbd "@" "C-c @ C-c")
   (modalka-define-kbd "<" "M-<")
   (modalka-define-kbd ">" "M->")
   (modalka-define-kbd "/" "C-/")
@@ -108,6 +110,7 @@
   (modalka-define-kbd "F" "M-f")
   (modalka-define-kbd "G" "M-g g")
   (modalka-define-kbd "L" "C-l")
+  (modalka-define-kbd "V" "M-v")
   (modalka-define-kbd "W" "M-w")
   (modalka-define-kbd "Y" "M-y")
 
@@ -123,7 +126,8 @@
   (modalka-define-kbd "m" "C-c m")
   (modalka-define-kbd "n" "C-n")
   (modalka-define-kbd "p" "C-p")
-  (modalka-define-kbd "s" "C-x c M-s o")
+  (modalka-define-kbd "s" "C-s")
+  (modalka-define-kbd "v" "C-v")
   (modalka-define-kbd "w" "C-w")
   (modalka-define-kbd "y" "C-y")
 

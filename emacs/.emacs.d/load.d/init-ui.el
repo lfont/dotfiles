@@ -11,6 +11,9 @@
       use-dialog-box nil)
 
 (global-hl-line-mode t)
+(add-hook 'term-mode-hook (lambda ()
+                            (setq-local global-hl-line-mode nil)))
+
 (column-number-mode t)
 
 ;; Make more room

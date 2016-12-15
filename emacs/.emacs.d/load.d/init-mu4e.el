@@ -1,15 +1,17 @@
 ;;; init-mu4e.el --- Mail client
-;;; Commentary: http://vxlabs.com/2014/06/06/configuring-emacs-mu4e-with-nullmailer-offlineimap-and-multiple-identities/
+;;; Commentary:
+;;; http://vxlabs.com/2014/06/06/configuring-emacs-mu4e-with-nullmailer-offlineimap-and-multiple-identities/
 ;;; Code:
 
 (use-package mu4e
-  :disabled t
-  :load-path ""
+  :load-path "/usr/share/emacs/site-lisp/mu4e/"
   :commands mu4e
   :bind (:map mu4e-main-mode-map
               ("<f1>" . my/mu4e-account-fastmail)
+              ("<f2>" . my/mu4e-account-fasterize)
          :map mu4e-headers-mode-map
               ("<f1>" . my/mu4e-account-fastmail)
+              ("<f2>" . my/mu4e-account-fasterize)
               ("d" . my/mu4e-move-to-trash)
          :map mu4e-view-mode-map
               ("d" . my/mu4e-move-to-trash))
@@ -20,7 +22,9 @@
   ;; a  list of user's e-mail addresses
   (setq mu4e-user-mail-address-list '("loicfontaine@fastmail.fm"
                                       "ljph.fontaine@gmail.com"
-                                      "channary.loic@gmail.com"))
+                                      "channary.loic@gmail.com"
+                                      "l@fasterize.com"
+                                      "loic@fasterize.com"))
 
   ;; the headers to show in the headers list -- a pair of a field
   ;; and its width, with `nil' meaning 'unlimited'
@@ -35,7 +39,8 @@
   ;; If you get your mail without an explicit command,
   ;; use "true" for the command (this is the default)
   (setq mu4e-get-mail-command "offlineimap"
-        mu4e-update-interval 300) ;; update every 5 minutes
+        mu4e-update-interval 300 ;; update every 5 minutes
+        mu4e-hide-index-messages t)
 
   ;; set this to nil so signature is not included by default
   ;; you can include in message with C-c C-w
@@ -48,29 +53,42 @@
 
   ;; don't keep message buffers around
   (setq message-kill-buffer-on-exit t)
-  :config
-  ;; custom bookmarks
-  (add-to-list 'mu4e-bookmarks
-               '("NOT maildir:/fastmail/INBOX.Trash AND flag:unread AND NOT flag:trashed"
-                 "Unread and not trashed messages"
-                 ?n))
-
-  ;; new mail notification
-  (defun my/mu4e-notify-new-messages ()
-    (start-process "mail-notify" nil "mail-notify.sh"
-                   (concat (getenv "HOME") "/Maildir/fastmail/INBOX")))
-
-  (add-hook 'mu4e-index-updated-hook 'my/mu4e-notify-new-messages)
-
-  ;; display rich-text messages
-  (require 'mu4e-contrib)
-  (setq mu4e-html2text-command 'mu4e-shr2text)
 
   ;; enable inline images
   (setq mu4e-view-show-images t)
   ;; use imagemagick, if available
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
+
+  ;; new mail query
+  (setq my/mu4e-new-mail-query
+        (concat
+         "flag:unread"
+         " AND NOT flag:trashed")
+        my/mu4e-account-new-mail-query nil)
+  :config
+  ;; custom bookmarks
+  (add-to-list 'mu4e-bookmarks
+               '(my/mu4e-account-new-mail-query
+                 "New messages"
+                 ?n))
+
+  ;; new mail notification
+  (use-package mu4e-alert
+    :ensure t
+    :demand t
+    :init
+    (setq alert-fade-time 10
+          mu4e-alert-interesting-mail-query my/mu4e-new-mail-query
+          mu4e-alert-email-notification-types '(subjects))
+    :config
+    (mu4e-alert-set-default-style 'libnotify)
+    (mu4e-alert-enable-notifications)
+    (mu4e-alert-enable-mode-line-display))
+
+  ;; display rich-text messages
+  (require 'mu4e-contrib)
+  (setq mu4e-html2text-command 'mu4e-shr2text)
 
   ;; send mail
   (require 'smtpmail)
@@ -86,6 +104,11 @@
   (defun my/mu4e-account-fastmail ()
     (interactive)
     (message "Switching to fastmail account...")
+
+    (setq my/mu4e-account-new-mail-query (concat my/mu4e-new-mail-query
+                                                 " AND maildir:/fastmail/*"
+                                                 " AND NOT maildir:\"/fastmail/INBOX.Junk Mail\""
+                                                 " AND NOT maildir:/fastmail/INBOX.Trash"))
 
     ;; the next are relative to `mu4e-maildir'
     ;; instead of strings, they can be functions too, see
@@ -104,10 +127,48 @@
     ;; general emacs mail settings; used when composing e-mail
     ;; the non-mu4e-* stuff is inherited from emacs/message-mode
     (setq user-mail-address "loicfontaine@fastmail.fm"
-          mu4e-compose-signature "Loïc Fontaine\nloicfontaine@fastmail.fm\n")
+          mu4e-compose-signature (concat user-full-name
+                                         "\nloicfontaine@fastmail.fm"
+                                         "\n"))
 
     ;; smtp mail setting
     (setq smtpmail-smtp-server "mail.messagingengine.com"
+          smtpmail-stream-type 'ssl
+          smtpmail-smtp-service 465))
+
+  (defun my/mu4e-account-fasterize ()
+    (interactive)
+    (message "Switching to fasterize account...")
+
+    (setq my/mu4e-account-new-mail-query (concat my/mu4e-new-mail-query
+                                                 " AND maildir:/fasterize/*"
+                                                 " AND NOT maildir:/fasterize/[Gmail].Spam"
+                                                 " AND NOT maildir:\"/fasterize/[Gmail].All Mail\""
+                                                 " AND NOT maildir:/fasterize/[Gmail].Important"
+                                                 " AND NOT maildir:/fasterize/reading"))
+
+    ;; the next are relative to `mu4e-maildir'
+    ;; instead of strings, they can be functions too, see
+    ;; their docstring or the chapter 'Dynamic folders'
+    (setq mu4e-sent-folder   "/fasterize/[Gmail].Sent Mail"
+          mu4e-drafts-folder "/fasterize/[Gmail].Drafts"
+          mu4e-trash-folder  "/fasterize/[Gmail].Trash")
+
+    ;; the maildirs you use frequently; access them with 'j' ('jump')
+    (setq mu4e-maildir-shortcuts
+          '(("/fasterize/INBOX"             . ?i)
+            ("/fasterize/[Gmail].All Mail"  . ?a)
+            ("/fasterize/[Gmail].Sent Mail" . ?s)))
+
+    ;; general emacs mail settings; used when composing e-mail
+    ;; the non-mu4e-* stuff is inherited from emacs/message-mode
+    (setq user-mail-address "l@fasterize.com"
+          mu4e-compose-signature (concat user-full-name
+                                         "\nFasterize"
+                                         "\n"))
+
+    ;; smtp mail setting
+    (setq smtpmail-smtp-server "smtp.gmail.com"
           smtpmail-stream-type 'ssl
           smtpmail-smtp-service 465))
 
@@ -128,7 +189,10 @@
            ((my/mu4e-is-message-to msg (list "loicfontaine@fastmail.fm"
                                              "ljph.fontaine@gmail.com"
                                              "channary.loic@gmail.com"))
-            (my/mu4e-account-fastmail))))))
+            (my/mu4e-account-fastmail))
+           ((my/mu4e-is-message-to msg (list "l@fasterize.com"
+                                             "loic@fasterize.com"))
+            (my/mu4e-account-fasterize))))))
 
   (add-hook 'mu4e-compose-pre-hook 'my/mu4e-set-from-address)
 
