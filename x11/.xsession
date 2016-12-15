@@ -1,3 +1,2 @@
-#!/bin/sh
-
-zsh --login ~/.xinitrc
+# -*-sh-*-
+exec bash --login ~/.xinitrc
