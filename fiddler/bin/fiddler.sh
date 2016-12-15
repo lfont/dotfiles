@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-mono ~/opt/fiddler/Fiddler.exe "$@"
+mono /opt/fiddler/Fiddler.exe "$@"
