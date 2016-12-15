@@ -2,8 +2,8 @@
 # Any customization should be done in ~/.gtkrc-2.0.mine instead.
 
 include "/home/loic/.gtkrc-2.0.mine"
-gtk-theme-name="Numix"
-gtk-icon-theme-name="Numix-Circle"
+gtk-theme-name="Arc-Darker"
+gtk-icon-theme-name="Arc"
 gtk-font-name="Cantarell 10"
 gtk-cursor-theme-name="Adwaita"
 gtk-cursor-theme-size=0
@@ -15,5 +15,5 @@ gtk-enable-event-sounds=1
 gtk-enable-input-feedback-sounds=1
 gtk-xft-antialias=1
 gtk-xft-hinting=1
-gtk-xft-hintstyle="hintfull"
+gtk-xft-hintstyle="hintmedium"
 gtk-xft-rgba="rgb"
