@@ -1,11 +1,12 @@
 [general]
-accounts = fastmail, mappy
-pythonfile = ~/dotfiles/offlineimap/offlineimap.py
+accounts = fastmail,fasterize
+pythonfile = ~/.offlineimap.py
+maxsyncaccounts = 1
+
 
 [Account fastmail]
 localrepository = fastmail-local
 remoterepository = fastmail-remote
-# Status cache. Default is plain, which eventually becomes huge and slow.
 status_backend = sqlite
 
 [Repository fastmail-local]
@@ -18,24 +19,25 @@ remotehost = mail.messagingengine.com
 remoteuser = loicfontaine@fastmail.fm
 remotepasseval = get_password_emacs("mail.messagingengine.com", "993")
 ssl = yes
-cert_fingerprint = 958b1601563aef92607a41eb5bad22e3cace8431
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+maxconnections = 3
+folderfilter = lambda folder: not re.search('^RESTORED', folder)
 
-[Account mappy]
-localrepository = mappy-local
-remoterepository = mappy-remote
-# Status cache. Default is plain, which eventually becomes huge and slow.
+
+[Account fasterize]
+localrepository = fasterize-local
+remoterepository = fasterize-remote
 status_backend = sqlite
 
-[Repository mappy-local]
+[Repository fasterize-local]
 type = Maildir
-localfolders = ~/Maildir/mappy
-nametrans = lambda foldername: foldername.decode('utf-8').encode('imap4-utf-7')
+localfolders = ~/Maildir/fasterize
 
-[Repository mappy-remote]
+[Repository fasterize-remote]
 type = IMAP
-remotehost = exch01.mappy.priv
-remoteuser = lfontaine
-remotepasseval = get_password_emacs("exch01.mappy.priv", "143")
+remotehost = imap.gmail.com
+remoteuser = l@fasterize.com
+remotepasseval = get_password_emacs("imap.gmail.com", "993")
 ssl = yes
-cert_fingerprint = 14ab1ec9503b5205921cefc3406ef4c45c0169bf
-nametrans = lambda foldername: foldername.decode('imap4-utf-7').encode('utf-8')
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+maxconnections = 3
