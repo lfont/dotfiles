@@ -25,7 +25,7 @@ ZSH_THEME="fishy"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -72,10 +72,6 @@ if command -v stack >/dev/null; then
   eval "$(stack --bash-completion-script "$(which stack)")"
 fi
 
-if [ -x ~/code/Fasterize/fstrz/bin/fstrz ]; then
-  eval "$(~/code/Fasterize/fstrz/bin/fstrz init -)"
-fi
-
 if [ -e /usr/share/doc/pkgfile/command-not-found.zsh ]; then
   source /usr/share/doc/pkgfile/command-not-found.zsh
 fi
@@ -90,8 +86,8 @@ bindkey -M emacs '^N' history-substring-search-down
 # For a full list of active aliases, run `alias`.
 #
 # zsh
-alias zshconfig="e ~/.zshrc"
-alias ohmyzsh="e ~/.oh-my-zsh"
+alias zshconfig="x ~/.zshrc"
+alias ohmyzsh="x ~/.oh-my-zsh"
 
 # tools
 alias root="sudo -i"
@@ -101,49 +97,63 @@ alias tme="tmux attach -t emacs || tmux new -s emacs 'emacs -nw'"
 alias tsh="cd ~/code/Turtle-Extensions && stack ghci --no-load; cd -"
 
 # pacman (https://wiki.archlinux.org/index.php/Pacman_tips)
-alias pacupg="yaourt -Syu"        # Synchronize with repositories and then upgrade packages that are out of date on the local system.
-alias pacdl="yaourt -Sw"          # Download specified package(s) as .tar.xz ball
-alias pacin="yaourt -S"           # Install specific package(s) from the repositories
-alias pacins="yaourt -U"          # Install specific package not from the repositories but from a file
-alias pacre="yaourt -R"           # Remove the specified package(s), retaining its configuration(s) and required dependencies
-alias pacrem="yaourt -Rns"        # Remove the specified package(s), its configuration(s) and unneeded dependencies
-alias pacrep="yaourt -Si"         # Display information about a given package in the repositories
-alias pacreps="yaourt -Ss"        # Search for package(s) in the repositories
-alias pacloc="yaourt -Qi"         # Display information about a given package in the local database
-alias paclocs="yaourt -Qs"        # Search for package(s) in the local database
-alias paclo="yaourt -Qdt"         # List all packages which are orphaned
-alias paclx="yaourt -Qen"         # List explicitly installed packages availble in the official repository
-alias paclxe="yaourt -Qem"        # List explicitly installed packages not avaible in the official repository
-alias pacc="yaourt -Scc"          # Clean cache - delete all the package files in the cache
-alias paclf="yaourt -Ql"          # List all files installed by a given package
-alias pacown="yaourt -Qo"         # Show package(s) owning the specified file(s)
-alias pacexpl="yaourt -D --asexp" # Mark one or more installed packages as explicitly installed
-alias pacimpl="yaourt -D --asdep" # Mark one or more installed packages as non explicitly installed
+alias pacupg="pacaur -Syu"        # Synchronize with repositories and then upgrade packages that are out of date on the local system.
+alias pacdl="pacaur -Sw"          # Download specified package(s) as .tar.xz ball
+alias pacin="pacaur -S"           # Install specific package(s) from the repositories
+alias pacins="pacaur -U"          # Install specific package not from the repositories but from a file
+alias pacre="pacaur -R"           # Remove the specified package(s), retaining its configuration(s) and required dependencies
+alias pacrem="pacaur -Rns"        # Remove the specified package(s), its configuration(s) and unneeded dependencies
+alias pacrep="pacaur -Si"         # Display information about a given package in the repositories
+alias pacreps="pacaur -Ss"        # Search for package(s) in the repositories
+alias pacloc="pacaur -Qi"         # Display information about a given package in the local database
+alias paclocs="pacaur -Qs"        # Search for package(s) in the local database
+alias paclo="pacaur -Qdt"         # List all packages which are orphaned
+alias paclx="pacaur -Qen"         # List explicitly installed packages availble in the official repository
+alias paclxe="pacaur -Qem"        # List explicitly installed packages not avaible in the official repository
+alias pacc="pacaur -Scc"          # Clean cache - delete all the package files in the cache
+alias paclf="pacaur -Ql"          # List all files installed by a given package
+alias pacown="pacaur -Qo"         # Show package(s) owning the specified file(s)
+alias pacexpl="pacaur -D --asexp" # Mark one or more installed packages as explicitly installed
+alias pacimpl="pacaur -D --asdep" # Mark one or more installed packages as non explicitly installed
 
 # Emacs: edit file from an Emacs shell (http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/)
 if [ "${TERM}x" = "eterm-colorx" ]; then
   alias e="print -P '\eAnSiTe'"
   alias x="print -P '\eAnSiTx'"
 else
-  alias e="emacsclient -t -a mg"
-  alias x="emacsclient -t -a mg"
+  alias e=$EDITOR
+  alias x=$EDITOR
 fi
 
-# fstrz: Fasterize tools
-alias fsup="fstrz host up cache01-devfe web01-devfe"
-alias fsdown="fstrz host halt cache01-devfe web01-devfe"
-alias fsssh="fstrz host ssh"
-alias fsreplzoo="fstrz zookeeper repl"
-alias fsreplmongo="fstrz mongodb repl"
-alias fsconfupcustomer="fstrz config customer update_default -e devfe"
-alias fsconfupengine="fstrz config provision --environment devfe"
-alias fsconfup="fsconfupengine && fsconfupcustomer"
+# Fasterize tools
+function fstrz() {
+  cd ~/code/Fasterize/fstrz/ && ./bin/fstrz $@; cd "$OLDPWD"
+}
 
-function fsconfsetattr() {
+alias fup="fstrz host up cache01-devfe web01-devfe graphite01-devfe"
+alias fdown="fstrz host halt cache01-devfe web01-devfe graphite01-devfe"
+alias fssh="fstrz host ssh"
+alias fzoo="fstrz zookeeper repl"
+alias fmongo="fstrz mongodb repl"
+alias flog="fstrz log request "
+alias fcustomerup="fstrz config customer update_default -e devfe"
+alias fengineup="fstrz config provision --environment devfe"
+
+function fcustomersetattr() {
   fstrz config customer set_attr -e devfe --attribute="$1" --value="$2"
 }
 
-function fsconfrestore() {
+# Fasterize API
+function fastapi() {
+  local cmd="$@"
+  cd ~/code/Fasterize/fastapi/ && ./shell.sh "$cmd"; cd "$OLDPWD"
+}
+
+alias fconfigtoken="fastapi configToken"
+alias fconfigdownload="fastapi configDownload"
+
+# Fastetize Capistrano
+function fcustomerrestore() {
   local CONFID="/$1"
   if [ "$CONFID" = "/" ]; then
       CONFID=""
@@ -153,7 +163,7 @@ function fsconfrestore() {
     ; cd -
 }
 
-function fsdbrestore() {
+function fdbrestore() {
   case "$1" in
     zoo)
       # import ZK cache01-devfe
