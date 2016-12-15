@@ -1,0 +1,8 @@
+# -*-sh-*-
+ CYAN="\[$(tput setaf 6)\]"
+GREEN="\[$(tput setaf 2)\]"
+  RED="\[$(tput setaf 1)\]"
+WHITE="\[$(tput setaf 7)\]"
+
+BRIGHT="\[$(tput bold)\]"
+ RESET="\[$(tput sgr0)\]"

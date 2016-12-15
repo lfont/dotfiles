@@ -1,0 +1,53 @@
+# -*-sh-*-
+function fstrz() {
+  cd ~/code/Fasterize/fstrz/ && ./bin/fstrz $@; cd "$OLDPWD"
+}
+
+function fastapi() {
+  cd ~/code/Fasterize/fastapi/ && ./shell.sh "$@"; cd "$OLDPWD"
+}
+
+function chef() {
+  cd ~/code/Fasterize/chef-repo/ && cap $@; cd "$OLDPWD"
+}
+
+# git
+function fgit() {
+  cd ~/code/Fasterize/
+  local oldpwd=$OLDPWD
+  for d in *; do
+    cd $d && git pull; cd "$OLDPWD"
+  done
+  cd "$oldpwd"
+}
+
+# host
+alias fup="fstrz host up cache01-devfe graphite01-devfe"
+alias fdown="fstrz host halt cache01-devfe graphite01-devfe"
+alias fssh="fstrz host ssh"
+alias flog="fstrz log request"
+
+# config
+function fconfigattr() {
+  fstrz config customer set_attr -e devfe --attribute="$1" --value="$2"
+}
+
+function fconfigup() {
+  local id=""
+  if [ ! -z "$1" ]; then
+    id="/$1"
+  fi
+  chef devfe zookeeper:backup:restore_from_env -s zk_path=/config/customer_config${id} -s src_env=dc1
+}
+
+# zookeeper
+alias fzoo="fstrz zookeeper repl"
+alias fzooup="fstrz config customer update-default -e devfe; fstrz config provision --environment devfe"
+
+# mongo
+alias fmongo="fstrz mongodb repl"
+alias fmongoup="fssh cache01-devfe \"cd /var/lib/mongodb && sudo mongo mongodb_config.js\""
+
+# mysql
+alias fmysqlup="chef devfe mysql:backup:local:restore_from_env -s src_env=dc1 -s password=\"\$(pass show fasterize/mysql.local | head -n 1)\" \
+               ; chef devfe mysql:backup:restore_from_env -s src_env=dc1 -s password=\"\$(pass show fasterize/mysql.web01 | head -n 1)\""

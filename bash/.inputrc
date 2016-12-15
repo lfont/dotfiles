@@ -1,0 +1,21 @@
+# Enabling history search
+"\C-p":history-search-backward
+"\C-n":history-search-forward
+"\e[A":history-search-backward
+"\e[B":history-search-forward
+"\eOA": history-search-backward
+"\eOB": history-search-forward
+
+# Enable work navigation
+"\eb":backward-word
+"\ef":forward-word
+
+# Color for tab completion
+set colored-stats on
+set colored-completion-prefix on
+
+# Cycle thought completions
+set show-all-if-ambiguous on
+set completion-ignore-case on
+"\t":menu-complete
+"\e[Z":menu-complete-backward

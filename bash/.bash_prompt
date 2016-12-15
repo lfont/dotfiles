@@ -1,0 +1,52 @@
+# -*-sh-*-
+# Bash prompt emulating the Fish shell's default prompt.
+
+function _bash_prompt_collapse_wd() {
+  echo $(pwd | perl -pe "
+   BEGIN {
+      binmode STDIN,  ':encoding(UTF-8)';
+      binmode STDOUT, ':encoding(UTF-8)';
+   }; s|^$HOME|~|g; s|/([^/])[^/]*(?=/)|/\$1|g
+")
+}
+
+function _bash_prompt_command() {
+  if [ $? -eq 0 ]; then
+    _BASH_PROMPT_LAST_ERR=""
+  else
+    _BASH_PROMPT_LAST_ERR=" [$?]"
+  fi
+
+  if declare -f '__git_ps1' > /dev/null; then
+    __git_ps1 "$_BASH_PROMPT_LEFT_PS1" "$_BASH_PROMPT_RIGHT_PS1"
+  fi
+}
+
+_BASH_PROMPT_LEFT_PS1="${GREEN}\u${WHITE}@${CYAN}\h ${GREEN}\$(_bash_prompt_collapse_wd)${WHITE}${BRIGHT}${RED}\${_BASH_PROMPT_LAST_ERR}${RESET}"
+_BASH_PROMPT_RIGHT_PS1="${WHITE}>${RESET} "
+
+case $PROMPT_COMMAND in
+  *_bash_prompt_command*)
+    if [ ! -z "$IN_NIX_SHELL" ]; then
+      export PROMPT_COMMAND="history -a; history -c; history -r"
+    fi
+    ;;
+  *)
+    if [ -z "$IN_NIX_SHELL" ]; then
+      export PROMPT_COMMAND="_bash_prompt_command; ${PROMPT_COMMAND:+$PROMPT_COMMAND;} history -a; history -c; history -r"
+    fi
+    ;;
+esac
+
+if [ -f /usr/share/git/git-prompt.sh ]; then
+  source /usr/share/git/git-prompt.sh
+
+  export GIT_PS1_SHOWDIRTYSTATE=1
+  export GIT_PS1_SHOWSTASHSTATE=""
+  export GIT_PS1_SHOWUNTRACKEDFILES=1
+  export GIT_PS1_SHOWUPSTREAM=auto
+  export GIT_PS1_SHOWCOLORHINTS=1
+  export GIT_PS1_HIDE_IF_PWD_IGNORED=1
+else
+  export PS1="${_BASH_PROMPT_LEFT_PS1}${_BASH_PROMPT_RIGHT_PS1}"
+fi
