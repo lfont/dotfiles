@@ -1,0 +1,290 @@
+/*
+  UI
+  See:
+  - http://www.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+  - http://www.conkeror.org/Tips#Open_Middle-Clicked_Links_in_New_Buffers
+  */
+
+homepage = "www.duckduckgo.com";
+clock_time_format = "%a %Y/%m/%d %I:%M %p";
+
+url_remoting_fn = load_url_in_new_buffer;
+browser_default_open_target = OPEN_NEW_BUFFER;
+require("clicks-in-new-buffer.js");
+
+session_pref("general.smoothScroll", true);
+
+add_hook("mode_line_hook", mode_line_adder(buffer_count_widget), true);
+
+/*
+  Privacy
+  */
+
+session_pref("network.cookie.cookieBehavior", 3);
+session_pref("browser.history_expire_days", 30);
+url_completion_use_history = true;
+
+/*
+  Session
+  */
+
+require("session.js");
+session_auto_save_auto_load = true;
+session_save_buffer_access_order = true;
+
+/*
+  Favicon
+  */
+
+require("favicon");
+read_buffer_show_icons = true;
+add_hook("mode_line_hook", mode_line_adder(buffer_icon_widget), true);
+
+/*
+  Editor
+  */
+
+view_source_use_external_editor = true;
+session_pref("layout.spellcheckDefault", 1);
+
+/*
+  Download
+  See:
+  - http://www.conkeror.org/Downloads
+  */
+
+download_buffer_automatic_open_target = OPEN_NEW_BUFFER_BACKGROUND;
+remove_hook("download_added_hook", open_download_buffer_automatically);
+// default directory for downloads and shell commands.
+cwd = get_home_directory();
+cwd.append("Downloads");
+// automatically handle some mime types internally.
+content_handlers.set("application/pdf", content_handler_save);
+
+/*
+  Media player
+  See:
+  - https://rednsx.org/git/conkerorrc/youtube.js
+  */
+
+// enable >360p in the HTML5 player
+// make sure libavcodec is installed for mp4 support.
+// WebM performance seems to be too bad to use.
+session_pref("media.mediasource.enabled",true);
+session_pref("media.mediasource.ignore_codecs",true);
+session_pref("media.mediasource.mp4.enabled",true);
+session_pref("media.mediasource.webm.enabled",true);
+session_pref("media.fragmented-mp4.enabled",true);
+session_pref("media.fragmented-mp4.exposed",true);
+session_pref("media.fragmented-mp4.ffmpeg.enabled",true);
+session_pref("media.fragmented-mp4.gmp.enabled",true);
+session_pref("media.fragmented-mp4.use-blank-decoder",false);
+
+/*
+  Prevent pages from stealing focus
+  See:
+  - http://www.conkeror.org/Focus
+ */
+
+require("block-content-focus-change.js");
+// block_content_focus_change_duration = 40;
+
+function focusblock (buffer) {
+  var s = Components.utils.Sandbox(buffer.top_frame);
+  s.document = buffer.document.wrappedJSObject;
+  Components.utils.evalInSandbox(
+    "(function () {\
+       function nothing () {}\
+       if (! document.forms)\
+         return;\
+       for (var i = 0, nforms = document.forms.length; i < nforms; i++) {\
+         for (var j = 0, nels = document.forms[i].elements.length; j < nels; j++)\
+           document.forms[i].elements[j].focus = nothing;\
+       }\
+     })();",
+    s);
+}
+
+add_hook("content_buffer_progress_change_hook", focusblock);
+
+/*
+  Prevent pages from stealing keystrokes
+  See:
+  - http://www.conkeror.org/KeyKill
+ */
+
+require("key-kill.js");
+key_kill_input_fields = true;
+key_kill_mode.test.push(build_url_regexp($domain = /(.*\.)?github/));
+key_kill_mode.test.push(build_url_regexp($domain = /(.*\.)?uservoice/));
+
+/*
+ uBlock addon
+ See:
+ - http://www.conkeror.org/uBlock?action=info
+ */
+
+interactive(
+  "ublock", "Open uBlock dashboard in a new buffer",
+  function (I) {
+    var ublock_branch;
+    if ("@ublock0/content-policy;1" in Cc) {
+      ublock_branch = "ublock0";
+    } else if ("@ublock/content-policy;1" in Cc) {
+      ublock_branch = "ublock";
+    } else {
+      throw interactive_error("uBlock not found");
+    }
+    load_url_in_new_buffer("chrome://"+ublock_branch+"/content/dashboard.html");
+  }
+);
+
+/*
+ Webjumps
+ See:
+ - http://www.conkeror.org/Webjumps
+ */
+
+define_webjump("bagit","javascript:location.href='https://wallabag.bibimbap.me/?action=add&url='+btoa(location.href);");
+define_webjump("translate", "https://translate.google.com/translate_t#auto|en|%s");
+define_webjump("dns", "https://www.whatsmydns.net/#CNAME/%s");
+define_webjump("mdn", "https://developer.mozilla.org/en/search?q=%s");
+
+/*
+ UserAgent
+ See:
+ - http://www.conkeror.org/UserAgent#Changing_Your_User_Agent_String_.28Per-Site.29
+ */
+
+require("user-agent-policy");
+
+// Tell Google Calendar that we are Firefox not Conkeror:
+user_agent_policy.define_policy(
+  "GCal",
+  user_agent_firefox(),
+  build_url_regexp($domain = /(.*\.)?google/, $path = /calendar/)
+);
+
+/*
+ Implements web permissions.
+ See:
+ - https://truongtx.me/2016/02/18/conkeror-working-with-web-page-permission
+*/
+
+// web page permission manager
+let permissionManager = Components.classes["@mozilla.org/permissionmanager;1"]
+      .getService(Components.interfaces.nsIPermissionManager);
+
+// List of web api permission
+let permissionsList = [
+  {desc: "Audio Capture", value: "audio-capture"},
+  {desc: "Video Capture", value: "video-capture"},
+  {desc: "Geo Location", value: "geolocation"},
+  {desc: "Desktop Notification", value: "desktop-notification"}
+];
+
+// read permission from minibuffer
+function readPermission(I) {
+  return I.minibuffer.read(
+    $prompt = "Select permission:",
+    $completer = new all_word_completer(
+      $completions = permissionsList,
+      $get_string = function(x) {return x.value;},
+      $get_description = function(x) {return x.desc;}
+    )
+  );
+}
+
+// add and remove permission for current page
+function addPermission(I) {
+  var perm = yield readPermission(I);
+  var uri = make_uri(I.buffer.current_uri.prePath);
+  var allow = Components.interfaces.nsIPermissionManager.ALLOW_ACTION;
+
+  permissionManager.add(uri, perm, allow);
+
+  I.minibuffer.message("Permission " + perm + " added");
+};
+
+function removePermission(I) {
+  var perm = yield readPermission(I);
+  var uri = make_uri(I.buffer.current_uri.prePath);
+  var deny = Components.interfaces.nsIPermissionManager.DENY_ACTION;
+
+  permissionManager.add(uri, perm, deny);
+
+  I.minibuffer.message("Permission " + perm + " removed");
+};
+
+// interactive
+interactive("add-permission", "Add specific permission for current uri", addPermission);
+interactive("remove-permission", "Remove specific permission for current uri", removePermission);
+
+/*
+ Implements new login-manager.
+ See:
+ - http://librelist.com/browser//conkeror/2013/11/28/login-manager-xulrunner-24-0/
+ - https://blog.mozilla.org/dolske/2013/08/21/a-change-in-password-manager/
+
+ (C) Copyright 2014 thorkill
+ BSD License
+ */
+
+let Cu = Components.utils;
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.defineLazyModuleGetter(this,
+                                  "LoginManagerContent",
+                                  "resource://gre/modules/LoginManagerContent.jsm");
+XPCOMUtils.defineLazyModuleGetter(this,
+                                  "LoginManagerParent",
+                                  "resource://gre/modules/LoginManagerParent.jsm");
+
+define_buffer_local_hook("content_buffer_dom_form_has_password_hook");
+define_buffer_local_hook("content_buffer_dom_auto_complete_hook");
+
+// passwords
+session_pref("signon.rememberSignons", true);
+session_pref("signon.expireMasterPassword", false);
+session_pref("signon.SignonFileName", "signons.txt");
+session_pref("signon.useDOMFormHasPassword", false);
+
+Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
+
+/* debugging prefs */
+//session_pref("browser.formfill.debug", false);
+//session_pref("browser.dom.window.dump.enabled", true);
+//session_pref("javascript.options.showInConsole", true);
+//session_pref("javascript.options.strict", true);
+//session_pref("nglayout.debug.disable_xul_cache", true);
+//session_pref("nglayout.debug.disable_xul_fastload", true);
+
+LoginManagerParent.init();
+
+add_hook("create_buffer_hook", function (buffer) {
+  buffer.browser.addEventListener("DOMFormHasPassword", function(event) {
+    content_buffer_dom_form_has_password_hook.run(buffer, event);
+  }, true /* captrue */);
+
+  buffer.browser.addEventListener("DOMAutoComplete", function(event) {
+    content_buffer_dom_auto_complete_hook.run(buffer, event);
+  }, true /* captrue */);
+
+  buffer.browser.addEventListener("blur", function(event) {
+    content_buffer_dom_auto_complete_hook.run(buffer, event);
+  }, true /* captrue */);
+
+  buffer.browser.addEventListener("change", function(event) {
+    content_buffer_dom_auto_complete_hook.run(buffer, event);
+  }, true /* captrue */);
+});
+
+add_hook("content_buffer_dom_form_has_password_hook", function(buffer, event) {
+  // Sometimes onFormPassword is undefined
+  if (LoginManagerContent.onFormPassword) {
+    LoginManagerContent.onFormPassword(event);
+  }
+});
+
+add_hook("content_buffer_dom_auto_complete_hook", function(buffer, event) {
+  LoginManagerContent.onUsernameInput(event);
+});

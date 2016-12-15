@@ -1,0 +1,12 @@
+## uncomment the next line to also load your normal .gtkrc-2.0
+include "/home/loic/.gtkrc-2.0"
+
+style "noscrollbars" {
+  GtkScrollbar::slider-width=10
+  GtkScrollbar::trough-border=1
+  GtkScrollbar::has-backward-stepper=0
+  GtkScrollbar::has-forward-stepper=0
+  GtkScrollbar::has-secondary-backward-stepper=0
+  GtkScrollbar::has-secondary-forward-stepper=0
+}
+widget "MozillaGtkWidget.*" style "noscrollbars"
