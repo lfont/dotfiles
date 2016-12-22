@@ -48,6 +48,8 @@
   :init
   (setq popwin:popup-window-height 25)
   :config
+  (push "*Async Shell Command*" popwin:special-display-config)
+  (push '("\*Man " :regexp t) popwin:special-display-config)
   (popwin-mode 1))
 
 (provide 'init-ui)
