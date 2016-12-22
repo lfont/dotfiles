@@ -72,15 +72,11 @@ if command -v gpg-connect-agent > /dev/null; then
 fi
 
 if command -v rbenv > /dev/null; then
-  eval "$(rbenv init -)"
+  eval "$(/usr/bin/rbenv init -)"
 fi
 
 if command -v direnv > /dev/null; then
-  eval "$(direnv hook bash)"
-fi
-
-if command -v stack > /dev/null; then
-  eval "$(stack --bash-completion-script "$(command -v stack)")"
+  eval "$(/usr/bin/direnv hook bash)"
 fi
 
 # Aliases
