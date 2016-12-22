@@ -37,7 +37,6 @@ fi
 # Launch a gnome-keyring instance
 if command -v gnome-keyring-daemon > /dev/null; then
   if ! pgrep gnome-keyring-daemon > /dev/null; then
-    eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-    export SSH_AUTH_SOCK
+    gnome-keyring-daemon --start --daemonize --components=pkcs11,secrets
   fi
 fi
