@@ -14,7 +14,6 @@ export PATH
 export NIX_PATH=${NIX_PATH:+$NIX_PATH:}unstable=${HOME}/.nix-defexpr/channels/unstable:frzpkgs=${HOME}/code/Fasterize/frzpkgs
 
 # Guix environment
-xset +fp $HOME/.guix-profile/share/fonts/truetype
 export GUIX_PROFILE="$HOME/.guix-profile"
 export GUIX_LOCPATH=$HOME/.guix-profile/lib/locale
 [ -s "$HOME/.guix-profile/etc/profile" ] \
