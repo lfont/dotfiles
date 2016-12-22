@@ -1,13 +1,21 @@
 [ -s ~/.bash_colors ] && source ~/.bash_colors
 [ -s ~/.bash_prompt ] && source ~/.bash_prompt
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR="vim"
-elif [[ -n $VISUAL ]]; then
+# Preferred editor
+if [[ -n $VISUAL ]]; then
   export EDITOR=$VISUAL
 else
-  export EDITOR="emacsclient -t -a mg"
+  if command -v mg > /dev/null; then
+    export EDITOR=mg
+  elif command -v nano > /dev/null; then
+    export EDITOR=nano
+  else
+    export EDITOR=vi
+  fi
+
+  if command -v emacsclient > /dev/null; then
+    export EDITOR="emacsclient -t -a $EDITOR"
+  fi
 fi
 
 # Docker
