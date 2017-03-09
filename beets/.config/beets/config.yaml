@@ -1,0 +1,56 @@
+directory: ~/Music/good
+library: ~/Music/good/musiclibrary.blb
+asciify_paths: true
+per_disc_numbering: true
+
+paths:
+    default: $albumartist/$album%aunique{}/$disc-$track - $albumartist - $title
+    singleton: Non-Album/$artist/$artist - $title
+    comp: Compilations/$album%aunique{}/$disc-$track - $artist - $title
+
+import:
+    move: yes
+
+plugins: info missing duplicates convert scrub ftintitle play fetchart lastgenre replaygain embedart smartplaylist
+
+play:
+    command: vlc -I rc
+
+fetchart:
+    enforce_ratio: yes
+    minwidth: 300
+    maxwidth: 500
+    sources: itunes * wikipedia google fanarttv
+
+lastgenre:
+    canonical: '~/.config/beets/genres-tree.yaml'
+    fallback: ''
+    force: yes
+    prefer_specific: yes
+    whitelist: '~/.config/beets/genres.txt'
+
+replaygain:
+    backend: gstreamer
+    overwrite: yes
+
+embedart:
+    auto: no
+
+smartplaylist:
+    relative_to: ~/Music/good
+    playlist_dir: ~/Music/playlists
+    playlists:
+        - name: _favorites.m3u
+          query: 'favorite:true'
+
+        - name: rap.m3u
+          query: 'genre:rap ^"nicki minaj" ^did.you'
+
+        - name: groove.m3u
+          query: ['artist::ABRA', 'artist:"adrian younge"', 'artist:"anderson .paak"', 'artist:"ben mazué"',
+          'artist:"blood orange"', 'artist:"fingers inc"', 'albumartist:"frankie knuckles" albumartist+',
+          'artist:"gil scott-heron"', 'artist:khalid', 'artist:kelela', 'artist:kaytranada', 'artist:odezenne',
+          'artist:"ricky blaze"', 'artist:"snoh aalegra"', 'artist:theesatisfaction']
+
+        - name: hi-res.m3u
+          query: 'format:flac ^artist:yusef ^genre:ska ^genre:pop ^genre:folk ^genre:electro ^genre:house ^genre:"new wave" ^genre:rock ^genre:metal'

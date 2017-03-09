@@ -1,0 +1,38 @@
+classical
+rock
+rock and roll
+glam rock
+punk rock
+hard rock
+garage rock
+new wave
+heavy metal
+folk
+country
+pop
+synthpop
+dream pop
+britpop
+rap
+trip hop
+reggae
+rocksteady
+ska
+jazz
+blues
+soul
+r&b
+funk
+afrobeat
+sega
+maloya
+electronic
+disco
+ambiant
+electro
+eurodance
+chillwave
+chill out
+house
+dubstep
+drum and bass
