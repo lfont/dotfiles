@@ -1,0 +1,118 @@
+# desktop - click on the desktop to get menus
+OnDesktop Mouse1 :HideMenus
+OnDesktop Mouse2 :WorkspaceMenu
+OnDesktop Mouse3 :RootMenu
+
+# desktop - scroll on the desktop to change workspaces
+OnDesktop Mouse4 :PrevWorkspace
+OnDesktop Mouse5 :NextWorkspace
+
+# toolbar - scroll on the toolbar to change current window
+OnToolbar Mouse4 :PrevWindow {static groups} (iconhidden=no)
+OnToolbar Mouse5 :NextWindow {static groups} (iconhidden=no)
+
+# titlebar - control-click a window's titlebar and drag to attach windows
+OnTitlebar Control Mouse1 :StartTabbing
+
+# titlebar - double click on the titlebar to shade
+OnTitlebar Double Mouse1 :Shade
+
+# titlebar - left click on the titlebar to move the window
+OnTitlebar Mouse1 :MacroCmd {Raise} {Focus} {ActivateTab}
+OnTitlebar Move1  :StartMoving
+
+# titlebar - middle click on the titlebar to lower
+OnTitlebar Mouse2 :Lower
+
+# titlebar - right click on the titlebar for a menu of options
+OnTitlebar Mouse3 :WindowMenu
+
+# window - left click to move the current window
+OnWindow Mod4 Mouse1 :MacroCmd {Raise} {Focus} {StartMoving}
+OnWindowBorder Move1 :StartMoving
+
+# window - right click to resize the current window
+OnWindow Mod4 Mouse3 :MacroCmd {Raise} {Focus} {StartResizing NearestCorner}
+OnLeftGrip Move1 :StartResizing bottomleft
+OnRightGrip Move1 :StartResizing bottomright
+
+# window - super + middle click to lower the window
+OnWindow Mod4 Mouse2 :Lower
+
+# window - focus a window
+Mod4 b :FocusLeft
+Mod4 f :FocusRight
+Mod4 n :FocusDown
+Mod4 p :FocusUp
+
+# window - position left/right/bottom/top
+Mod4 Shift b :MacroCmd {ResizeTo 50% 100%} {MoveTo 0 0 TopLeft}
+Mod4 Shift f :MacroCmd {ResizeTo 50% 100%} {MoveTo 0 0 TopRight}
+Mod4 Shift n :MacroCmd {ResizeTo 100% 50%} {MoveTo 0 0 BottomLeft}
+Mod4 Shift p :MacroCmd {ResizeTo 100% 50%} {MoveTo 0 0 TopLeft}
+
+# window - tiling
+Mod4 h :ArrangeWindowsStackRight
+Mod4 Shift h :ArrangeWindowsStackLeft
+Mod4 v :ArrangeWindowsStackBottom
+Mod4 Shift v :ArrangeWindowsStackTop
+
+# window - go to the selected window
+Mod4 g :Exec dmenu_goto_window.sh -p "goto: " -l 5 -i
+
+# window - current window commands
+Mod4 Shift q :Close
+Mod4 F11 :Fullscreen
+Mod4 w k :Kill
+Mod4 w i :Minimize
+Mod4 w Shift i :Deiconify
+Mod4 w m :Maximize
+Mod4 w s :Stick
+
+# window - change to previous/next window
+Mod1 Tab :NextWindow {groups} (workspace=[current])
+Mod1 Shift Tab :PrevWindow {groups} (workspace=[current])
+
+# workspace - change to a specific workspace
+Mod4 1 :Workspace 1
+Mod4 2 :Workspace 2
+Mod4 3 :Workspace 3
+Mod4 4 :Workspace 4
+Mod4 5 :Workspace 5
+Mod4 6 :Workspace 6
+
+# workspace - send the current window to a specific workspace
+Mod4 Shift 1 :SendToWorkspace 1
+Mod4 Shift 2 :SendToWorkspace 2
+Mod4 Shift 3 :SendToWorkspace 3
+Mod4 Shift 4 :SendToWorkspace 4
+Mod4 Shift 5 :SendToWorkspace 5
+Mod4 Shift 6 :SendToWorkspace 6
+
+# monitor - move the current window to a specific monitor
+Mod4 Ctrl Shift b :Exec wmctrl_move_window_to_monitor.sh l
+Mod4 Ctrl Shift f :Exec wmctrl_move_window_to_monitor.sh r
+Mod4 Ctrl Shift n :Exec wmctrl_move_window_to_monitor.sh d
+Mod4 Ctrl Shift p :Exec wmctrl_move_window_to_monitor.sh u
+
+# program - start a terminal
+Mod4 Return :Exec $TERMINAL
+
+# program - common aliases
+Mod4 l w :Exec $BROWSER
+Mod4 l e :Exec $VISUAL
+Mod4 l f :Exec pcmanfm
+Mod4 l l :Exec slock
+
+# program - run
+Mod4 r :Exec dmenu_run -p "run: " -l 5
+
+# program - volume settings
+123 :Exec audio-volume.sh up
+122 :Exec audio-volume.sh down
+121 :Exec audio-volume.sh toggle
+
+# fluxbox - commands
+Mod4 Shift c :Reconfigure
+Mod4 Shift e :Exit
+Mod4 F1 :RootMenu

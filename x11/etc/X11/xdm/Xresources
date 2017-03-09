@@ -1,17 +1,19 @@
 Xcursor.theme: whiteglass
 
 xlogin*login.translations: #override \
-	Ctrl<Key>R: abort-display()\n\
-	<Key>F1: set-session-argument(failsafe) finish-field()\n\
-	<Key>Delete: delete-character()\n\
-	<Key>Left: move-backward-character()\n\
-	<Key>Right: move-forward-character()\n\
-	<Key>Home: move-to-begining()\n\
-	<Key>End: move-to-end()\n\
-	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
-	<Key>KP_Enter: set-session-argument() finish-field()\n\
-	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
-	<Key>Return: set-session-argument() finish-field()
+  Ctrl<Key>R: abort-display()\n\
+  <Key>Delete: delete-character()\n\
+  <Key>Left: move-backward-character()\n\
+  <Key>Right: move-forward-character()\n\
+  <Key>Home: move-to-begining()\n\
+  <Key>End: move-to-end()\n\
+  <Key>KP_Enter: set-session-argument() finish-field()\n\
+  <Key>Return: set-session-argument() finish-field()\n\
+  Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+  Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+  <Key>F1: set-session-argument(exwm) finish-field()\n\
+  <Key>F2: set-session-argument(fluxbox) finish-field()\n\
+  <Key>F3: set-session-argument(i3) finish-field()
 
 xlogin*greeting:
 xlogin*namePrompt: Username:\040

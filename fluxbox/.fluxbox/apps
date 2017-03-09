@@ -1,0 +1,20 @@
+[app] (name=fbrun)
+  [Position]	(CENTER)	{0 0}
+  [Layer]	{2}
+[end]
+[app] (name=emacs) (class=Emacs)
+  [Dimensions]	{41% 57%}
+[end]
+[app] (name=urxvt) (class=URxvt)
+  [Dimensions]	{44% 53%}
+  [Position]	(UPPERLEFT)	{0% 0%}
+[end]
+[app] (name=qsynth) (class=qsynth)
+  [Dimensions]	{56% 33%}
+  [Position]	(UPPERLEFT)	{43% 13%}
+  [Close]	{yes}
+[end]
+[app] (name=qtractor) (class=qtractor)
+  [Dimensions]	{44% 59%}
+  [Position]	(UPPERLEFT)	{0% 0%}
+[end]

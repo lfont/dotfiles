@@ -1,2 +1,2 @@
-# -*-sh-*-
-exec bash --login ~/.xinitrc
+#!/usr/bin/bash --login
+. ~/.xinitrc
