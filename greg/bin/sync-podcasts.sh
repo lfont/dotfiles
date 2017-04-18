@@ -16,7 +16,7 @@ fi
 echo -n > "$REMOTE_PODCASTS_LOG"
 cat "$REMOTE_PODCASTS" | sort -V | while read podcast
 do
-  echo "$podcast" | sed -e 's,^.*$,'"$LOCAL_PATH"'/"&",' | ls -1 | sort -Vr | tail -n 3 | sed -e 's,^.*$,'"$podcast"'/&,' >> "$REMOTE_PODCASTS_LOG"
+  echo "$podcast" | sed -e 's,^.*$,'"$LOCAL_PATH"'/"&",' | xargs ls -1 | sort -Vr | head -n 1 | sed -e 's,^.*$,'"$podcast"'/&,' >> "$REMOTE_PODCASTS_LOG"
 done
 
 # copy playlist
@@ -32,3 +32,4 @@ find "$REMOTE_PATH/Podcasts/" -empty -delete
 
 # sync
 rsync -a --progress --modify-window=1 --files-from="$REMOTE_PODCASTS_LOG" "$LOCAL_PATH/" "$REMOTE_PATH/Podcasts/"
+df -h "$REMOTE_PATH"
