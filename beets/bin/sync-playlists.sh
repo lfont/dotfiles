@@ -13,7 +13,7 @@ then
     beet splupdate
 
     # generate recently added playlist
-    beet list -p added:$(date +"%Y-%m-%d" --date="1 day ago").. | sed -e 's,'"$LOCAL_PATH"'/,,' > "$LOCAL_PLAYLISTS/_recently_added.m3u"
+    beet list -p added:$(date +"%Y-%m-%d" --date="2 day ago").. | sed -e 's,'"$LOCAL_PATH"'/,,' > "$LOCAL_PLAYLISTS/_recently_added.m3u"
 fi
 
 # list of tracks to sync
@@ -40,3 +40,4 @@ find "$REMOTE_PATH/Music/" -empty -delete
 
 # sync
 rsync -a --progress --modify-window=1 --files-from="$REMOTE_PLAYLISTS_LOG" "$LOCAL_PATH/" "$REMOTE_PATH/Music/"
+df -h "$REMOTE_PATH"

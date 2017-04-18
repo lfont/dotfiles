@@ -19,7 +19,7 @@ play:
 fetchart:
     enforce_ratio: yes
     minwidth: 300
-    maxwidth: 500
+    maxwidth: 1000
     sources: itunes * wikipedia google fanarttv
 
 lastgenre:
@@ -44,13 +44,21 @@ smartplaylist:
           query: 'favorite:true'
 
         - name: rap.m3u
-          query: 'genre:rap ^"nicki minaj" ^did.you'
+          query: 'genre:rap format:flac
+          ^albumartist:"young fathers"
+          ^album:"greatest hits" ^album:"best of"
+          ^comp:true'
 
         - name: groove.m3u
-          query: ['artist::ABRA', 'artist:"adrian younge"', 'artist:"anderson .paak"', 'artist:"ben mazué"',
-          'artist:"blood orange"', 'artist:"fingers inc"', 'albumartist:"frankie knuckles" albumartist+',
-          'artist:"gil scott-heron"', 'artist:khalid', 'artist:kelela', 'artist:kaytranada', 'artist:odezenne',
-          'artist:"ricky blaze"', 'artist:"snoh aalegra"', 'artist:theesatisfaction']
+          query: ['albumartist:abra', 'albumartist:"blood orange"', 'albumartist:kelela', 'albumartist:kaytranada',
+          'albumartist:"syd"',
+          'album:"doing it in lagos" albumartist+ album+ track+']
+
+        - name: low-res.m3u
+          query: ['format:mp3 bitrate:..319999', 'format:acc bitrate:..255999']
+
+        - name: cd-quality.m3u
+          query: 'format:flac bitdepth:16'
 
         - name: hi-res.m3u
-          query: 'format:flac ^artist:yusef ^genre:ska ^genre:pop ^genre:folk ^genre:electro ^genre:house ^genre:"new wave" ^genre:rock ^genre:metal'
+          query: 'format:flac bitdepth:24'
