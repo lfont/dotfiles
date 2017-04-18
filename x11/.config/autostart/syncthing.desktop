@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=/usr/bin/syncthing -no-browser -logflags=3
+Name=syncthing
+Comment=Syncthing
+Type=Application

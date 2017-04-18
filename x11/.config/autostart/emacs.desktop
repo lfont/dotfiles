@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/emacs --daemon
+Name=emacs
+Comment=GNU project Emacs
+Type=Application
+NotShowIn=EXWM

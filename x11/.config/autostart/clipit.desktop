@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=/usr/bin/clipit
+Name=clipit
+Comment=Lightweight GTK+ Clipboard Manager
+Type=Application
