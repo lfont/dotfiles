@@ -43,8 +43,8 @@
       ("l" my/ispell-cycle-languages "language")
       ("n" my/flyspell-check-next-highlighted-word "next")
       ("p" flyspell-check-previous-highlighted-word "prev")
-      ("q" (when (fboundp 'my/hydra-modes-pop)
-             (my/hydra-modes-pop)) "cancel" :color blue))))
+      ("SPC" (when (fboundp 'my/hydra-modes-pop)
+               (my/hydra-modes-pop)) "cancel" :color blue))))
 
 (provide 'init-spellcheck)
 

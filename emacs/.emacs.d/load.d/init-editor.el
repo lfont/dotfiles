@@ -76,6 +76,16 @@ point reaches the beginning or end of the buffer, stop there."
 
 (global-set-key (kbd "C-x K") 'my/editor-kill-others-buffers)
 
+(defun my/dos2unix ()
+  "Convert the current buffer to UNIX file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-unix nil))
+
+(defun my/unix2dos ()
+  "Convert the current buffer to DOS file format."
+  (interactive)
+  (set-buffer-file-coding-system 'undecided-dos nil))
+
 ;; Auto revert buffer on file change
 (use-package autorevert
   :diminish auto-revert-mode)

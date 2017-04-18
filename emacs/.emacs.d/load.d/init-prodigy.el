@@ -70,7 +70,9 @@
     :path "~/.nix-profile/bin"
     :command "nix-shell"
     :args (prodigy-callback (service)
-            `("--pure" "--run" ,(getf service :arg)))
+            `("--pure"
+              "--run"
+              ,(getf service :arg)))
     :stop-signal 'kill)
 
   (prodigy-define-service
@@ -99,14 +101,15 @@
     "Assemble the ssh tunnel argument list."
     `("-v" ;; allows us to parse for the ready message
       "-N" ;; don't start an interactive shell remotely
-      "-L" ,(concat (getf args :localport) ;; the tunnel spec
+      "-C" ;; enable compression
+      "-L" ,(concat (cl-getf args :localport) ;; the tunnel spec
                     ":"
-                    (getf args :tunnel-host)
+                    (cl-getf args :tunnel-host)
                     ":"
-                    (getf args :tunnel-port))
-      "-l" ,(getf args :user) ;; the user name
-      "-p" ,(getf args :port) ;; the remote port
-      ,(getf args :host)))    ;; the remote host
+                    (cl-getf args :tunnel-port))
+      "-l" ,(cl-getf args :user) ;; the user name
+      "-p" ,(cl-getf args :port) ;; the remote port
+      ,(cl-getf args :host)))    ;; the remote host
 
   (prodigy-define-tag
     :name 'ssh-tunnel
@@ -114,30 +117,58 @@
     :cwd (getenv "HOME")
     :args (prodigy-callback (service)
             (my/prodigy-build-tunnel-args
-             (getf service :tunnel)))
+             (cl-getf service :tunnel)))
+    :ready-message "debug1: Entering interactive session.")
+
+  (defun my/prodigy-build-proxy-args (args)
+    "Assemble the ssh proxy argument list."
+    `("-v" ;; allows us to parse for the ready message
+      "-N" ;; don't start an interactive shell remotely
+      "-C" ;; enable compression
+      "-D" ,(cl-getf args :localport) ;; the proxy spec
+      "-l" ,(cl-getf args :user) ;; the user name
+      "-p" ,(cl-getf args :port) ;; the remote port
+      ,(cl-getf args :host))) ;; the remote host
+
+  (prodigy-define-tag
+    :name 'ssh-proxy
+    :command "ssh"
+    :cwd (getenv "HOME")
+    :args (prodigy-callback (service)
+            (my/prodigy-build-proxy-args
+             (cl-getf service :proxy)))
     :ready-message "debug1: Entering interactive session.")
 
   (prodigy-define-service
-    :name "HAProxy - 10001:front01-dc1"
+    :name "tunnel - 10001:front01-dc1:81"
     :tags '(fasterize ssh-tunnel)
     :tunnel (list
-             :localport  "10001"
-             :tunnel-host  "front01-dc1.fstrz.net"
-             :tunnel-port  "81"
-             :user  "lfont"
-             :host  "front01-dc1.fstrz.net"
-             :port  "22"))
+             :localport   "10001"
+             :tunnel-host "front01-dc1.fstrz.net"
+             :tunnel-port "81"
+             :user        "lfont"
+             :host        "front01-dc1.fstrz.net"
+             :port        "22"))
 
   (prodigy-define-service
-    :name "HAProxy - 10002:front02-dc1"
+    :name "tunnel - 10002:front02-dc1:81"
     :tags '(fasterize ssh-tunnel)
     :tunnel (list
-             :localport  "10002"
-             :tunnel-host  "front02-dc1.fstrz.net"
-             :tunnel-port  "81"
-             :user  "lfont"
-             :host  "front02-dc1.fstrz.net"
-             :port  "22")))
+             :localport   "10002"
+             :tunnel-host "front02-dc1.fstrz.net"
+             :tunnel-port "81"
+             :user        "lfont"
+             :host        "front02-dc1.fstrz.net"
+             :port        "22"))
+
+  (prodigy-define-service
+    :name "proxy - 8888:bibimbap.me"
+    :tags '(ssh-proxy)
+    :proxy (list
+            :localport "8888"
+            :user      (getenv "USER")
+            :host      "bibimbap.me"
+            :port      "22")))
 
 (provide 'init-prodigy)
 

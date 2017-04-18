@@ -16,6 +16,7 @@
          ("C-x C-f" . counsel-find-file)
          ("C-x c o" . counsel-imenu)
          ("C-x c s" . counsel-ag)
+         ("C-x c g" . counsel-git-grep)
          ("C-x c b" . ivy-resume))
   :init
   (setq ivy-use-virtual-buffers t

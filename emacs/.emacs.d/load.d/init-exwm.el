@@ -55,13 +55,13 @@
     (exwm-input-set-key (kbd (format "s-%d" i))
                         `(lambda () (interactive) (exwm-workspace-switch ,i))))
 
-  ;; 's-o': Launch application
-  (exwm-input-set-key (kbd "s-o")
+  ;; 's-r': Launch application
+  (exwm-input-set-key (kbd "s-r")
                       (lambda (command)
                         (interactive (list (read-shell-command "Run: ")))
                         (start-process-shell-command command nil command)))
 
-  ;; 's-<tab>: Switch buffer
+  ;; 'M-<tab>: Switch buffer
   (defun my/exwm-buffer-switch ()
     (interactive)
     (let* ((current-buffers (cl-remove-if-not (lambda (b)
@@ -77,7 +77,7 @@
                           (nth (+ current-buffer-position 1) current-buffers))))
       (switch-to-buffer next-buffer nil t)))
 
-  (exwm-input-set-key (kbd "s-<tab>") #'my/exwm-buffer-switch)
+  (exwm-input-set-key (kbd "M-<tab>") #'my/exwm-buffer-switch)
 
   ;; Global apps shortcuts
   (defun my/exwm-global-command (key command)
@@ -87,11 +87,12 @@
 
   (my/exwm-global-command "<XF86AudioRaiseVolume>" "audio-volume.sh up")
   (my/exwm-global-command "<XF86AudioLowerVolume>" "audio-volume.sh down")
-  (my/exwm-global-command "s-M-t" "urxvt -e bash -c 'tmux attach -t term || tmux new -s term'")
-  (my/exwm-global-command "s-M-l" "slock")
-  (my/exwm-global-command "s-M-f" "pcmanfm")
+  (my/exwm-global-command "<XF86AudioMute>" "audio-volume.sh toggle")
+  (my/exwm-global-command "s-M-t" (getenv "TERMINAL"))
   (my/exwm-global-command "s-M-w" (getenv "BROWSER"))
   (my/exwm-global-command "s-M-e" (getenv "VISUAL"))
+  (my/exwm-global-command "s-M-l" "slock")
+  (my/exwm-global-command "s-M-f" "pcmanfm")
 
   ;; Hook for load.d modules
   (run-hooks 'my/exwm-config-hook)
@@ -117,33 +118,9 @@
   (exwm-systemtray-enable)
 
   ;; Services
-  (defun my/exwm-start-processes (processes)
-    (let ((delay 0))
-      (dolist (process processes)
-        (let ((program (car (split-string process))))
-          (run-at-time (format "%d sec" delay) nil
-                       (lambda ()
-                         (start-process-shell-command process nil process)
-                         (add-hook 'kill-emacs-hook
-                                   (lambda ()
-                                     (start-process (concat "pkill " program)
-                                                    nil "pkill" program)) t)))
-          (setq delay (+ delay 1))))))
-
   (add-hook 'exwm-init-hook
             (lambda ()
-              (my/exwm-start-processes '(; background services
-                                         "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-                                         "xsidle.sh slock"
-                                         "pcmanfm --daemon-mode"
-                                         "syncthing -no-browser -logflags=3"
-                                         "btsync --config ~/.config/btsync/sync.conf"
-                                         ; systray
-                                         "xfce4-power-manager"
-                                         "nm-applet"
-                                         "clipit"
-                                         "blueman-applet"
-                                         "pasystray"))) t)
+              (start-process-shell-command "dex" nil "dex -ae EXWM")))
 
   ;; Multi monitor support
   (require 'exwm-randr)

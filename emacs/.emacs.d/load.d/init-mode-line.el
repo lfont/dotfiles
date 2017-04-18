@@ -11,7 +11,8 @@
 
   (spaceline-define-segment persp-name
     "The current workspace number. Requires `exwm' to be enabled."
-    (when (fboundp 'exwm-workspace-switch)
+    (when (and (fboundp 'exwm-workspace-switch)
+               (boundp 'exwm-workspace--list))
       (let* ((num (cl-position (selected-frame) exwm-workspace--list))
              (str (when num (int-to-string num))))
         (when str

@@ -14,8 +14,13 @@
         tab-width 2
         standard-indent tab-width
         c-basic-offset tab-width
+        js-indent-level tab-width
         js2-basic-offset tab-width
         sh-basic-offset tab-width
+        web-mode-style-padding tab-width
+        web-mode-script-padding tab-width
+        json-reformat:indent-width tab-width
+        tide-format-options '(:indentSize 2 :tabSize 2 :convertTabsToSpaces t)
         tab-stop-list (number-sequence tab-width 200 tab-width)))
 
 (add-hook 'conf-mode-hook 'my/indent-setup-offset)

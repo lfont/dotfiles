@@ -4,7 +4,7 @@
 
 ;; Leader key
 ;; http://emacs.stackexchange.com/questions/12961/how-can-i-globally-replace-c-c-with-another-key-binding
-(define-key input-decode-map (kbd "M-<SPC>") (kbd "<leader>"))
+;(define-key input-decode-map (kbd "M-<SPC>") (kbd "<leader>"))
 
 ;; Global bindings
 (global-set-key (kbd "C-c e j") 'join-line)
@@ -39,10 +39,10 @@
     ("sn" mc/skip-to-next-like-this "skip next")
     ("sp" mc/skip-to-previous-like-this "skip prev")
     ("e" mc/edit-lines "edit lines")
-    ("q" (progn (mc/keyboard-quit)
-                (mc/keyboard-quit)
-                (when (fboundp 'my/hydra-modes-pop)
-                  (my/hydra-modes-pop))) "cancel" :color blue)))
+    ("SPC" (progn (mc/keyboard-quit)
+                  (mc/keyboard-quit)
+                  (when (fboundp 'my/hydra-modes-pop)
+                    (my/hydra-modes-pop))) "cancel" :color blue)))
 
 (use-package hydra
   :ensure t
@@ -74,17 +74,17 @@
     ("s" (progn
            (hydra-spellcheck/body)
            (my/hydra-modes-push '(hydra-modes/body))) "spellcheck")
-    ("q" nil "cancel")))
+    ("SPC" nil "cancel")))
 
 (use-package modalka
   :ensure t
-  :bind (("<leader>" . modalka-mode))
+  :bind (("M-<SPC>" . modalka-mode))
   :init
   (setq-default cursor-type '(bar . 1))
   (setq modalka-cursor-type 'box)
 
-  (add-hook 'conf-mode-hook #'modalka-mode)
   (add-hook 'text-mode-hook #'modalka-mode)
+  (add-hook 'conf-mode-hook #'modalka-mode)
   (add-hook 'prog-mode-hook #'modalka-mode)
   :config
   (modalka-define-kbd "%" "M-%")
@@ -105,14 +105,8 @@
   (modalka-define-kbd "8" "C-8")
   (modalka-define-kbd "9" "C-9")
 
-  (modalka-define-kbd "B" "M-b")
-  (modalka-define-kbd "D" "M-d")
-  (modalka-define-kbd "F" "M-f")
   (modalka-define-kbd "G" "M-g g")
   (modalka-define-kbd "L" "C-l")
-  (modalka-define-kbd "V" "M-v")
-  (modalka-define-kbd "W" "M-w")
-  (modalka-define-kbd "Y" "M-y")
 
   (modalka-define-kbd "a" "C-a")
   (modalka-define-kbd "b" "C-b")

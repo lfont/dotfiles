@@ -30,8 +30,8 @@
     ("s" magit-status "status" :color blue)
     ("l" magit-log-buffer-file "file log")
     ("b" magit-blame "blame")
-    ("q" (when (fboundp 'my/hydra-modes-pop)
-           (my/hydra-modes-pop)) "cancel" :color blue)))
+    ("SPC" (when (fboundp 'my/hydra-modes-pop)
+             (my/hydra-modes-pop)) "cancel" :color blue)))
 
 (provide 'init-git)
 

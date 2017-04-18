@@ -107,19 +107,23 @@
 
 (use-package hydra
   :ensure t
-  :bind (("C-c l" . hydra-window-layout/body))
+  :bind (("s-q" . hydra-window-layout/body))
   :config
   (defhydra hydra-window-layout ()
     "layout"
     ("a" ace-window "ace" :color blue)
+    ("P" my/windresize-up)
     ("p" windmove-up "up")
+    ("F" my/windresize-right)
     ("f" windmove-right "right")
+    ("N" my/windresize-down)
     ("n" windmove-down "down")
+    ("B" my/windresize-left)
     ("b" windmove-left "left")
     ("u" winner-undo "undo")
     ("U" winner-redo "redo")
-    ("q" (when (fboundp 'my/hydra-modes-pop)
-           (my/hydra-modes-pop)) "cancel" :color blue)))
+    ("SPC" (when (fboundp 'my/hydra-modes-pop)
+             (my/hydra-modes-pop)) "cancel" :color blue)))
 
 (provide 'init-window)
 

@@ -1,10 +1,7 @@
 """
-   http://www.emacswiki.org/emacs/OfflineIMAP#toc2
-
-   Get account password form a running emacs server instance.
+   Get account password from a password store.
 """
 import subprocess
-
 
 def get_output(cmd):
     # Bunch of boilerplate to catch the output of a command:
@@ -13,7 +10,13 @@ def get_output(cmd):
     assert pipe.returncode == 0 and not errout
     return output
 
-
-def get_password_emacs(host, port):
+"""
+   http://www.emacswiki.org/emacs/OfflineIMAP#toc2
+"""
+def get_password_emacs(host, port = 993):
     cmd = "emacsclient -e '(authinfo-get-password \"%s\" \"%s\")'" % (host, port)
     return get_output(cmd).strip().lstrip('"').rstrip('"')
+
+def get_password_pass(name):
+    cmd = "pass show \"%s\"" % (name)
+    return get_output(cmd).split('\n')[-2].split(':')[1].strip()
