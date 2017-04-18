@@ -26,7 +26,6 @@ key.suspendKey           = "<f2>";
 
 // ================================= Hooks ================================= //
 
-
 hook.setHook('KeyBoardQuit', function (aEvent) {
     if (key.currentKeySequence.length) return;
 
@@ -52,7 +51,6 @@ hook.setHook('KeyBoardQuit', function (aEvent) {
     }
 });
 
-
 // ============================= Key bindings ============================== //
 
 key.setGlobalKey(['M-SPC', 'b'], function (ev, arg) {
@@ -71,6 +69,42 @@ key.setGlobalKey(['M-SPC', 'x'], function (ev, arg) {
     ext.select(arg, ev);
 }, 'List exts and execute selected one');
 
+key.setGlobalKey('C-n', function (ev) {
+    key.generateKey(ev.originalTarget, KeyEvent.DOM_VK_DOWN, true);
+}, 'Scroll line down');
+
+key.setGlobalKey('C-p', function (ev) {
+    key.generateKey(ev.originalTarget, KeyEvent.DOM_VK_UP, true);
+}, 'Scroll line up');
+
+key.setGlobalKey('C-f', function (ev) {
+    key.generateKey(ev.originalTarget, KeyEvent.DOM_VK_RIGHT, true);
+}, 'Scroll right');
+
+key.setGlobalKey('C-b', function (ev) {
+    key.generateKey(ev.originalTarget, KeyEvent.DOM_VK_LEFT, true);
+}, 'Scroll left');
+
+key.setGlobalKey('C-y', command.yank, 'Paste (Yank)');
+
+key.setGlobalKey('C-w', function (ev) {
+    goDoCommand("cmd_copy");
+    goDoCommand("cmd_delete");
+    command.resetMark(ev);
+}, 'Cut current region');
+
+key.setGlobalKey('M-w', function (ev) {
+    command.copyRegion(ev);
+}, 'Copy selected text');
+
+key.setGlobalKey('C-a', function (ev) {
+    command.beginLine(ev);
+}, 'Beginning of the line');
+
+key.setGlobalKey('C-e', function (ev) {
+    command.endLine(ev);
+}, 'End of the line');
+
 key.setViewKey('c', function (ev, arg) {
     ext.exec('hok-yank-foreground-mode', arg, ev);
 }, 'Start Hit a Yank foreground mode');
@@ -86,3 +120,15 @@ key.setViewKey('f', function (ev, arg) {
 key.setViewKey('g', function (ev) {
     BrowserReload();
 }, 'Reload the page');
+
+key.setGlobalKey('C-s', function (ev) {
+    command.iSearchForwardKs(ev);
+}, 'Emacs like incremental search forward', true);
+
+key.setGlobalKey('C-r', function (ev) {
+    command.iSearchBackwardKs(ev);
+}, 'Emacs like incremental search backward', true);
+
+key.setGlobalKey(['C-x', 'h'], function (ev) {
+    goDoCommand("cmd_selectAll");
+}, 'Select all');
