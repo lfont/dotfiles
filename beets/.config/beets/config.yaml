@@ -45,7 +45,7 @@ smartplaylist:
 
         - name: rap.m3u
           query: 'genre:rap format:flac
-          ^albumartist:"young fathers"
+          ^albumartist:"young fathers" ^albumartist:"public enemy"
           ^album:"greatest hits" ^album:"best of"
           ^comp:true'
 
