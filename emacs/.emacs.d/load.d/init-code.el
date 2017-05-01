@@ -123,6 +123,21 @@
   :ensure t
   :defer t)
 
+(use-package csharp-mode
+  :config
+  (add-hook 'csharp-mode-hook (lambda ()
+                                (omnisharp-mode))))
+
+(use-package omnisharp
+  :ensure t
+  :diminish "o#"
+  :bind (:map omnisharp-mode-map
+              ("<f12>" . omnisharp-go-to-definition)
+              ("M-." . omnisharp-go-to-definition)
+              ("C-<f12>" . omnisharp-go-to-implementation))
+  :init
+  (setq omnisharp-server-executable-path "/opt/omnisharp-roslyn/OmniSharp.exe"))
+
 (provide 'init-code)
 
 ;;; init-code.el ends here

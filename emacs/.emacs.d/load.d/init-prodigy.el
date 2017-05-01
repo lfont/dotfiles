@@ -7,62 +7,49 @@
   :bind (("C-c t" . prodigy))
   :config
   (use-package nvm   :ensure t)
-  (use-package rbenv :ensure t)
 
   (prodigy-define-tag
-    :name 'fasterize
+    :name 'default
     :kill-process-buffer-on-stop t)
 
   (prodigy-define-service
-    :name "bstats-server"
-    :cwd "~/code/Fasterize/bstats-server"
-    :path "~/.nvm/v0.10.29/bin"
-    :command "supervisor"
-    :args '("app.js")
-    :port 3100
-    :tags '(fasterize)
+    :name "boost-offerdb - api"
+    :cwd "~/code/vp/boost/offer-db/OfferDB.Api"
+    :command "dotnet"
+    :args '("run")
+    :url "http://localhost:46982/swagger/ui"
+    :env '(("ASPNETCORE_ENVIRONMENT" "DEV")
+           ("ASPNETCORE_URLS" "http://localhost:46982"))
+    :tags '(default))
+
+  (prodigy-define-service
+    :name "boost-back - api"
+    :cwd "~/code/vp/boost/boost-back/Boost.Api"
+    :command "dotnet"
+    :args '("run")
+    :url "http://localhost:56942/swagger/ui"
+    :env '(("ASPNETCORE_ENVIRONMENT" "DEV")
+           ("ASPNETCORE_URLS" "http://localhost:56942"))
+    :tags '(default))
+
+  (prodigy-define-service
+    :name "boost-front - front"
+    :cwd "~/code/vp/boost/boost-front/Boost"
+    :command "dotnet"
+    :args '("run")
+    :port 60759
+    :env '(("ASPNETCORE_ENVIRONMENT" "Development")
+           ("ASPNETCORE_URLS" "http://localhost:60759"))
+    :tags '(default))
+
+  (prodigy-define-service
+    :name "boost-front - webpack"
+    :cwd "~/code/vp/boost/boost-front/Boost/wwwroot"
+    :command "npm"
+    :args '("run" "watch")
     :init-async (lambda (done)
-                  (nvm-use "0.10.29" done)))
-
-  (prodigy-define-service
-    :name "fasterize.com"
-    :cwd "~/code/Fasterize/fasterize.com"
-    :path "~/.rbenv/shims"
-    :command "bundle"
-    :args '("exec" "rails" "s")
-    :port 3000
-    :tags '(fasterize)
-    :init (lambda ()
-            (rbenv-use "1.9.3-p392")
-            (setenv "RBENV_VERSION")))
-
-  (prodigy-define-service
-    :name "geonosis"
-    :cwd "~/code/Fasterize/geonosis"
-    :path "~/code/Fasterize/geonosis"
-    :command "sbt"
-    :args '("run" "-Dconfig.file=../FasterizeEngine/geonosis.conf")
-    :port 9000
-    :tags '(fasterize))
-
-  (prodigy-define-service
-    :name "reverse-devfe"
-    :cwd "~/code/Fasterize/fstrz"
-    :path "~/code/Fasterize/fstrz/bin"
-    :command "fstrz"
-    :args '("container" "reverse-devfe")
-    :tags '(fasterize))
-
-  (prodigy-define-service
-    :name "testerize"
-    :cwd "~/code/Fasterize/testerize"
-    :path "~/.nvm/versions/node/v0.12.7/bin"
-    :command "supervisor"
-    :args '("app.js")
-    :port 3001
-    :tags '(fasterize)
-    :init-async (lambda (done)
-                  (nvm-use "0.12.7" done)))
+                  (nvm-use "6.10.2" done))
+    :tags '(default))
 
   ;; Nix Shell
   (prodigy-define-tag
@@ -75,26 +62,12 @@
               ,(getf service :arg)))
     :stop-signal 'kill)
 
-  (prodigy-define-service
-    :name "FasterizeEngine"
-    :cwd "~/code/Fasterize/FasterizeEngine"
-    :arg "supervisor devfe"
-    :port 8080
-    :tags '(fasterize nix-shell))
-
-  (prodigy-define-service
-    :name "FasterizeEngine - .devfe.fasterized.net"
-    :cwd "~/code/Fasterize/FasterizeEngine"
-    :arg "supervisor -- devfe --origin_port 80 --secure_origin_port 443"
-    :port 8080
-    :tags '(fasterize nix-shell))
-
-  (prodigy-define-service
-    :name "fastapi"
-    :cwd "~/code/Fasterize/fastapi"
-    :arg "supervisor app.js"
-    :port 8101
-    :tags '(fasterize nix-shell))
+  ;; (prodigy-define-service
+  ;;   :name ""
+  ;;   :cwd "~/code/"
+  ;;   :arg ""
+  ;;   :port 8080
+  ;;   :tags '(default nix-shell))
 
   ;; SSH Tunnel: https://raw.githubusercontent.com/rejeep/prodigy.el/master/examples/ssh-tunnel.el
   (defun my/prodigy-build-tunnel-args (args)
@@ -120,6 +93,17 @@
              (cl-getf service :tunnel)))
     :ready-message "debug1: Entering interactive session.")
 
+  ;; (prodigy-define-service
+  ;;   :name "tunnel - 10001::81"
+  ;;   :tags '(default ssh-tunnel)
+  ;;   :tunnel (list
+  ;;            :localport   "10001"
+  ;;            :tunnel-host ""
+  ;;            :tunnel-port "81"
+  ;;            :user        ""
+  ;;            :host        ""
+  ;;            :port        "22"))
+
   (defun my/prodigy-build-proxy-args (args)
     "Assemble the ssh proxy argument list."
     `("-v" ;; allows us to parse for the ready message
@@ -140,30 +124,8 @@
     :ready-message "debug1: Entering interactive session.")
 
   (prodigy-define-service
-    :name "tunnel - 10001:front01-dc1:81"
-    :tags '(fasterize ssh-tunnel)
-    :tunnel (list
-             :localport   "10001"
-             :tunnel-host "front01-dc1.fstrz.net"
-             :tunnel-port "81"
-             :user        "lfont"
-             :host        "front01-dc1.fstrz.net"
-             :port        "22"))
-
-  (prodigy-define-service
-    :name "tunnel - 10002:front02-dc1:81"
-    :tags '(fasterize ssh-tunnel)
-    :tunnel (list
-             :localport   "10002"
-             :tunnel-host "front02-dc1.fstrz.net"
-             :tunnel-port "81"
-             :user        "lfont"
-             :host        "front02-dc1.fstrz.net"
-             :port        "22"))
-
-  (prodigy-define-service
     :name "proxy - 8888:bibimbap.me"
-    :tags '(ssh-proxy)
+    :tags '(default ssh-proxy)
     :proxy (list
             :localport "8888"
             :user      (getenv "USER")
