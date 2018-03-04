@@ -1,2 +1,7 @@
-#!/bin/sh
-xrandr --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off --output eDP-1 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output HDMI-2 --off
+#!/bin/bash
+xrandr --output eDP-1 --auto --dpi 220 \
+       --output DP-1-2 --auto --primary --panning 3840x2160+3840+0 --scale 2x2 --right-of eDP-1 \
+       --output DP-1 --off \
+       --output DP-2 --off \
+       --output HDMI-1 --off \
+       --output HDMI-2 --off
