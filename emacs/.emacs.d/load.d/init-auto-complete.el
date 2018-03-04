@@ -43,23 +43,11 @@ Argument IGNORE is not used."
 
   (use-package company-quickhelp
     :ensure t
+    :bind (:map company-active-map
+                ("M-h" . company-quickhelp-manual-begin))
     :init
     (setq company-quickhelp-delay nil)
-    :config
-    (company-quickhelp-mode 1))
-
-  (use-package tern
-    :ensure t
-    :diminish tern-mode
-    :defer t
-    :init
-    (add-hook 'js-mode-hook 'tern-mode)
-    :config
-    (use-package company-tern
-      :ensure t
-      :defer t
-      :init
-      (add-to-list 'company-backends 'company-tern))))
+    (company-quickhelp-mode 1)))
 
 (provide 'init-auto-complete)
 

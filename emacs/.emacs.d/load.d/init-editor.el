@@ -7,7 +7,11 @@
       auto-save-default nil) ; stop creating those #autosave# files
 
 ;; Remove trailing white spaces
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook (lambda ()
+                              (when (not
+                                     (eq 'markdown-mode
+                                         (with-current-buffer (current-buffer) major-mode)))
+                                (delete-trailing-whitespace))))
 
 ;; Put a new line at the end of file
 (setq require-final-newline t)

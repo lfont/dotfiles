@@ -4,7 +4,7 @@
 
 (use-package prodigy
   :ensure t
-  :bind (("C-c t" . prodigy))
+  :bind (([f6] . prodigy))
   :config
   (use-package nvm   :ensure t)
 
@@ -12,35 +12,34 @@
     :name 'default
     :kill-process-buffer-on-stop t)
 
+  (prodigy-define-tag
+    :name 'dotnet
+    :command "watch-files.sh"
+    :args '(".." "*.cs" "dotnet-run.sh"))
+
   (prodigy-define-service
     :name "boost-offerdb - api"
     :cwd "~/code/vp/boost/offer-db/OfferDB.Api"
-    :command "dotnet"
-    :args '("run")
     :url "http://localhost:46982/swagger/ui"
     :env '(("ASPNETCORE_ENVIRONMENT" "DEV")
            ("ASPNETCORE_URLS" "http://localhost:46982"))
-    :tags '(default))
+    :tags '(default dotnet))
 
   (prodigy-define-service
     :name "boost-back - api"
     :cwd "~/code/vp/boost/boost-back/Boost.Api"
-    :command "dotnet"
-    :args '("run")
     :url "http://localhost:56942/swagger/ui"
     :env '(("ASPNETCORE_ENVIRONMENT" "DEV")
            ("ASPNETCORE_URLS" "http://localhost:56942"))
-    :tags '(default))
+    :tags '(default dotnet))
 
   (prodigy-define-service
     :name "boost-front - front"
     :cwd "~/code/vp/boost/boost-front/Boost"
-    :command "dotnet"
-    :args '("run")
     :port 60759
     :env '(("ASPNETCORE_ENVIRONMENT" "Development")
            ("ASPNETCORE_URLS" "http://localhost:60759"))
-    :tags '(default))
+    :tags '(default dotnet))
 
   (prodigy-define-service
     :name "boost-front - webpack"
