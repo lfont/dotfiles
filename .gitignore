@@ -1,3 +1,7 @@
+elpa/
+auto-save-list/
+.emacs.d/
+*.eld
 *.pyc
 *.elc
 *.hi

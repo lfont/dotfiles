@@ -50,7 +50,8 @@ if [ -s ~/.gpg-agent-info ]; then
 else
   unset SSH_AGENT_PID
   if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-    export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    #export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+    export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
   fi
 fi
 
@@ -59,16 +60,20 @@ fi
   && source /usr/share/bash-completion/bash_completion
 
 # Autojump
-[ -s /etc/profile.d/autojump.bash ] \
-  && source /etc/profile.d/autojump.bash
+[ -s /usr/share/autojump/autojump.bash ] \
+  && source /usr/share/autojump/autojump.bash
 
 # Arch command not found
 [ -s /usr/share/doc/pkgfile/command-not-found.bash ] \
   && source /usr/share/doc/pkgfile/command-not-found.bash
 
 # NVM
-[ -s /usr/share/nvm/init-nvm.sh ] \
-  && source /usr/share/nvm/init-nvm.sh
+if [ -s ~/.nvm/nvm.sh ]; then
+  source ~/.nvm/nvm.sh
+  nvm use stable >/dev/null
+fi
+
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Mimic Zsh run-help ability (Alt+h after a command to open its manpage)
 bind '"\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"'

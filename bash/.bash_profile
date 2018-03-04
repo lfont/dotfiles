@@ -1,5 +1,5 @@
 # Enhance path
-PATH=$HOME/bin:$PATH
+PATH=$HOME/bin:$HOME/.local/bin:$PATH
 
 if [ "$EUID" -ne 0 ]; then
   PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin

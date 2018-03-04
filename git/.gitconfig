@@ -39,4 +39,4 @@
     currentbranch = !git branch | grep \"^\\*\" | cut -d \" \" -f 2
 
 [credential]
-	helper = !/usr/lib/jvm/java-8-openjdk/jre/bin/java -Ddebug=false -Djava.net.useSystemProxies=true -jar /home/loic/bin/git-credential-manager-2.0.3.jar
+	helper = !java -Ddebug=false -Djava.net.useSystemProxies=true -jar ~/bin/git-credential-manager-2.0.3.jar
