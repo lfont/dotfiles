@@ -19,19 +19,19 @@ xset dpms 600 700 800
   && xset +fp $HOME/.guix-profile/share/fonts/truetype
 
 ## Detect and configure touchpad/mouse. See 'man xinput' for more info.
-xinput list | grep "SynPS/2 Synaptics TouchPad"
-if [ $? -eq 0 ]; then
-    # Tapping Enabled
-    xinput set-prop "SynPS/2 Synaptics TouchPad" 292 1
-    # Natural Scrolling Enabled
-    xinput set-prop "SynPS/2 Synaptics TouchPad" 280 1
-fi
+#xinput list | grep "SynPS/2 Synaptics TouchPad"
+#if [ $? -eq 0 ]; then
+#    # Tapping Enabled
+#    xinput set-prop "SynPS/2 Synaptics TouchPad" 292 1
+#    # Natural Scrolling Enabled
+#    xinput set-prop "SynPS/2 Synaptics TouchPad" 280 1
+#fi
 
-xinput list | grep "Logitech Anywhere MX"
-if [ $? -eq 0 ]; then
-    # Natural Scrolling Enabled
-    xinput set-prop "Logitech Anywhere MX" 280 1
-fi
+#xinput list | grep "Logitech Anywhere MX"
+#if [ $? -eq 0 ]; then
+#    # Natural Scrolling Enabled
+#    xinput set-prop "Logitech Anywhere MX" 280 1
+#fi
 
 ## Restore screen layout
 if [ -x ~/.screenlayout/default.sh ]; then
