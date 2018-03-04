@@ -1559,3 +1559,11 @@ XLock.random.duration: 60
 XLock.random.modelist:
 XLock.random.sequential: False
 XLock.random.fullrandom: True
+
+Xft.dpi: 220
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb

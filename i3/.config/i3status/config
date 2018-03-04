@@ -13,7 +13,7 @@ general {
 }
 
 order += "disk /"
-order += "disk /home"
+order += "disk /mnt/crypthdd"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "battery all"
@@ -23,11 +23,11 @@ order += "volume master"
 order += "tztime local"
 
 disk "/" {
-  format = "/ %avail"
+  format = "ssd %avail"
 }
 
-disk "/home" {
-  format = "/home %avail"
+disk "/mnt/crypthdd" {
+  format = "hdd %avail"
 }
 
 wireless _first_ {
