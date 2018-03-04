@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-MUSIC="$HOME/Music"
-LOCAL_PATH="$MUSIC/podcasts"
-REMOTE_PATH="/run/media/$USER/$1"
+LOCAL_PATH="$HOME/Podcasts"
+REMOTE_PATH="/media/$USER/$1"
 REMOTE_PODCASTS="$REMOTE_PATH/.podcasts"
 REMOTE_PODCASTS_LOG="$REMOTE_PODCASTS.log"
 

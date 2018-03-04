@@ -2,9 +2,9 @@
 
 REMOTE_HOST="$1"
 REMOTE_PATH=/media/seagate/Music
-REMOTE_PLAYLISTS_PATH=/media/seagate/Playlists
+REMOTE_PLAYLISTS_PATH=/media/seagate/Music/playlists
 
-LOCAL_PATH=~/Music/good
+LOCAL_PATH=~/Music
 LOCAL_PLAYLISTS_PATH=~/Music/playlists
 LOCAL_PLAYLISTS_TEMP_PATH=/tmp/playlists
 

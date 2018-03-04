@@ -1,5 +1,5 @@
-directory: ~/Music/good
-library: ~/Music/good/musiclibrary.blb
+directory: ~/Music
+library: ~/Music/musiclibrary.blb
 asciify_paths: true
 per_disc_numbering: true
 
@@ -37,25 +37,30 @@ embedart:
     auto: no
 
 smartplaylist:
-    relative_to: ~/Music/good
+    relative_to: ~/Music
     playlist_dir: ~/Music/playlists
     playlists:
         - name: _favorites.m3u
           query: 'favorite:true'
 
         - name: rap.m3u
-          query: 'genre:rap format:flac
-          ^albumartist:"young fathers" ^albumartist:"public enemy"
-          ^album:"greatest hits" ^album:"best of"
-          ^comp:true'
+          query: 'genre:rap
+                  format:flac
+                  ^album:"greatest hits" ^album:"best of"
+                  ^comp:true
+                  ^artist:"cypress hill" ^artist:rohff ^artist:"ideal j"
+                  ^artist:2pac ^artist:"kanye west"
+                  ^artist:"manu key"
+                  ^artist:"das racist"'
 
-        - name: groove.m3u
-          query: ['albumartist:abra', 'albumartist:"blood orange"', 'albumartist:kelela', 'albumartist:kaytranada',
-          'albumartist:"syd"',
-          'album:"doing it in lagos" albumartist+ album+ track+']
+        - name: soul.m3u
+          query: [ 'albumartist:kelela'
+                 ]
 
         - name: low-res.m3u
-          query: ['format:mp3 bitrate:..319999', 'format:acc bitrate:..255999']
+          query: [ 'format:mp3 bitrate:..319999'
+                 , 'format:acc bitrate:..255999'
+                 ]
 
         - name: cd-quality.m3u
           query: 'format:flac bitdepth:16'

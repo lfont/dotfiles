@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-MUSIC="$HOME/Music"
-LOCAL_PATH="$MUSIC/good"
-LOCAL_PLAYLISTS="$MUSIC/playlists"
-REMOTE_PATH="/run/media/$USER/$1"
+LOCAL_PATH="$HOME/Music"
+LOCAL_PLAYLISTS="$LOCAL_PATH/playlists"
+REMOTE_PATH="/media/$USER/$1"
 REMOTE_PLAYLISTS="$REMOTE_PATH/.playlists"
 REMOTE_PLAYLISTS_LOG="$REMOTE_PLAYLISTS.log"
 
@@ -13,7 +12,7 @@ then
     beet splupdate
 
     # generate recently added playlist
-    beet list -p added:$(date +"%Y-%m-%d" --date="2 day ago").. | sed -e 's,'"$LOCAL_PATH"'/,,' > "$LOCAL_PLAYLISTS/_recently_added.m3u"
+    beet list -p added:$(date +"%Y-%m-%d" --date="2 day ago").. | sed -e 's,'"$LOCAL_PATH"'/,,' > "$LOCAL_PLAYLISTS/_recently-added.m3u"
 fi
 
 # list of tracks to sync
