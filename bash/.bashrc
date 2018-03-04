@@ -18,9 +18,6 @@ else
   fi
 fi
 
-# Docker
-export DOCKER_HOST=tcp://127.0.0.1:2375
-
 # Store only one copy of each command
 export HISTCONTROL="erasedups:ignoreboth"
 
