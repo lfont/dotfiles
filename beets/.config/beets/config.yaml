@@ -26,7 +26,8 @@ lastgenre:
     canonical: '~/.config/beets/genres-tree.yaml'
     fallback: ''
     force: yes
-    prefer_specific: yes
+    prefer_specific: no
+    source: artist
     whitelist: '~/.config/beets/genres.txt'
 
 replaygain:
@@ -37,33 +38,38 @@ embedart:
     auto: no
 
 smartplaylist:
-    relative_to: ~/Music
+    relative_to: ~/Music/playlists
     playlist_dir: ~/Music/playlists
     playlists:
         - name: _favorites.m3u
           query: 'favorite:true'
 
+        - name: bad-quality.m3u
+          query: [ 'format:mp3 bitrate:..319999'
+                 , 'format:acc'
+                 ]
+
+        - name: good-quality.m3u
+          query: 'format:flac'
+
+        - name: afrobeat.m3u
+          query: 'genre:afrobeat bitrate:320000.. ^comp:true'
+
+        - name: electronic.m3u
+          query: [ 'genre:electronic bitrate:..319999'
+                 , 'genre:electro bitrate:..319999'
+                 , 'genre:house bitrate:..319999'
+                 , 'genre:techno bitrate:..319999'
+                 ]
+
+        - name: new-wave.m3u
+          query: 'genre:"new wave" bitrate:320000.. ^comp:true'
+
         - name: rap.m3u
-          query: 'genre:rap
-                  format:flac
-                  ^album:"greatest hits" ^album:"best of"
-                  ^comp:true
-                  ^artist:"cypress hill" ^artist:rohff ^artist:"ideal j"
-                  ^artist:2pac ^artist:"kanye west"
-                  ^artist:"manu key"
-                  ^artist:"das racist"'
+          query: 'genre:rap bitrate:320000.. ^comp:true'
+
+        - name: rnb.m3u
+          query: 'genre:r&b bitrate:320000.. ^comp:true'
 
         - name: soul.m3u
-          query: [ 'albumartist:kelela'
-                 ]
-
-        - name: low-res.m3u
-          query: [ 'format:mp3 bitrate:..319999'
-                 , 'format:acc bitrate:..255999'
-                 ]
-
-        - name: cd-quality.m3u
-          query: 'format:flac bitdepth:16'
-
-        - name: hi-res.m3u
-          query: 'format:flac bitdepth:24'
+          query: 'genre:soul bitrate:320000.. ^comp:true'
