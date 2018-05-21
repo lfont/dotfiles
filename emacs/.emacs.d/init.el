@@ -244,20 +244,22 @@
         (my/vcs-gutter-mode -1)
       (my/vcs-gutter-mode t))))
 
+(defvar my/hydra-modes-stack nil)
+
+(defun my/hydra-modes-push (expr)
+  (push `(lambda () ,expr) my/hydra-modes-stack))
+
+(defun my/hydra-modes-pop (&optional fun)
+  (interactive)
+  (when fun
+    (call-interactively fun))
+  (let ((x (pop my/hydra-modes-stack)))
+    (when x
+      (funcall x))))
+
 (use-package hydra
   :commands hydra-modes/body
   :bind (("C-c m" . hydra-modes/body))
-  :init
-  (defvar my/hydra-modes-stack nil)
-
-  (defun my/hydra-modes-push (expr)
-    (push `(lambda () ,expr) my/hydra-modes-stack))
-
-  (defun my/hydra-modes-pop ()
-    (interactive)
-    (let ((x (pop my/hydra-modes-stack)))
-      (when x
-        (funcall x))))
   :config
   (defhydra hydra-modes (:color teal)
     "modes"
@@ -288,10 +290,12 @@
     ("sn" mc/skip-to-next-like-this "skip next")
     ("sp" mc/skip-to-previous-like-this "skip prev")
     ("e" mc/edit-lines "edit lines")
-    ("SPC" (progn (mc/keyboard-quit)
-                  (mc/keyboard-quit)
-                  (when (fboundp 'my/hydra-modes-pop)
-                    (my/hydra-modes-pop))) "cancel" :color blue)))
+    ("SPC" (my/hydra-modes-pop 'my/hydra-cursor-exit) "cancel" :color blue))
+
+  (defun my/hydra-cursor-exit ()
+    (interactive)
+    (mc/keyboard-quit)
+    (mc/keyboard-quit)))
 
 (use-package modalka
   :bind (("M-<SPC>" . modalka-mode))
@@ -459,7 +463,7 @@
   :config
   (defhydra hydra-window-layout ()
     "layout"
-    ("a" ace-window "ace" :color blue)
+    ("a" (my/hydra-modes-pop 'ace-window) "ace" :color blue)
     ("P" my/windresize-up)
     ("p" windmove-up "up")
     ("F" my/windresize-right)
@@ -470,8 +474,7 @@
     ("b" windmove-left "left")
     ("u" winner-undo "undo")
     ("U" winner-redo "redo")
-    ("SPC" (when (fboundp 'my/hydra-modes-pop)
-             (my/hydra-modes-pop)) "cancel" :color blue)))
+    ("SPC" my/hydra-modes-pop "cancel" :color blue)))
 
 ;;; Editor settings
 
@@ -599,7 +602,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Use space instead of tabs.
 (defun my/indent-setup-offset ()
   (setq indent-tabs-mode nil
-        tab-width 2
+        tab-width 4
         standard-indent tab-width
         c-basic-offset tab-width
         js-indent-level tab-width
@@ -608,7 +611,7 @@ point reaches the beginning or end of the buffer, stop there."
         web-mode-style-padding tab-width
         web-mode-script-padding tab-width
         json-reformat:indent-width tab-width
-        tide-format-options '(:indentSize 2 :tabSize 2 :convertTabsToSpaces t)
+        tide-format-options '(:indentSize tab-width :tabSize tab-width :convertTabsToSpaces t)
         tab-stop-list (number-sequence tab-width 200 tab-width)))
 
 (add-hook 'conf-mode-hook 'my/indent-setup-offset)
@@ -671,8 +674,7 @@ point reaches the beginning or end of the buffer, stop there."
       ("l" my/ispell-cycle-languages "language")
       ("n" my/flyspell-check-next-highlighted-word "next")
       ("p" flyspell-check-previous-highlighted-word "prev")
-      ("SPC" (when (fboundp 'my/hydra-modes-pop)
-               (my/hydra-modes-pop)) "cancel" :color blue))))
+      ("SPC" my/hydra-modes-pop "cancel" :color blue))))
 
 ;;; Source control settings
 
@@ -700,8 +702,7 @@ point reaches the beginning or end of the buffer, stop there."
     ("s" magit-status "status" :color blue)
     ("l" magit-log-buffer-file "file log")
     ("b" magit-blame "blame")
-    ("SPC" (when (fboundp 'my/hydra-modes-pop)
-             (my/hydra-modes-pop)) "cancel" :color blue)))
+    ("SPC" my/hydra-modes-pop "cancel" :color blue)))
 
 (use-package ediff
   :defer t
@@ -899,7 +900,6 @@ point reaches the beginning or end of the buffer, stop there."
               ("C-c C-c" . omnisharp-current-type-information)
               ("C-c C-d" . omnisharp-current-type-documentation))
   :init
-  (setq omnisharp-server-executable-path (expand-file-name "~/code/omnisharp-roslyn/artifacts/publish/OmniSharp/default/netcoreapp1.1/OmniSharp"))
   (eval-after-load 'csharp-mode '(add-hook 'csharp-mode-hook 'omnisharp-mode))
   :config
   (eval-after-load 'company '(add-to-list 'company-backends 'company-omnisharp)))
