@@ -794,6 +794,12 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package toml-mode
   :defer t)
 
+(use-package dockerfile-mode
+  :defer t)
+
+(use-package docker-compose-mode
+  :defer t)
+
 ;; Languages modes
 (use-package arduino-mode
   :defer t
@@ -1587,7 +1593,7 @@ Argument IGNORE is not used."
  '(git-gutter:separator-sign "|")
  '(package-selected-packages
    (quote
-    (arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
+    (docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
