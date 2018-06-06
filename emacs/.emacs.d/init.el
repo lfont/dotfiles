@@ -228,11 +228,11 @@
 ;(define-key input-decode-map (kbd "M-<SPC>") (kbd "<leader>"))
 
 ;; Global bindings
-(global-set-key (kbd "C-c e j") 'join-line)
+(global-set-key (kbd "C-c l j") 'join-line)
 
 (use-package linum
   :commands my/line-number-toggle
-  :bind (("C-c e l" . my/line-number-toggle))
+  :bind (("C-c l t" . my/line-number-toggle))
   :config
   (defun my/vcs-gutter-mode (state)
     (when (fboundp 'git-gutter-mode)
@@ -244,41 +244,20 @@
         (my/vcs-gutter-mode -1)
       (my/vcs-gutter-mode t))))
 
-(defvar my/hydra-modes-stack nil)
-
-(defun my/hydra-modes-push (expr)
-  (push `(lambda () ,expr) my/hydra-modes-stack))
-
-(defun my/hydra-modes-pop (&optional fun)
-  (interactive)
-  (when fun
-    (call-interactively fun))
-  (let ((x (pop my/hydra-modes-stack)))
-    (when x
-      (funcall x))))
-
 (use-package hydra
-  :commands hydra-modes/body
   :bind (("C-c m" . hydra-modes/body))
+  :commands hydra-modes/body
   :config
   (defhydra hydra-modes (:color teal)
     "modes"
-    ("c" (progn
-           (hydra-cursor/body)
-           (my/hydra-modes-push '(hydra-modes/body))) "cursor")
-    ("g" (progn
-           (hydra-git/body)
-           (my/hydra-modes-push '(hydra-modes/body))) "git")
-    ("l" (progn
-           (hydra-window-layout/body)
-           (my/hydra-modes-push '(hydra-modes/body))) "layout")
-    ("s" (progn
-           (hydra-spellcheck/body)
-           (my/hydra-modes-push '(hydra-modes/body))) "spellcheck")
-    ("SPC" nil "cancel")))
+    ("c" hydra-cursor/body "cursor")
+    ("g" hydra-git/body "git")
+    ("l" hydra-window-layout/body "layout")
+    ("o" hydra-org/body "org")
+    ("s" hydra-spellcheck/body "spellcheck")
+    ("q" nil "quit")))
 
 (use-package multiple-cursors
-  :bind (("C-c c" . hydra-cursor/body))
   :commands hydra-cursor/body
   :config
   (defhydra hydra-cursor ()
@@ -290,12 +269,7 @@
     ("sn" mc/skip-to-next-like-this "skip next")
     ("sp" mc/skip-to-previous-like-this "skip prev")
     ("e" mc/edit-lines "edit lines")
-    ("SPC" (my/hydra-modes-pop 'my/hydra-cursor-exit) "cancel" :color blue))
-
-  (defun my/hydra-cursor-exit ()
-    (interactive)
-    (mc/keyboard-quit)
-    (mc/keyboard-quit)))
+    ("q" nil "quit")))
 
 (use-package modalka
   :bind (("M-<SPC>" . modalka-mode))
@@ -334,9 +308,9 @@
   (modalka-define-kbd "e" "C-e")
   (modalka-define-kbd "f" "C-f")
   (modalka-define-kbd "g" "C-g")
-  (modalka-define-kbd "j" "C-c e j")
+  (modalka-define-kbd "j" "C-c l j")
   (modalka-define-kbd "k" "C-k")
-  (modalka-define-kbd "l" "C-c e l")
+  (modalka-define-kbd "l" "C-c l t")
   (modalka-define-kbd "m" "C-c m")
   (modalka-define-kbd "n" "C-n")
   (modalka-define-kbd "p" "C-p")
@@ -459,11 +433,11 @@
     (windmove-right)))
 
 (use-package hydra
-  :bind (("s-q" . hydra-window-layout/body))
+  :commands hydra-window-layout/body
   :config
   (defhydra hydra-window-layout ()
     "layout"
-    ("a" (my/hydra-modes-pop 'ace-window) "ace" :color blue)
+    ("a" ace-window "ace" :color blue)
     ("P" my/windresize-up)
     ("p" windmove-up "up")
     ("F" my/windresize-right)
@@ -474,7 +448,7 @@
     ("b" windmove-left "left")
     ("u" winner-undo "undo")
     ("U" winner-redo "redo")
-    ("SPC" my/hydra-modes-pop "cancel" :color blue)))
+    ("q" nil "quit")))
 
 ;;; Editor settings
 
@@ -645,7 +619,6 @@ point reaches the beginning or end of the buffer, stop there."
   (add-hook 'text-mode-hook 'flyspell-mode)
   :config
   (use-package hydra
-    :bind (("C-c s" . hydra-spellcheck/body))
     :config
     (require 'ispell)
 
@@ -674,7 +647,7 @@ point reaches the beginning or end of the buffer, stop there."
       ("l" my/ispell-cycle-languages "language")
       ("n" my/flyspell-check-next-highlighted-word "next")
       ("p" flyspell-check-previous-highlighted-word "prev")
-      ("SPC" my/hydra-modes-pop "cancel" :color blue))))
+      ("q" nil "quit"))))
 
 ;;; Source control settings
 
@@ -690,7 +663,7 @@ point reaches the beginning or end of the buffer, stop there."
   (set-face-foreground 'git-gutter:separator "grey"))
 
 (use-package magit
-  :bind (("C-c g" . hydra-git/body))
+  :commands hydra-git/body
   :init
   (setq magit-last-seen-setup-instructions "1.4.0")
   :config
@@ -702,7 +675,7 @@ point reaches the beginning or end of the buffer, stop there."
     ("s" magit-status "status" :color blue)
     ("l" magit-log-buffer-file "file log")
     ("b" magit-blame "blame")
-    ("SPC" my/hydra-modes-pop "cancel" :color blue)))
+    ("q" nil "quit")))
 
 (use-package ediff
   :defer t
@@ -1198,6 +1171,25 @@ Argument IGNORE is not used."
          (call-interactively 'eshell))
        :default-config-keywords '(:height 25 :stick t)))))
 
+;;; Org mode settings
+
+(use-package org
+  :commands hydra-org/body
+  :init
+  (setq org-agenda-files (list "~/code/agenda")
+        org-log-done 'time)
+  :config
+  (defhydra hydra-org ()
+    "org"
+    ("a" org-agenda "agenda")
+    ("hh" org-shifttab "headlines")
+    ("hn" org-metaright "nest")
+    ("hN" org-metaleft "un-nest")
+    ("ht" org-promote-subtree "nest tree")
+    ("hT" org-demote-subtree "un-nest tree")
+    ("tn" org-insert-todo-heading "new todo")
+    ("q" nil "quit")))
+
 ;;; Task manager settings
 
 (use-package prodigy
@@ -1598,7 +1590,7 @@ Argument IGNORE is not used."
  '(git-gutter:separator-sign "|")
  '(package-selected-packages
    (quote
-    (docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
+    (org-mode docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
