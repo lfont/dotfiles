@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/emacs --daemon
+Exec=emacs --daemon
 Name=emacs
 Comment=GNU project Emacs
 Type=Application

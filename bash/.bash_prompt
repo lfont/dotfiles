@@ -22,7 +22,7 @@ function _bash_prompt_command() {
   fi
 }
 
-_BASH_PROMPT_LEFT_PS1="${GREEN}\u${WHITE}@${CYAN}\h ${GREEN}\$(_bash_prompt_collapse_wd)${WHITE}\$(__docker_machine_ps1)${BRIGHT}${RED}\${_BASH_PROMPT_LAST_ERR}${RESET}"
+_BASH_PROMPT_LEFT_PS1="${GREEN}\u${WHITE}@${CYAN}\h ${GREEN}\$(_bash_prompt_collapse_wd)${WHITE}${BRIGHT}${RED}\${_BASH_PROMPT_LAST_ERR}${RESET}"
 _BASH_PROMPT_RIGHT_PS1="${WHITE}>${RESET} "
 
 case $PROMPT_COMMAND in

@@ -1,17 +1,20 @@
-# Enhance path
-PATH=$HOME/bin:$HOME/.local/bin:$PATH
-
-if [ "$EUID" -ne 0 ]; then
-  PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
-fi
-
-export PATH
-
 # Nix environment
 [ -s ~/.nix-profile/etc/profile.d/nix.sh ] \
   && source ~/.nix-profile/etc/profile.d/nix.sh
 
 export NIX_PATH=${NIX_PATH:+$NIX_PATH:}stable=${HOME}/.nix-defexpr/channels/nixos-18.03
+export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
+export LADSPA_PATH=$HOME/.nix-profile/lib/ladspa
+export LV2_PATH=$HOME/.nix-profile/lib/lv2
+export LXVST_PATH=$HOME/.nix-profile/lib/vst
+
+# User bin are always the favorites
+export PATH=$HOME/bin:$HOME/.local/bin:$PATH
+
+# Non root user can see sbin
+if [ "$EUID" -ne 0 ]; then
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+fi
 
 # Common bash setup
 [ -s ~/.bashrc ] \
