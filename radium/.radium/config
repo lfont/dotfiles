@@ -1,0 +1,38 @@
+settings_version = 0.73 # dont change this one
+
+font = Cousine,11,-1,5,75,0,0,0,0,0
+font_style = Regular
+
+system_font = Lato,8,-1,5,87,0,0,0,0,0,Black
+system_font_style = Black
+
+bottom_slider_height = 14
+left_slider_width = 8
+
+override_default_qt_style = true
+
+blocklist_width = 818
+use_0x90_for_note_off = 0
+
+num_vst_paths = 1
+vst_path0 = C:/Program Files/Steinberg/VstPlugins
+
+last_system_font_version = 1.9.21
+last_editor_font_version = 3.0.b2.3
+scrolls_per_second = 20
+record_midi_accurately = true
+always_record_midi_velocity = false
+samples_dir = /home/loic/bin/radium_64bit_linux-5.7.4/bin/sounds
+pause_rendering = true
+vsync = true
+plugin_usage_MIDI Messages_-__-_MIDI Messages = 1
+plugin_usage_FluidSynth_-__-_FluidSynth = 5
+show_vsync_warning_during_startup = false
+latest_informed_update_version = 5.7.4
+midi_num_inports = 1
+midi_input_port_0 = test
+midi_input_port = test
+sample_bookmarks1 = /home/loic/bin/radium_64bit_linux-5.7.4-demo/bin/sounds
+multisample = 4
+show_linenumbers = false
+show_intel_gfx_message2_during_startup = false

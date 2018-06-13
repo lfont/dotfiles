@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [[ ! $(pidof qjackctl) ]]
+then
+    qjackctl &
+    sleep 1
+fi
+
+cd ~/bin/radium_64bit_linux-5.7.4
+exec ./run_radium.sh "$@"
