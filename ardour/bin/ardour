@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ ! $(pidof qjackctl) ]]
+then
+    qjackctl &
+    sleep 1
+fi
+
+exec ardour5 "$@"
