@@ -1,5 +1,6 @@
 [ -s ~/.bash_colors ] && source ~/.bash_colors
 [ -s ~/.bash_prompt ] && source ~/.bash_prompt
+[ -s ~/.bash_aliases ] && source ~/.bash_aliases
 
 # Preferred editor
 if [[ -n $VISUAL ]]; then
@@ -60,18 +61,6 @@ fi
 [ -s /usr/share/autojump/autojump.bash ] \
   && source /usr/share/autojump/autojump.bash
 
-# Arch command not found
-[ -s /usr/share/doc/pkgfile/command-not-found.bash ] \
-  && source /usr/share/doc/pkgfile/command-not-found.bash
-
-# NVM
-if [ -s ~/.nvm/nvm.sh ]; then
-  source ~/.nvm/nvm.sh
-  nvm use stable >/dev/null
-fi
-
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # Mimic Zsh run-help ability (Alt+h after a command to open its manpage)
 bind '"\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"'
 
@@ -82,19 +71,3 @@ bind '"\er": "\C-asudo \C-e"'
 if command -v gpg-connect-agent > /dev/null; then
   /usr/bin/gpg-connect-agent --quiet /bye > /dev/null
 fi
-
-if command -v rbenv > /dev/null; then
-  eval "$(/usr/bin/rbenv init -)"
-fi
-
-if command -v direnv > /dev/null; then
-  eval "$(/usr/bin/direnv hook bash)"
-fi
-
-# Aliases
-[ -s ~/.bash_aliases ] \
-  && source ~/.bash_aliases
-
-# Fasterize
-[ -s ~/.bash_fstrz ] \
-  && source ~/.bash_fstrz
