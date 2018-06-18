@@ -459,7 +459,7 @@
 ;; Remove trailing white spaces
 (add-hook 'before-save-hook (lambda ()
                               (when (not
-                                     (eq 'markdown-mode
+                                     (eq 'gfm-mode
                                          (with-current-buffer (current-buffer) major-mode)))
                                 (delete-trailing-whitespace))))
 
