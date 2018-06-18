@@ -35,9 +35,13 @@ function execwm
   fi
 }
 
-session=${1:-i3}
+session=${1:-cwm}
 
 case $session in
+  cwm)
+    tint2 &
+    dex -ae cwm
+    execwm cwm;;
   exwm)
     xhost +SI:localuser:$USER
     execwm emacs --eval "(with-eval-after-load \"init-exwm\" (exwm-enable))";;

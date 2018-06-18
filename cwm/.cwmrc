@@ -1,0 +1,105 @@
+# Window decoration colors
+color activeborder   '#4c7899'
+color inactiveborder '#5e5e5e'
+color urgencyborder  '#900000'
+color groupborder    '#00cd00'
+color ungroupborder  '#cdcd00'
+
+# Menu colors
+color font    '#dcdccc'
+color selfont '#dcdccc'
+color menubg  '#4c7899'
+color menufg  '#5e5e5e'
+
+
+borderwidth 2
+fontname "Hack:size=12:antialias=true:autohint=true"
+gap 41 0 0 0
+moveamount 40
+sticky yes
+
+
+ignore tint2
+
+
+command editor                      "emacsclient -c -a mg"
+command "file browser"              pcmanfm
+command "keymap - fr swapcaps"      "setxkbmap -layout fr -option ctrl:swapcaps"
+command "keymap - fr"               "setxkbmap -layout fr -option ''"
+command "keymap - us intl swapcaps" "setxkbmap -layout us -variant intl -option ctrl:swapcaps"
+command "keymap - us intl"          "setxkbmap -layout us -variant intl -option ''"
+command lock                         slock
+command "monitor - enable external"  "/home/loic/.screenlayout/2.sh"
+command "monitor - disable external" "/home/loic/.screenlayout/1.sh"
+command "tint2 - reload"             "pkill -SIGUSR1 -f tint2"
+command term                         "st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34"
+command top                          "st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34 -e htop"
+command "web browser"                firefox
+
+
+# Mouse bindings
+
+bind-mouse 4-1 window-move
+bind-mouse 4-2 window-stick
+bind-mouse 4-3 window-resize
+bind-mouse 4-4 group-cycle
+bind-mouse 4-5 group-rcycle
+
+
+# Key bindings
+
+unbind-key all
+
+bind-key 4-0 group-toggle-all
+bind-key 4-1 group-only-1
+bind-key 4-2 group-only-2
+bind-key 4-3 group-only-3
+bind-key 4-4 group-only-4
+
+bind-key 4S-0 window-stick
+bind-key 4S-1 window-movetogroup-1
+bind-key 4S-2 window-movetogroup-2
+bind-key 4S-3 window-movetogroup-3
+bind-key 4S-4 window-movetogroup-4
+
+bind-key M-Tab  window-cycle
+bind-key MS-Tab window-rcycle
+bind-key 4-Tab  group-cycle
+bind-key 4S-Tab group-rcycle
+
+bind-key 4C-p window-move-up
+bind-key 4C-n window-move-down
+bind-key 4C-b window-move-left
+bind-key 4C-f window-move-right
+
+bind-key 4CS-p window-resize-up
+bind-key 4CS-n window-resize-down
+bind-key 4CS-b window-resize-left
+bind-key 4CS-f window-resize-right
+
+bind-key F11  window-fullscreen
+
+bind-key 4-h  window-htile
+bind-key 4-v  window-vtile
+bind-key 4S-m window-maximize
+bind-key 4S-h window-hmaximize
+bind-key 4S-v window-vmaximize
+bind-key 4S-x window-delete
+
+bind-key 4S-r restart
+bind-key 4S-q quit
+bind-key 4S-l lock
+
+bind-key 4-Return terminal
+bind-key 4-w      menu-window
+bind-key 4-l      menu-cmd
+bind-key 4-r      menu-exec
+bind-key 4-s      menu-ssh
+
+# Switch focus between screen
+bind-key 4M-b "xdotool mousemove 0 41"
+bind-key 4M-f "xdotool mousemove 3841 41"
+
+# Move window between screen
+bind-key 4MS-b "xdotool getactivewindow windowmove 0 41"
+bind-key 4MS-f "xdotool getactivewindow windowmove 3841 41"
