@@ -1,5 +1,6 @@
 [Desktop Entry]
-Exec=pasystray
-Name=pasystray
-Comment=PulseAudio controller for the system tray
 Type=Application
+Name=pasystray
+Exec=pasystray
+Comment=PulseAudio controller for the system tray
+NoDisplay=true
