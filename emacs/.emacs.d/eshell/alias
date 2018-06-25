@@ -1,0 +1,5 @@
+alias e find-file-other-window $1
+alias j cd =$1
+alias clear recenter 0
+alias ll ls -l $*
+alias la ll -a $*
