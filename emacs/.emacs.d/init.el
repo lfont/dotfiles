@@ -29,10 +29,9 @@
 (eval-when-compile
   (require 'use-package))
 
+;; Global libraries
 (use-package diminish)
 (use-package bind-key)
-
-;; Global libraries
 (use-package s)
 
 ;;; Emacs misc settings
@@ -161,39 +160,29 @@
 
 (use-package treemacs
   :defer t
-  :config
-  (progn
-    (setq treemacs-follow-after-init          t
-          treemacs-width                      35
-          treemacs-indentation                2
-          treemacs-git-integration            t
-          treemacs-collapse-dirs              3
-          treemacs-silent-refresh             nil
-          treemacs-change-root-without-asking nil
-          treemacs-sorting                    'alphabetic-desc
-          treemacs-show-hidden-files          t
-          treemacs-never-persist              nil
-          treemacs-is-never-other-window      nil
-          treemacs-goto-tag-strategy          'refetch-index)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t))
-  :bind
-  (:map global-map
-        ([f8]        . treemacs-toggle)
-        ("M-0"       . treemacs-select-window)
-        ("C-c 1"     . treemacs-delete-other-windows)
-        ("C-c fT"    . treemacs)
-        ("C-c ft"    . treemacs-toggle)
-        ("C-c f C-t" . treemacs-find-file)))
-
-(use-package treemacs-projectile
-  :defer t
-  :config
-  (setq treemacs-header-function #'treemacs-projectile-create-header)
   :bind (:map global-map
-              ("C-c fP" . treemacs-projectile)
-              ("C-c fp" . treemacs-projectile-toggle)))
+              ("C-c o" . treemacs-toggle)
+              ("C-c O" . treemacs-projectile))
+  :init
+  (setq treemacs-follow-after-init          t
+        treemacs-width                      35
+        treemacs-indentation                2
+        treemacs-git-integration            t
+        treemacs-collapse-dirs              3
+        treemacs-silent-refresh             nil
+        treemacs-change-root-without-asking nil
+        treemacs-sorting                    'alphabetic-desc
+        treemacs-show-hidden-files          t
+        treemacs-never-persist              nil
+        treemacs-is-never-other-window      nil
+        treemacs-goto-tag-strategy          'refetch-index)
+  :config
+  (use-package treemacs-projectile
+    :init
+    (setq treemacs-header-function #'treemacs-projectile-create-header))
+
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
 
 (use-package spaceline-config
   :ensure spaceline
@@ -215,19 +204,14 @@
     "The current window number. Requires `ace-window' to be enabled."
     (when (fboundp 'aw-update)
       (aw-update)
-      (let* ((num (read (window-parameter (selected-window) 'ace-window-path)))
+     (let* ((num (read (window-parameter (selected-window) 'ace-window-path)))
              (str (when num (int-to-string num))))
         (when str
           (propertize str 'face 'bold)))))
 
-  (spaceline-emacs-theme)
-  (with-eval-after-load "helm" (spaceline-helm-mode)))
+  (spaceline-emacs-theme))
 
 ;;; Keyboard navigation settings
-
-;; Leader key
-;; http://emacs.stackexchange.com/questions/12961/how-can-i-globally-replace-c-c-with-another-key-binding
-;(define-key input-decode-map (kbd "M-<SPC>") (kbd "<leader>"))
 
 ;; Global bindings
 (global-set-key (kbd "C-c l j") 'join-line)
@@ -459,11 +443,12 @@
       auto-save-default nil) ; stop creating those #autosave# files
 
 ;; Remove trailing white spaces
-(add-hook 'before-save-hook (lambda ()
-                              (when (not
-                                     (eq 'markdown-mode
-                                         (with-current-buffer (current-buffer) major-mode)))
-                                (delete-trailing-whitespace))))
+(defun my/delete-trailing-whitespace ()
+  (when (not (eq #'markdown-mode
+                 (with-current-buffer (current-buffer) major-mode)))
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook #'my/delete-trailing-whitespace)
 
 ;; Put a new line at the end of file
 (setq require-final-newline t)
@@ -530,7 +515,7 @@ point reaches the beginning or end of the buffer, stop there."
                (buffer-list))))
   (message "Other buffers killed"))
 
-(global-set-key (kbd "C-x K") 'my/editor-kill-others-buffers)
+(global-set-key (kbd "C-c b k") #'my/editor-kill-others-buffers)
 
 (defun my/dos2unix ()
   "Convert the current buffer to UNIX file format."
@@ -773,9 +758,6 @@ point reaches the beginning or end of the buffer, stop there."
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(use-package toml-mode
-  :defer t)
-
 (use-package dockerfile-mode
   :defer t)
 
@@ -815,34 +797,6 @@ point reaches the beginning or end of the buffer, stop there."
     :init
     (eval-after-load 'company '(add-to-list 'company-backends 'company-tern))))
 
-(use-package typescript-mode
-  :defer t)
-
-(use-package tide
-  :diminish "td"
-  :commands my/tide-setup
-  :bind (:map tide-mode-map
-              ("C-c C-i" . my/tide-format))
-  :init
-  (eval-after-load 'typescript-mode '(add-hook 'typescript-mode-hook 'my/tide-setup))
-  (eval-after-load 'web-mode '(add-hook 'web-mode-hook
-                                        '(lambda ()
-                                           (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                                             (my/tide-setup)))))
-  :config
-  (eval-after-load 'company '(add-to-list 'company-backends 'company-tide))
-
-  (defun my/tide-setup ()
-    (tide-setup)
-    (tide-hl-identifier-mode +1))
-
-  (defun my/tide-format ()
-    (interactive)
-    (if (string-equal "tsx" (file-name-extension buffer-file-name))
-        (web-mode-buffer-indent)
-      (tide-format))))
-
-
 (use-package intero
   :defer t)
 
@@ -859,17 +813,6 @@ point reaches the beginning or end of the buffer, stop there."
                                  (turn-on-haskell-indent)
                                  (intero-mode)
                                  (hindent-mode))))
-
-(use-package purescript-mode
-  :defer t)
-
-(use-package psc-ide
-  :defer t
-  :init
-  (setq psc-ide-use-npm-bin t)
-  (eval-after-load 'purescript-mode '(add-hook 'purescript-mode-hook (lambda ()
-                                                                       (psc-ide-mode)
-                                                                       (turn-on-purescript-indentation)))))
 
 (use-package elm-mode
   :defer t
@@ -891,11 +834,8 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package omnisharp
   :diminish "o#"
   :bind (:map omnisharp-mode-map
-              ("<f12>" . omnisharp-go-to-definition)
               ("M-." . omnisharp-go-to-definition)
-              ("C-<f12>" . omnisharp-go-to-implementation)
-              ("C-c C-c" . omnisharp-current-type-information)
-              ("C-c C-d" . omnisharp-current-type-documentation))
+              ("C-c C-t" . omnisharp-current-type-information))
   :init
   (eval-after-load 'csharp-mode '(add-hook 'csharp-mode-hook 'omnisharp-mode))
   :config
@@ -961,7 +901,6 @@ Argument IGNORE is not used."
         mu4e-completing-read-function 'ivy-completing-read
         projectile-completion-system 'ivy)
   :config
-  (ido-mode -1)
   (ivy-mode 1)
   (counsel-mode 1))
 
@@ -1042,18 +981,18 @@ Argument IGNORE is not used."
   (defhydra hydra-org ()
     "org"
     ("a" org-agenda "agenda")
-    ("hh" org-shifttab "headlines")
-    ("hn" org-metaright "nest")
-    ("hN" org-metaleft "un-nest")
-    ("ht" org-promote-subtree "nest tree")
-    ("hT" org-demote-subtree "un-nest tree")
+    ("ht" org-shifttab "headlines")
+    ("hf" org-metaright "nest")
+    ("hb" org-metaleft "un-nest")
+    ("hn" org-promote-subtree "nest tree")
+    ("hp" org-demote-subtree "un-nest tree")
     ("tn" org-insert-todo-heading "new todo")
     ("q" nil "quit")))
 
 ;;; Task manager settings
 
 (use-package prodigy
-  :bind (([f6] . prodigy))
+  :bind (("C-c t" . prodigy))
   :config
   (prodigy-define-tag
     :name 'default
