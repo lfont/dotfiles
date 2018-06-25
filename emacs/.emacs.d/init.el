@@ -570,6 +570,8 @@ point reaches the beginning or end of the buffer, stop there."
   (add-hook 'prog-mode-hook 'whitespace-mode))
 
 ;; Auto indent
+(setq tab-always-indent 'complete)
+
 (use-package electric
   :defer t
   :init
@@ -907,20 +909,19 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package company
   :diminish company-mode
   :bind (:map company-mode-map
-              ("<tab>" . my/auto-complete-or-indent))
+              ("<tab>" . company-indent-or-complete-common)
+         :map company-active-map
+              ("C-n" . company-select-next)
+              ("C-p" . company-select-previous)
+              ("M-h" . company-quickhelp-manual-begin))
   :init
   (setq company-tooltip-align-annotations t)
-  (add-hook 'conf-mode-hook 'company-mode)
-  (add-hook 'text-mode-hook 'company-mode)
   (add-hook 'prog-mode-hook 'company-mode)
   :config
-  (defun my/auto-complete-or-indent ()
-    (interactive)
-    (if (and (not (bolp))
-             (not (looking-back "[[:space:]]+" (line-beginning-position)))
-             (company-manual-begin))
-        (company-complete-common)
-      (indent-according-to-mode)))
+  (use-package company-quickhelp
+    :init
+    (setq company-quickhelp-delay nil)
+    (company-quickhelp-mode 1))
 
   (defvar-local my/auto-complete-fci-mode-on-p nil)
 
@@ -940,74 +941,17 @@ Argument IGNORE is not used."
 
   (add-hook 'company-completion-started-hook 'my/auto-complete-turn-off-fci)
   (add-hook 'company-completion-finished-hook 'my/auto-complete-maybe-turn-on-fci)
-  (add-hook 'company-completion-cancelled-hook 'my/auto-complete-maybe-turn-on-fci)
-
-  (use-package company-quickhelp
-    :bind (:map company-active-map
-                ("M-h" . company-quickhelp-manual-begin))
-    :init
-    (setq company-quickhelp-delay nil)
-    (company-quickhelp-mode 1)))
-
-(use-package helm
-  :diminish helm-mode
-  :demand t
-  :disabled t
-  :bind (("M-x"     . helm-M-x)
-         ("M-y"     . helm-show-kill-ring)
-         ("C-x b"   . helm-mini)
-         ("C-x C-f" . helm-find-files)
-         :map helm-map
-         ;; rebind tab to run persistent action
-         ("<tab>" . helm-execute-persistent-action)
-         ;; make TAB works in terminal
-         ("C-i"   . helm-execute-persistent-action)
-         ;; list actions using C-z
-         ("C-z"   . helm-select-action)
-         ;; Override some projectile keymaps
-         :map projectile-command-map
-         ("b" . helm-projectile-switch-buffer)
-         ("d" . helm-projectile-find-dir)
-         ("f" . helm-projectile)
-         ("p" . helm-projectile-switch-project))
-  :init
-  (require 'helm-config)
-
-  (setq
-   ;; split current window and display to bottom
-   helm-split-window-in-side-p t
-   helm-split-window-default-side 'below
-   ;; Fuzzy matching
-   helm-mode-fuzzy-match t
-   helm-completion-in-region-fuzzy-match t)
-  :config
-  (ido-mode -1)
-  (helm-mode 1)
-
-  (use-package helm-projectile
-    :config
-    (defun helm-projectile-switch-buffer ()
-      "Use Helm instead of ido to switch buffer in projectile."
-      (interactive)
-      (helm :sources helm-source-projectile-buffers-list
-            :buffer "*helm projectile buffers*"
-            :prompt (projectile-prepend-project-name "Switch to buffer: ")))))
+  (add-hook 'company-completion-cancelled-hook 'my/auto-complete-maybe-turn-on-fci))
 
 (use-package ivy
   :ensure ivy-hydra
   :ensure swiper
   :ensure counsel
-  :ensure smex
   :diminish ivy-mode
+  :diminish counsel-mode
   :demand t
   :bind (("C-s"     . swiper)
-         ("M-x"     . counsel-M-x)
-         ("M-y"     . counsel-yank-pop)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x c o" . counsel-imenu)
-         ("C-x c s" . counsel-ag)
-         ("C-x c g" . counsel-git-grep)
-         ("C-x c b" . ivy-resume))
+         ("C-c C-r" . ivy-resume))
   :init
   (setq ivy-use-virtual-buffers t
         ivy-count-format "(%d/%d) "
@@ -1018,7 +962,8 @@ Argument IGNORE is not used."
         projectile-completion-system 'ivy)
   :config
   (ido-mode -1)
-  (ivy-mode 1))
+  (ivy-mode 1)
+  (counsel-mode 1))
 
 ;;; Shell settings
 
