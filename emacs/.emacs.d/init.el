@@ -109,6 +109,9 @@
 
 ;;; UI settings
 
+;; Empty scratch buffer
+(setq initial-scratch-message "")
+
 ;; Always ask for y/n keypress instead of typing out 'yes' or 'no'
 (defalias 'yes-or-no-p 'y-or-n-p)
 
