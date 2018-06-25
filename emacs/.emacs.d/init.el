@@ -161,8 +161,8 @@
 (use-package treemacs
   :defer t
   :bind (:map global-map
-              ("C-c o" . treemacs-toggle)
-              ("C-c O" . treemacs-projectile))
+              ("C-c v" . treemacs-toggle)
+              ("C-c V" . treemacs-projectile))
   :init
   (setq treemacs-follow-after-init          t
         treemacs-width                      35
@@ -230,20 +230,8 @@
         (my/vcs-gutter-mode -1)
       (my/vcs-gutter-mode t))))
 
-(use-package hydra
-  :bind (("C-c m" . hydra-modes/body))
-  :commands hydra-modes/body
-  :config
-  (defhydra hydra-modes (:color teal)
-    "modes"
-    ("c" hydra-cursor/body "cursor")
-    ("g" hydra-git/body "git")
-    ("l" hydra-window-layout/body "layout")
-    ("o" hydra-org/body "org")
-    ("s" hydra-spellcheck/body "spellcheck")
-    ("q" nil "quit")))
-
 (use-package multiple-cursors
+  :bind (("C-c c" . hydra-cursor/body))
   :commands hydra-cursor/body
   :config
   (defhydra hydra-cursor ()
@@ -257,69 +245,21 @@
     ("e" mc/edit-lines "edit lines")
     ("q" nil "quit")))
 
-(use-package modalka
-  :bind (("M-<SPC>" . modalka-mode))
+(use-package god-mode
+  :bind (("M-<SPC>" . god-mode-all)
+         :map god-local-mode-map
+         ("." . repeat)
+         ("i" . god-local-mode))
   :init
-  (setq-default cursor-type '(bar . 1))
-  (setq modalka-cursor-type 'box)
-
-  (add-hook 'text-mode-hook #'modalka-mode)
-  (add-hook 'conf-mode-hook #'modalka-mode)
-  (add-hook 'prog-mode-hook #'modalka-mode)
+  (setq god-exempt-major-modes '(magit-popup-mode)
+        god-exempt-predicates '(god-exempt-mode-p))
+  (god-mode-all)
   :config
-  (modalka-define-kbd "%" "M-%")
-  (modalka-define-kbd "@" "C-c @ C-c")
-  (modalka-define-kbd "<" "M-<")
-  (modalka-define-kbd ">" "M->")
-  (modalka-define-kbd "/" "C-/")
-  (modalka-define-kbd "SPC" "C-SPC")
+  (defun my/god-update-cursor ()
+    (setq cursor-type (if god-local-mode 'box '(bar . 1))))
 
-  (modalka-define-kbd "0" "C-0")
-  (modalka-define-kbd "1" "C-1")
-  (modalka-define-kbd "2" "C-2")
-  (modalka-define-kbd "3" "C-3")
-  (modalka-define-kbd "4" "C-4")
-  (modalka-define-kbd "5" "C-5")
-  (modalka-define-kbd "6" "C-6")
-  (modalka-define-kbd "7" "C-7")
-  (modalka-define-kbd "8" "C-8")
-  (modalka-define-kbd "9" "C-9")
-
-  (modalka-define-kbd "G" "M-g g")
-  (modalka-define-kbd "L" "C-l")
-
-  (modalka-define-kbd "a" "C-a")
-  (modalka-define-kbd "b" "C-b")
-  (modalka-define-kbd "d" "C-d")
-  (modalka-define-kbd "e" "C-e")
-  (modalka-define-kbd "f" "C-f")
-  (modalka-define-kbd "g" "C-g")
-  (modalka-define-kbd "j" "C-c l j")
-  (modalka-define-kbd "k" "C-k")
-  (modalka-define-kbd "l" "C-c l t")
-  (modalka-define-kbd "m" "C-c m")
-  (modalka-define-kbd "n" "C-n")
-  (modalka-define-kbd "p" "C-p")
-  (modalka-define-kbd "s" "C-s")
-  (modalka-define-kbd "v" "C-v")
-  (modalka-define-kbd "w" "C-w")
-  (modalka-define-kbd "y" "C-y")
-
-  (modalka-define-kbd "cb" "C-c p b")
-  (modalka-define-kbd "cd" "C-c p d")
-  (modalka-define-kbd "cf" "C-c p f")
-  (modalka-define-kbd "ck" "C-c p k")
-  (modalka-define-kbd "cp" "C-c p p")
-  (modalka-define-kbd "rm" "C-x r m")
-  (modalka-define-kbd "rb" "C-x r b")
-  (modalka-define-kbd "xb" "C-x b")
-  (modalka-define-kbd "xc" "C-x C-c")
-  (modalka-define-kbd "xd" "C-x d")
-  (modalka-define-kbd "xe" "C-x C-e")
-  (modalka-define-kbd "xf" "C-x C-f")
-  (modalka-define-kbd "xk" "C-x k")
-  (modalka-define-kbd "xo" "C-x o")
-  (modalka-define-kbd "xs" "C-x C-s"))
+  (add-hook 'god-mode-enabled-hook #'my/god-update-cursor)
+  (add-hook 'god-mode-disabled-hook #'my/god-update-cursor))
 
 ;;; Window management settings
 
@@ -419,6 +359,7 @@
     (windmove-right)))
 
 (use-package hydra
+  :bind (("C-c a" . hydra-window-layout/body))
   :commands hydra-window-layout/body
   :config
   (defhydra hydra-window-layout ()
@@ -598,6 +539,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; spell checking
 (use-package flyspell
+  :bind (( "C-c s". hydra-spellcheck/body))
   :defer t
   :diminish flyspell-mode
   :init
@@ -652,6 +594,7 @@ point reaches the beginning or end of the buffer, stop there."
   (set-face-foreground 'git-gutter:separator "grey"))
 
 (use-package magit
+  :bind (("C-c g" . hydra-git/body))
   :commands hydra-git/body
   :init
   (setq magit-last-seen-setup-instructions "1.4.0")
@@ -973,6 +916,7 @@ Argument IGNORE is not used."
 ;;; Org mode settings
 
 (use-package org
+  :bind (("C-c o" . hydra-org/body))
   :commands hydra-org/body
   :init
   (setq org-agenda-files (list "~/code/agenda")
@@ -1389,7 +1333,7 @@ Argument IGNORE is not used."
  '(git-gutter:separator-sign "|")
  '(package-selected-packages
    (quote
-    (org-mode docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
+    (god-mode god org-mode docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
