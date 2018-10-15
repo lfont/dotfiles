@@ -41,16 +41,16 @@ shopt -s autocd
 # Checks the window size after each command
 shopt -s checkwinsize
 
-# GPG
+# GPG - https://lists.gnupg.org/pipermail/gnupg-devel/2013-March/027562.html
 export GPG_TTY=$(tty)
-if [ -s ~/.gpg-agent-info ]; then
-  source ~/.gpg-agent-info
-else
-  unset SSH_AGENT_PID
-  if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-    #export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-    export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
-  fi
+unset GPG_AGENT_INFO
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
+if command -v gpg-connect-agent > /dev/null; then
+  gpg-connect-agent --quiet /bye > /dev/null
 fi
 
 # bash-completion
@@ -66,8 +66,3 @@ bind '"\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"'
 
 # Append sudo to command (Alt+r)
 bind '"\er": "\C-asudo \C-e"'
-
-# Initialization of external tools
-if command -v gpg-connect-agent > /dev/null; then
-  /usr/bin/gpg-connect-agent --quiet /bye > /dev/null
-fi

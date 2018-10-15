@@ -25,13 +25,6 @@ if [[ $LANG == "C" || $LANG == "" ]]; then
   >&2 echo "${BRIGHT}${RED}The \$LANG variable is not set. This can cause a lot of problems.${RESET}"
 fi
 
-# Launch a gpg-agent instance
-if [[ $(gpg-agent --version | head -n 1 | awk '{print $3}') < 2.1 ]]; then
-  if ! pgrep gpg-agent > /dev/null; then
-    eval $(gpg-agent --daemon --sh --write-env-file ~/.gpg-agent-info)
-  fi
-fi
-
 # Launch a gnome-keyring instance
 if command -v gnome-keyring-daemon > /dev/null; then
   if ! pgrep gnome-keyring-daemon > /dev/null; then
