@@ -1560,7 +1560,7 @@ XLock.random.modelist:
 XLock.random.sequential: False
 XLock.random.fullrandom: True
 
-Xft.dpi: 220
+Xft.dpi: 200
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hintstyle: hintfull

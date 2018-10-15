@@ -14,7 +14,7 @@ color menufg  '#5e5e5e'
 
 borderwidth 2
 fontname "Hack:size=12:antialias=true:autohint=true"
-gap 41 0 0 0
+gap 40 0 0 0
 moveamount 40
 sticky yes
 
@@ -31,13 +31,19 @@ command "keymap - us intl"          "setxkbmap -layout us -variant intl -option 
 command lock                         slock
 command "monitor - enable external"  "/home/loic/.screenlayout/2.sh"
 command "monitor - disable external" "/home/loic/.screenlayout/1.sh"
-command "tint2 - reload"             "pkill -SIGUSR1 -f tint2"
 command term                         "st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34"
+command "tint2 - reload"             "pkill -SIGUSR1 -f tint2"
 command top                          "st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34 -e htop"
 command "web browser"                firefox
 
 
 # Mouse bindings
+
+unbind-mouse M-M1
+unbind-mouse CM-M1
+unbind-mouse M-M2
+unbind-mouse M-M3
+unbind-mouse CMS-M3
 
 bind-mouse 4-1 window-move
 bind-mouse 4-2 window-stick
@@ -79,6 +85,10 @@ bind-key 4CS-f window-resize-right
 
 bind-key F11  window-fullscreen
 
+bind-key 4-p  window-snap-up
+bind-key 4-n  window-snap-down
+bind-key 4-f  window-snap-right
+bind-key 4-b  window-snap-left
 bind-key 4-h  window-htile
 bind-key 4-v  window-vtile
 bind-key 4S-m window-maximize
