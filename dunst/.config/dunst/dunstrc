@@ -11,7 +11,7 @@
     # <http://developer.gnome.org/pango/stable/PangoMarkupFormat.html>.
     # If markup is not allowed, those tags will be stripped out of the
     # message.
-    allow_markup = yes
+    markup = yes
 
     # The format of the message.  Possible variables are:
     #   %a  appname
@@ -51,7 +51,6 @@
     # Ignore newlines '\n' in notifications.
     ignore_newline = no
 
-
     # The geometry of the window:
     #   [{width}]x{height}[+/-{x}+/-{y}]
     # The geometry of the message window.
@@ -64,7 +63,7 @@
     # the top and down respectevly.
     # The width can be negative.  In this case the actual width is the
     # screen width minus the width defined in within the geometry option.
-    geometry = "x5-0+40"
+    geometry = "x5-0+0"
 
     # Shrink window if it's smaller than the width.  Will be ignored if
     # width is 0.
@@ -145,11 +144,10 @@
     icon_position = right
 
     # Paths to default icons.
-    icon_folders = /usr/share/icons/gnome/48x48/status/:/usr/share/icons/gnome/48x48/devices/
+    icon_path = /usr/share/icons/gnome/48x48/status/:/usr/share/icons/gnome/48x48/devices/
 
-[frame]
-    width = 1
-    color = "#4c7899"
+    frame_width = 1
+    frame_color = "#4c7899"
 
 [shortcuts]
 

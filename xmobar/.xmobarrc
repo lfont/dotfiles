@@ -1,4 +1,4 @@
-Config { font = "xft:Hack-10:Normal"
+Config { font = "xft:Hack-9:Normal"
        , borderColor = "black"
        , border = FullB
        , bgColor = "black"
@@ -32,44 +32,36 @@ Config { font = "xft:Hack-10:Normal"
 		    , "-n", "orange"
 		    , "-l", "green"
 		    ] 30
-		    , Run DiskIO
-		    [ ("/", "/: v<read> ^<write>"), ("/home", " * home: v<read> ^<write>") ]
+		    , Run DiskU
+		    [
+	              ("/", "ssd: <used>/<size>")
+		    , ("/mnt/crypthdd", "* hdd: <used>/<size>")
+		    ]
 		    [
 		      "-h", "red"
 		    , "-n", "orange"
 		    , "-l", "green"
 		    ] 30
-		    , Run Network
-		    "eth0"
+		    , Run DynNetwork
 		    [
-		      "-t", "E: v<rx>K ^<tx>K"
+		      "-t", "<dev>: v<rx>KB ^<tx>KB"
                     , "-h", "red"
 		    , "-n", "orange"
 		    , "-l", "green"
 		    , "-x", ""
 		    ] 30
-		    , Run Network
-		    "enp0s25"
+		    , Run Wireless
+		    "wlp2s0"
 		    [
-		      "-t", "E: v<rx>K ^<tx>K"
-                    , "-h", "red"
+		      "-t", "<essid> <quality>%"
+		    , "-h", "green"
 		    , "-n", "orange"
-		    , "-l", "green"
-		    , "-x", ""
-		    ] 30
-		    , Run Network
-		    "wlp3s0"
-		    [
-		      "-t", " * W: v<rx>K ^<tx>K"
-                    , "-h", "red"
-		    , "-n", "orange"
-		    , "-l", "green"
-		    , "-x", ""
+		    , "-l", "red"
 		    ] 30
                     , Run Date "%a %F %H:%M:%S" "date" 10
                     , Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " %StdinReader% }{ %multicpu% (%top%) | %memory% * %swap% | %diskio% | %eth0%%enp0s25%%wlp3s0% | <fc=pink>%date%</fc> |              "
+       , template = " %StdinReader% }{ %multicpu% (%top%) | %memory% * %swap% | %disku% | %dynnetwork% (%wlp2s0wi%) | <fc=pink>%date%</fc> |                "
        }

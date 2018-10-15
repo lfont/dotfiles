@@ -1,0 +1,16 @@
+resolver: lts-12.13
+
+packages:
+- xmobar
+- xmonad
+- xmonad-contrib
+
+extra-deps:
+  - alsa-mixer-0.2.0.3
+  - iwlib-0.1.0
+  - libmpd-0.9.0.8
+  - parsec-numbers-0.1.0
+
+flags:
+  xmobar:
+    all_extensions: true

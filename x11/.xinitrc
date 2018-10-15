@@ -35,7 +35,7 @@ function execwm
   fi
 }
 
-session=${1:-cwm}
+session=${1:-xmonad}
 
 case $session in
   cwm)
@@ -49,6 +49,8 @@ case $session in
     execwm startfluxbox;;
   i3)
     execwm i3;;
+  xmonad)
+    execwm xmonad;;
   # No known session, try to run it as command
   *) exec $1;;
 esac

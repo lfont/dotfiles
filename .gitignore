@@ -6,3 +6,5 @@ auto-save-list/
 *.elc
 *.hi
 *.o
+*.bak
+.stack-work/
