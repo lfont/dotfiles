@@ -6,10 +6,10 @@ COMMANDS="editor
 \nkeymap - fr
 \nkeymap - us intl swapcaps
 \nkeymap - us intl
-\nlock
+\nlock screen
 \nmonitor - enable external
 \nmonitor - disable external
-\nterm
+\nterminal
 \ntop
 \nweb browser"
 
@@ -33,7 +33,7 @@ function launch () {
         "keymap - us intl ")
             exec setxkbmap -layout us -variant intl -option ''
             ;;
-        "lock ")
+        "lock screen ")
             exec slock
             ;;
         "monitor - enable external ")
@@ -42,7 +42,7 @@ function launch () {
         "monitor - disable external ")
             exec ~/.screenlayout/1.sh
             ;;
-        "term ")
+        "terminal ")
             exec st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34
             ;;
         "top ")

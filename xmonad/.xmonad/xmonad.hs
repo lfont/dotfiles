@@ -102,7 +102,7 @@ myKeys (XConfig {modMask = modm}) =
 
 -- Define terminal
 myTerminal :: String
-myTerminal = "st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34"
+myTerminal = "emacsclient.sh -e '(ansi-term \"/bin/bash\")'"
 
 -- Startup
 myStartupHook :: X ()
