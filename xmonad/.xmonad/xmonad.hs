@@ -74,9 +74,9 @@ myManageHook :: Query (Endo WindowSet)
 myManageHook =
   composeAll . concat $
   [ [className =? c --> viewShift "1" | c <- ["Firefox", "Chromium"]]
-  , [className =? t --> viewShift "2" | t <- ["Slack"]]
-  , [resource =? c --> doFloat | c <- []]
-  , [resource =? r --> doIgnore | r <- ["stalonetray"]]
+  , [className =? c --> viewShift "2" | c <- ["Slack"]]
+  , [className =? c --> doFloat | c <- []]
+  , [className =? c --> doIgnore | c <- ["stalonetray"]]
   ]
   where
     viewShift = doF . liftM2 (.) W.greedyView W.shift
@@ -85,8 +85,14 @@ myManageHook =
 myKeys :: XConfig t -> M.Map (KeyMask, KeySym) (X ())
 myKeys (XConfig {modMask = modm}) =
   M.fromList $
+  [ ( (modm, xK_q)
+    , spawn $
+      "if type xmonad; then xmonad --recompile && xmonad --restart" ++
+      "&& (killall stalonetray; stalonetray)" ++
+      "; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi" -- %! Restart xmonad
+     )
        -- Lock screen
-  [ ((modm .|. shiftMask, xK_l), spawn "slock")
+  , ((modm .|. shiftMask, xK_l), spawn "slock")
        -- App/Window prompt
   , ((modm, xK_p), spawn "dmenu_run -fn 'Hack-10' -p 'run: ' -l 10")
   , ( (modm .|. shiftMask, xK_p)
