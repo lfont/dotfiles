@@ -238,11 +238,9 @@
 ;;; Keyboard navigation settings
 
 ;; Global bindings
-(global-set-key (kbd "C-c l j") 'join-line)
-
 (use-package linum
   :commands my/line-number-toggle
-  :bind (("C-c l t" . my/line-number-toggle))
+  :bind (("C-c l" . hydra-line/body))
   :config
   (defun my/vcs-gutter-mode (state)
     (when (fboundp 'git-gutter-mode)
@@ -252,7 +250,13 @@
     (interactive)
     (if (call-interactively 'linum-mode)
         (my/vcs-gutter-mode -1)
-      (my/vcs-gutter-mode t))))
+      (my/vcs-gutter-mode t)))
+
+  (defhydra hydra-line ()
+    "line"
+    ("t" my/line-number-toggle "toggle")
+    ("j" join-line "join")
+    ("q" nil "quit")))
 
 (use-package multiple-cursors
   :bind (("C-c c" . hydra-cursor/body))
