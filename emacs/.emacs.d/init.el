@@ -133,9 +133,30 @@
 (tooltip-mode -1)
 (fringe-mode '(nil . 0))
 
-;; Font
-(add-to-list 'default-frame-alist
-             '(font . "Hack-10:Normal"))
+;; specify default font
+;; http://ergoemacs.org/emacs/emacs_list_and_set_font.html
+(when (member "Hack" (font-family-list))
+  (add-to-list 'initial-frame-alist '(font . "Hack-10"))
+  (add-to-list 'default-frame-alist '(font . "Hack-10")))
+;; specify font for all unicode characters
+;; (when (member "Symbola" (font-family-list))
+;;   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+
+;; automatic font mapping
+;; https://github.com/rolandwalker/unicode-fonts/issues/3
+(use-package unicode-fonts
+  :config
+  (defun my/hook-unicode-fonts-setup (frame)
+    "Run unicode-fonts-setup, then remove the hook."
+    (progn
+      (select-frame frame)
+      (unicode-fonts-setup)
+      (message "Removing unicode-fonts-setup to after-make-frame-functions hook")
+      (remove-hook 'after-make-frame-functions 'my/hook-unicode-fonts-setup)))
+
+  (if initial-window-system
+      (unicode-fonts-setup)
+    (add-hook 'after-make-frame-functions 'my/hook-unicode-fonts-setup nil)))
 
 (use-package hc-zenburn-theme
   :config
@@ -461,6 +482,17 @@ point reaches the beginning or end of the buffer, stop there."
 
 (global-set-key (kbd "C-c b k") #'my/editor-kill-others-buffers)
 
+;; Auto revert buffer on file change
+(use-package autorevert
+  :diminish auto-revert-mode)
+
+;; Always ALWAYS use UTF-8
+(use-package iso-transl
+  :ensure nil
+  :config
+  (set-language-environment 'utf-8)
+  (prefer-coding-system 'utf-8))
+
 (defun my/dos2unix ()
   "Convert the current buffer to UNIX file format."
   (interactive)
@@ -470,20 +502,6 @@ point reaches the beginning or end of the buffer, stop there."
   "Convert the current buffer to DOS file format."
   (interactive)
   (set-buffer-file-coding-system 'undecided-dos nil))
-
-;; Auto revert buffer on file change
-(use-package autorevert
-  :diminish auto-revert-mode)
-
-;; Always ALWAYS use UTF-8
-(use-package iso-transl
-  :ensure nil
-  :config
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8))
-
-(set-language-environment "UTF-8")
 
 ;; Use xclip to copy/paste to the terminal from X.
 (use-package xclip
