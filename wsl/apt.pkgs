@@ -1,0 +1,2 @@
+  110  sudo apt install dbus-x11
+ 1086  sudo apt install pinentry-gtk2

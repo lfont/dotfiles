@@ -51,6 +51,7 @@ fi
 
 if command -v gpg-connect-agent > /dev/null; then
   gpg-connect-agent --quiet /bye > /dev/null
+  echo UPDATESTARTUPTTY | gpg-connect-agent > /dev/null
 fi
 
 # bash-completion
@@ -66,3 +67,13 @@ bind '"\eh": "\C-a\eb\ed\C-y\e#man \C-y\C-m\C-p\C-p\C-a\C-d\C-e"'
 
 # Append sudo to command (Alt+r)
 bind '"\er": "\C-asudo \C-e"'
+
+# Default X server
+export DISPLAY=:0
+export LIBGL_ALWAYS_INDIRECT=1
+export GDK_SCALE=1.5
+
+# Note: Bash on Windows does not currently apply umask properly.
+if [ "$(umask)" = "0000" ]; then
+  umask 0022
+fi

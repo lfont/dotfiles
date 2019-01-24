@@ -3,7 +3,6 @@
     name  = Loïc Fontaine
 
 [core]
-    editor       = emacsclient -a mg
     excludesfile = ~/.gitignore
 
 [diff]
@@ -26,9 +25,6 @@
 [mergetool "ediff"]
     cmd = emacs -merge $LOCAL $REMOTE $BASE $MERGED
 
-#[url "https://"]
-#  insteadOf = git://
-
 [url "git@git.vpgrp.io:"]
     insteadOf = https://git.vpgrp.io
 
@@ -42,4 +38,5 @@
     currentbranch = !git branch | grep \"^\\*\" | cut -d \" \" -f 2
 
 [credential]
-	helper = !java -Ddebug=false -Djava.net.useSystemProxies=true -jar ~/bin/git-credential-manager-2.0.3.jar
+    helper = !java -Ddebug=false -Djava.net.useSystemProxies=true -jar ~/bin/git-credential-manager-2.0.3.jar
+    # helper = manager

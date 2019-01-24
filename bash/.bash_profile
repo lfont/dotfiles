@@ -27,7 +27,8 @@ fi
 
 # Launch a gnome-keyring instance
 if command -v gnome-keyring-daemon > /dev/null; then
-  if ! pgrep gnome-keyring-daemon > /dev/null; then
-    gnome-keyring-daemon --start --daemonize --components=pkcs11,secrets
+  if ! pgrep -f gnome-keyring-daemon > /dev/null; then
+    eval $(gnome-keyring-daemon --start --daemonize --components=pkcs11,secrets)
+    export GNOME_KEYRING_CONTROL
   fi
 fi
