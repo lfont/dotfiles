@@ -279,7 +279,7 @@
          ("." . repeat)
          ("i" . god-local-mode))
   :init
-  (setq god-exempt-major-modes '(magit-popup-mode)
+  (setq god-exempt-major-modes '(magit-popup-mode term-mode)
         god-exempt-predicates '(god-exempt-mode-p))
   (god-mode-all)
   :config
@@ -767,22 +767,28 @@ point reaches the beginning or end of the buffer, stop there."
     :init
     (eval-after-load 'company '(add-to-list 'company-backends 'company-tern))))
 
-(use-package intero
-  :defer t)
-
-(use-package hindent
-  :defer t
-  :init
-  (setq hindent-reformat-buffer-on-save t))
-
 (use-package haskell-mode
   :defer t
   :config
-  (add-hook 'haskell-mode-hook (lambda ()
-                                 (turn-on-haskell-doc-mode)
-                                 (turn-on-haskell-indent)
-                                 (intero-mode)
-                                 (hindent-mode))))
+  (turn-on-haskell-indent))
+
+(use-package haskell-doc
+ :ensure haskell-mode
+ :hook (haskell-mode . haskell-doc-mode))
+
+(use-package hindent
+ :hook (haskell-mode . hindent-mode)
+ :init
+ (setq hindent-reformat-buffer-on-save t))
+
+(defvar-local my/intero-disabled nil)
+
+(use-package intero
+ :hook (haskell-mode . my/intero-mode)
+ :init
+ (defun my/intero-mode ()
+   (if (not (bound-and-true-p my/intero-disabled))
+       (intero-mode))))
 
 (use-package elm-mode
   :defer t
@@ -877,9 +883,18 @@ Argument IGNORE is not used."
 
 ;;; Shell settings
 
+(use-package term
+  :bind (:map term-raw-map
+         ("M-<SPC>" . god-mode)
+         ("C-c a" . hydra-window-layout/body)
+         ("M-x" . counsel-M-x)
+         :map term-mode-map
+         ("M-<SPC>" . god-mode)))
+
 (use-package eshell
   :commands eshell
-  :bind (("C-c e" . my/eshell))
+  :bind (("C-c e" . my/eshell)
+         ("C-c E" . my/eshell-new))
   :init
   (setq eshell-banner-message ""
         eshell-cmpl-autolist t
@@ -933,13 +948,19 @@ Argument IGNORE is not used."
         (with-current-buffer b major-mode)))
 
   (defun my/eshell ()
+    "Open an instance of eshell."
     (interactive)
     (if (my/eshell-is-active (current-buffer))
         (popwin:close-popup-window)
       (popwin:display-buffer-1
        (save-window-excursion
          (call-interactively #'eshell))
-       :default-config-keywords '(:height 25 :stick t)))))
+       :default-config-keywords '(:height 25 :stick t))))
+
+  (defun my/eshell-new()
+    "Open a new instance of eshell."
+    (interactive)
+    (eshell 'N)))
 
 ;;; Org mode settings
 
@@ -947,7 +968,7 @@ Argument IGNORE is not used."
   :bind (("C-c o" . hydra-org/body))
   :commands hydra-org/body
   :init
-  (setq org-agenda-files (list "~/code/agenda")
+  (setq org-agenda-files (list "~/code/org/agenda")
         org-log-done 'time)
   :config
   (defhydra hydra-org ()
@@ -1361,7 +1382,7 @@ Argument IGNORE is not used."
  '(git-gutter:separator-sign "|")
  '(package-selected-packages
    (quote
-    (go-mode protobuf-mode god-mode god org-mode docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
+    (tidal go-mode protobuf-mode god-mode god org-mode docker-compose-mode arduino-mode company-arduino dockerfile-mode treemacs-projectile treemacs hindent intero-mode intero flycheck-elm toml-mode markdown-mode+ yaml-mode swiper ivy fsharp-mode omnisharp csharp-mode elm-mode typescript-mode tern flycheck company mu4e-alert rbenv nvm xclip web-mode use-package tide spaceline smex rainbow-delimiters purescript-mode psc-ide projectile prodigy popwin nix-mode multiple-cursors modalka minibuffer-line magit load-dir json-mode js2-mode ivy-hydra hc-zenburn-theme haskell-mode git-gutter fill-column-indicator exwm elfeed counsel company-tern company-quickhelp ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
