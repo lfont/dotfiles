@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=/usr/bin/pcmanfm --daemon-mode
+Exec=pcmanfm -d --desktop
 Name=pcmanfm
 Comment=A lightweight Gtk+ based file manager for X Window.
 Type=Application
