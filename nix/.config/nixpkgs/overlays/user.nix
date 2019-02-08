@@ -20,6 +20,11 @@ self: super: {
         tree = super.tree;
         pass = super.pass;
 	mosh = super.mosh;
+	gnupg = super.gnupg;
+	pcmanfm = super.pcmanfm;
+        curl = super.curl;
+        git = super.git;
+	clipit = super.clipit;
 
         ## wine
 	wine = super.wine;
@@ -94,14 +99,17 @@ self: super: {
 
         ## pulseaudio
         pavucontrol = super.pavucontrol;
-        #pasystray = super.pasystray;
+        # pasystray = super.pasystray;
 
         ## daw
-        ardour = super.ardour;
-        a2jmidid = super.a2jmidid;
-        jack2 = super.jack2Full;
-        qjackctl = super.qjackctl;
-        calf = super.calf;
-        zynaddsubfx = super.zynaddsubfx;
+        # ardour = super.ardour;
+        # a2jmidid = super.a2jmidid;
+        # jack2 = super.jack2Full;
+        # qjackctl = super.qjackctl;
+        # calf = super.calf;
+        # zynaddsubfx = super.zynaddsubfx;
+
+        ## android
+	androidsdk = super.androidsdk;
      };
 }

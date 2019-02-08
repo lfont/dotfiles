@@ -1,9 +1,7 @@
 self: super: {
     userPackages = super.userPackages or {} // {
         ansible = super.ansible_2_5;
-        curl = super.curl;
         docker_compose = super.docker_compose;
-        git = super.git;
         # slack = super.slack; # alsa issues
         vagrant = super.vagrant;
         vscode = super.vscode-with-extensions;
