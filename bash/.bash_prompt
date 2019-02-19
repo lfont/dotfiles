@@ -1,13 +1,20 @@
 # -*-sh-*-
 # Bash prompt emulating the Fish shell's default prompt.
 
-function _bash_prompt_collapse_wd() {
-  echo $(pwd | perl -pe "
-   BEGIN {
-      binmode STDIN,  ':encoding(UTF-8)';
-      binmode STDOUT, ':encoding(UTF-8)';
-   }; s|^$HOME|~|g; s|/([^/])[^/]*(?=/)|/\$1|g
-")
+_COLLAPSE_WD=
+
+function _bash_prompt_wd() {
+  local pwd=$(pwd | sed "s|^$HOME|~|g")
+  if [ -z "$_COLLAPSE_WD" ]; then
+    echo "$pwd"
+  else
+    echo $(echo "$pwd" | perl -pe "
+        BEGIN {
+          binmode STDIN,  ':encoding(UTF-8)';
+          binmode STDOUT, ':encoding(UTF-8)';
+        }; s|/([^/])[^/]*(?=/)|/\$1|g
+    ")
+  fi
 }
 
 function _bash_prompt_command() {
@@ -22,8 +29,8 @@ function _bash_prompt_command() {
   fi
 }
 
-_BASH_PROMPT_LEFT_PS1="${GREEN}\u${WHITE}@${CYAN}\h ${GREEN}\$(_bash_prompt_collapse_wd)${WHITE}${BRIGHT}${RED}\${_BASH_PROMPT_LAST_ERR}${RESET}"
-_BASH_PROMPT_RIGHT_PS1="${WHITE}>${RESET} "
+_BASH_PROMPT_LEFT_PS1="${GREEN}\u${WHITE}@${CYAN}\h ${GREEN}\$(_bash_prompt_wd)${WHITE}${BRIGHT}${RED}\${_BASH_PROMPT_LAST_ERR}${RESET}"
+_BASH_PROMPT_RIGHT_PS1="\n${WHITE}>${RESET} "
 
 case $PROMPT_COMMAND in
   *_bash_prompt_command*)

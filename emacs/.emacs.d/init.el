@@ -928,7 +928,8 @@ Argument IGNORE is not used."
                                            (if (string= dir (getenv "HOME")) "~"
                                              (let ((dirname (file-name-nondirectory dir)))
                                                (if (string= dirname "") "/" (abbreviate-file-name dir)))))
-                                         (if (= (user-uid) 0) " # " " $ ")))
+                                         "\n"
+                                         (if (= (user-uid) 0) "# " "$ ")))
         eshell-save-history-on-exit t
         eshell-stringify nil
         eshell-term-name "ansi"
