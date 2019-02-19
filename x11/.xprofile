@@ -1,5 +1,25 @@
 # -*-sh-*-
 
+## Set favorite DE behavior
+export DE="lxde"
+export DESKTOP_SESSION="LXDE"
+export XDG_MENU_PREFIX="lxde-"
+
+## Default X apps
+export TERMINAL="urxvt -e bash -c 'tmux attach -t term || tmux new -s term'"
+export BROWSER="firefox"
+export VISUAL="emacsclient -c -a mg"
+export QT_SELECT=4
+
+## HiDPI
+## https://wiki.archlinux.org/index.php/HiDPI
+## https://wiki.archlinux.org/index.php/xorg#Display_size_and_DPI
+xrdb -merge ~/.Xresources
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+#export QT_SCALE_FACTOR=2
+#export GDK_SCALE=2
+#export ELM_SCALE=2
+
 ## Remaps CapsLock
 setxkbmap -layout us -variant intl -option ctrl:swapcaps
 
@@ -49,6 +69,3 @@ if [ -e ~/.fehbg ]; then
         sh ~/.fehbg
     fi
 fi
-
-## Set urxvt settings
-xrdb -merge ~/.Xresources
