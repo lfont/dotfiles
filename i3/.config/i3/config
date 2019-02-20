@@ -12,7 +12,7 @@
 set $mod Mod4
 
 # Start some programs by default
-exec --no-startup-id "dex -ae i3"
+#exec --no-startup-id ""
 
 # Layout mode for new containers
 workspace_layout stacking

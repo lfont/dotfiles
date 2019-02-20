@@ -4,3 +4,4 @@ Name=pasystray
 Exec=pasystray
 Comment=PulseAudio controller for the system tray
 NoDisplay=true
+NotShowIn=KDE;GNOME;

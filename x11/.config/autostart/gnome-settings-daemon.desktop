@@ -3,3 +3,4 @@ Type=Application
 Name=GNOME Settings Daemon
 Exec=gsd-xsettings
 NoDisplay=true
+NotShowIn=KDE;GNOME;

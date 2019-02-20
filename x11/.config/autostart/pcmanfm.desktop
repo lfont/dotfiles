@@ -3,3 +3,4 @@ Exec=pcmanfm -d --desktop
 Name=pcmanfm
 Comment=A lightweight Gtk+ based file manager for X Window.
 Type=Application
+NotShowIn=KDE;GNOME;

@@ -6,9 +6,7 @@
 if [[ -n $VISUAL ]]; then
   export EDITOR=$VISUAL
 else
-  if command -v mg > /dev/null; then
-    export EDITOR=mg
-  elif command -v nano > /dev/null; then
+  if command -v nano > /dev/null; then
     export EDITOR=nano
   else
     export EDITOR=vi

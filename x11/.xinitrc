@@ -29,16 +29,20 @@ session=${1:-xmonad}
 case $session in
   cwm)
     tint2 &
-    dex -ae cwm
+    dex -ae CWM
     execwm cwm;;
   exwm)
     xhost +SI:localuser:$USER
+    dex -ae EXWM
     execwm emacs --eval "(with-eval-after-load \"init-exwm\" (exwm-enable))";;
   fluxbox)
+    dex -ae FLUXBOX
     execwm startfluxbox;;
   i3)
+    dex -ae I3
     execwm i3;;
   xmonad)
+    dex -ae XMONAD
     execwm xmonad;;
   # No known session, try to run it as command
   *) exec $1;;

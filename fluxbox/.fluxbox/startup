@@ -10,7 +10,6 @@ xmodmap "~/.Xmodmap"
 # Applications you want to run with fluxbox.
 # MAKE SURE THAT APPS THAT KEEP RUNNING HAVE AN ''&'' AT THE END.
 #
-dex -ae Fluxbox
 
 # And last but not least we start fluxbox.
 # Because it is the last app you have to run it with ''exec'' before it.

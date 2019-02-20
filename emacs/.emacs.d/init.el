@@ -1347,9 +1347,9 @@ Argument IGNORE is not used."
   (exwm-systemtray-enable)
 
   ;; Services
-  (add-hook 'exwm-init-hook
-            (lambda ()
-              (start-process-shell-command "dex" nil "dex -ae EXWM")))
+  ;; (add-hook 'exwm-init-hook
+  ;;           (lambda ()
+  ;;             (start-process-shell-command "" nil "")))
 
   ;; Multi monitor support
   (require 'exwm-randr)

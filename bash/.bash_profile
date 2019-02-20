@@ -1,7 +1,14 @@
+## Default X apps
+export TERMINAL="st -f Hack:size=10:antialias=true:autohint=true -g 120x34"
+export BROWSER=firefox
+export VISUAL="emacsclient -c -a nano"
+export FILE_BROWSER=dolphin
+
 # Nix environment
 [ -s ~/.nix-profile/etc/profile.d/nix.sh ] \
   && source ~/.nix-profile/etc/profile.d/nix.sh
 
+## NIX variables
 export NIX_PATH=${NIX_PATH:+$NIX_PATH:}local=${HOME}/code/nixpkgs
 export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
 export LADSPA_PATH=$HOME/.nix-profile/lib/ladspa

@@ -25,6 +25,7 @@ self: super: {
         curl = super.curl;
         git = super.git;
 	clipit = super.clipit;
+	pinentry_qt5 = super.pinentry_qt5;
 
         ## wine
 	wine = super.wine;

@@ -3,3 +3,4 @@ Exec=clipit
 Name=clipit
 Comment=Lightweight GTK+ Clipboard Manager
 Type=Application
+NotShowIn=KDE;GNOME;

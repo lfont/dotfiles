@@ -16,10 +16,10 @@ COMMANDS="editor
 function launch () {
     case $1 in
         "editor ")
-            exec emacsclient -c -a mg
+            eval exec "$VISUAL"
             ;;
         "file browser ")
-            exec pcmanfm
+            eval exec "$FILE_BROWSER"
             ;;
         "keymap - fr swapcaps ")
             exec setxkbmap -layout fr -option ctrl:swapcaps
@@ -43,13 +43,13 @@ function launch () {
             exec ~/.screenlayout/1.sh
             ;;
         "terminal ")
-            exec st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34
+            eval exec "$TERMINAL"
             ;;
         "top ")
-            exec st -f 'Hack:size=10:antialias=true:autohint=true' -g 120x34 -e htop
+            eval exec "$TERMINAL" -e htop
             ;;
         "web browser")
-            exec firefox
+            eval exec "$BROWSER"
             ;;
     esac
 }

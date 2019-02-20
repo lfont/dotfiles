@@ -1,6 +1,7 @@
 import XMonad
 
 import XMonad.Config.Desktop
+import XMonad.Config.Kde
 
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
@@ -23,25 +24,57 @@ import Control.Monad (liftM2)
 
 import Graphics.X11.ExtraTypes.XF86
 
-import System.IO
+import System.Environment (getEnv)
+import System.IO (Handle)
 
 -- Run XMonad
 main :: IO ()
 main = do
+  session <- getEnv "DESKTOP_SESSION"
+  defDesktopConfig <- desktop session
+  let myDesktopConfig =
+        defDesktopConfig
+          { modMask = mod4Mask -- Rebind mod to windows key
+          , keys = myKeys <+> keys defDesktopConfig
+          , workspaces = myWorkspaces
+          , manageHook = myManageHook <+> manageHook defDesktopConfig
+          , layoutHook = desktopLayoutModifiers $ myLayout
+          , startupHook = startupHook defDesktopConfig >> myStartupHook
+          }
+  xmonad myDesktopConfig
+
+-- Define current desktop config
+desktop "kde" = return kde4Config
+desktop "kde-plasma" = return kde4Config
+desktop "plasma" = return kde4Config
+desktop _ = do
   xmobarPanel <- spawnPipe "xmobar"
-  xmonad $
+  myTerminal <- getEnv "TERMINAL"
+  let myKeys (XConfig {modMask = modm}) =
+        M.fromList $
+        [ ( (modm, xK_q)
+          , spawn $
+            "if type xmonad; then xmonad --recompile && xmonad --restart" ++
+            "&& (killall stalonetray; stalonetray)" ++
+            "; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi" -- %! Restart xmonad
+           )
+          -- Lock screen
+        , ((modm .|. shiftMask, xK_l), spawn "slock")
+          -- App/Window prompt
+        , ((modm, xK_p), spawn "dmenu_run -fn 'Hack-10' -p 'run: ' -l 10")
+          -- Audio volume
+        , ((0, xF86XK_AudioRaiseVolume), spawn "audio-volume.sh up")
+        , ((0, xF86XK_AudioLowerVolume), spawn "audio-volume.sh down")
+        ]
+  return
     desktopConfig
-      { modMask = mod4Mask -- Rebind mod to windows key
-      , keys = myKeys <+> keys desktopConfig
+      { logHook = myLogHook xmobarPanel <+> logHook desktopConfig
       , terminal = myTerminal
-      , workspaces = myWorkspaces
-      , manageHook = myManageHook <+> manageHook desktopConfig
-      , layoutHook = desktopLayoutModifiers $ myLayout
+      , startupHook = startupHook desktopConfig >> spawnOnce "stalonetray"
+      , keys = myKeys <+> keys desktopConfig
       -- this must be in this order, docksEventHook must be last
       -- https://unix.stackexchange.com/questions/288037/xmobar-does-not-appear-on-top-of-window-stack-when-xmonad-starts/303242#303242
-      , handleEventHook = handleEventHook desktopConfig <+> docksEventHook
-      , logHook = myLogHook xmobarPanel <+> logHook desktopConfig
-      , startupHook = startupHook desktopConfig >> myStartupHook
+      --, handleEventHook = handleEventHook desktopConfig <+> docksEventHook
       }
 
 -- Define the names of all workspaces
@@ -85,30 +118,14 @@ myManageHook =
 myKeys :: XConfig t -> M.Map (KeyMask, KeySym) (X ())
 myKeys (XConfig {modMask = modm}) =
   M.fromList $
-  [ ( (modm, xK_q)
-    , spawn $
-      "if type xmonad; then xmonad --recompile && xmonad --restart" ++
-      "&& (killall stalonetray; stalonetray)" ++
-      "; else xmessage xmonad not in \\$PATH: \"$PATH\"; fi" -- %! Restart xmonad
-     )
-       -- Lock screen
-  , ((modm .|. shiftMask, xK_l), spawn "slock")
-       -- App/Window prompt
-  , ((modm, xK_p), spawn "dmenu_run -fn 'Hack-10' -p 'run: ' -l 10")
+    -- move focus up or down the window stack
+  [ ((mod1Mask, xK_Tab), windows W.focusDown) -- %! Move focus to the next window
+  , ((mod1Mask .|. shiftMask, xK_Tab), windows W.focusUp) -- %! Move focus to the previous window
+    -- App/Window prompt
   , ( (modm .|. shiftMask, xK_p)
     , spawn "dmenu_launcher.sh -fn 'Hack-10' -p 'launch: ' -l 10")
   , ((modm, xK_g), spawn "dmenu_goto_window.sh -fn 'Hack-10' -p 'goto: ' -l 10")
-       -- Audio volume
-  , ((0, xF86XK_AudioRaiseVolume), spawn "audio-volume.sh up")
-  , ((0, xF86XK_AudioLowerVolume), spawn "audio-volume.sh down")
-       -- move focus up or down the window stack
-  , ((mod1Mask, xK_Tab), windows W.focusDown) -- %! Move focus to the next window
-  , ((mod1Mask .|. shiftMask, xK_Tab), windows W.focusUp) -- %! Move focus to the previous window
   ]
-
--- Define terminal
-myTerminal :: String
-myTerminal = "emacsclient.sh -e '(ansi-term \"/bin/bash\")'"
 
 -- Startup
 myStartupHook :: X ()
@@ -116,9 +133,6 @@ myStartupHook
   -- fix swing apps
  = do
   setWMName "LG3D"
-  -- background services
-  spawnOnce "stalonetray"
-  spawnOnce "dex -ae xmonad"
 
 -- Panel
 myLogHook :: Handle -> X ()

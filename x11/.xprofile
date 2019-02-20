@@ -1,20 +1,18 @@
 # -*-sh-*-
 
 ## Set favorite DE behavior
-export DE="lxde"
-export DESKTOP_SESSION="LXDE"
-export XDG_MENU_PREFIX="lxde-"
+export DE="${DE:=lxde}"
+export DESKTOP_SESSION="${DESKTOP_SESSION:=LXDE}"
+export XDG_MENU_PREFIX="${XDG_MENU_PREFIX:=lxde-}"
 
-## Default X apps
-export TERMINAL="urxvt -e bash -c 'tmux attach -t term || tmux new -s term'"
-export BROWSER="firefox"
-export VISUAL="emacsclient -c -a mg"
-export QT_SELECT=4
+if [ "${DESKTOP_SESSION}" = "xsession" ]; then
+  export DESKTOP_SESSION=LXDE
+fi
 
 ## HiDPI
 ## https://wiki.archlinux.org/index.php/HiDPI
 ## https://wiki.archlinux.org/index.php/xorg#Display_size_and_DPI
-xrdb -merge ~/.Xresources
+[ -e ~/.Xresources ] && xrdb -merge ~/.Xresources
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 #export QT_SCALE_FACTOR=2
 #export GDK_SCALE=2
@@ -34,29 +32,8 @@ xset b off
 xset s 300 60
 xset dpms 600 700 800
 
-# Guix fonts
-[ -d "$HOME/.guix-profile/share/fonts/truetype" ] \
-  && xset +fp $HOME/.guix-profile/share/fonts/truetype
-
-## Detect and configure touchpad/mouse. See 'man xinput' for more info.
-#xinput list | grep "SynPS/2 Synaptics TouchPad"
-#if [ $? -eq 0 ]; then
-#    # Tapping Enabled
-#    xinput set-prop "SynPS/2 Synaptics TouchPad" 292 1
-#    # Natural Scrolling Enabled
-#    xinput set-prop "SynPS/2 Synaptics TouchPad" 280 1
-#fi
-
-#xinput list | grep "Logitech Anywhere MX"
-#if [ $? -eq 0 ]; then
-#    # Natural Scrolling Enabled
-#    xinput set-prop "Logitech Anywhere MX" 280 1
-#fi
-
 ## Restore screen layout
-if [ -x ~/.screenlayout/default.sh ]; then
-    ~/.screenlayout/default.sh
-fi
+[ -x ~/.screenlayout/default.sh ] && ~/.screenlayout/default.sh
 
 ## Set root window colour
 xsetroot -solid "#222222"

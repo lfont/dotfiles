@@ -4,6 +4,7 @@ Config { font = "xft:Hack-9:Normal"
        , bgColor = "black"
        , fgColor = "grey"
        , position = TopW L 100
+       , overrideRedirect = False
        , commands = [ Run MultiCpu
 		    [
 		      "-t", "C: <total>%"
