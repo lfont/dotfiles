@@ -108,7 +108,7 @@ myManageHook =
   composeAll . concat $
   [ [className =? c --> viewShift "1" | c <- ["Firefox", "Chromium"]]
   , [className =? c --> viewShift "2" | c <- ["Slack"]]
-  , [className =? c --> doFloat | c <- []]
+  , [className =? c --> doFloat | c <- ["plasmashell"]]
   , [className =? c --> doIgnore | c <- ["stalonetray"]]
   ]
   where
