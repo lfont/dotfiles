@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-LOCAL_PATH=~/Music
-LOCAL_PLAYLISTS_PATH=~/Music/playlists
+LOCAL_PATH=~/Music/Library
+LOCAL_PLAYLISTS_PATH=~/Music/Playlists
 LOCAL_PLAYLISTS_TEMP_PATH=/tmp/playlists
 
 REMOTE_HOST="$1"
-REMOTE_PATH=/mnt/seagate/Music
-REMOTE_PLAYLISTS_PATH=/mnt/seagate/Music/playlists
+REMOTE_PATH=/mnt/seagate/Music/Library
+REMOTE_PLAYLISTS_PATH=/mnt/seagate/Music/Playlists
 
 function fix_perms() {
   find $LOCAL_PATH/ -type d -name ".*" -print0 | xargs -0 rm -rf
@@ -22,15 +22,11 @@ then
 else
   echo "------------------------------------ PUSH MUSIC"
   fix_perms
-  rsync -a --partial --progress --delete --exclude="/Incoming/" --exclude="/playlists/" $LOCAL_PATH/ $REMOTE_HOST:$REMOTE_PATH/
+  rsync -a --partial --progress --exclude="/Incoming/" --exclude="/playlists/" $LOCAL_PATH/ $REMOTE_HOST:$REMOTE_PATH/
 
   if [ "$2" == "-u" ]
   then
-    echo "------------------------------------ UPDATE PLAYLISTS"
-    beet splupdate
-
-    # generate recently added playlist
-    beet list -p added:$(date +"%Y-%m-%d" --date="2 day ago").. | sed -e 's,'"$LOCAL_PATH"'/,,' > "$LOCAL_PLAYLISTS_PATH/_recently-added.m3u"
+      update-playlists.sh
   fi
 
   echo "------------------------------------ PUSH PLAYLISTS"
@@ -43,7 +39,7 @@ else
   done
 
   # sync
-  rsync -a --progress --delete --checksum "$LOCAL_PLAYLISTS_TEMP_PATH/" $REMOTE_HOST:"$REMOTE_PLAYLISTS_PATH/"
+  rsync -a --progress --checksum "$LOCAL_PLAYLISTS_TEMP_PATH/" $REMOTE_HOST:"$REMOTE_PLAYLISTS_PATH/"
 
   echo "------------------------------------ UPDATE DATABASE"
   SALT=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w6 | head -n1 | tr '[:upper:]' '[:lower:]')

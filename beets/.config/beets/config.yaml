@@ -1,4 +1,4 @@
-directory: ~/Music
+directory: ~/Music/Library/
 library: ~/Music/musiclibrary.blb
 asciify_paths: true
 per_disc_numbering: true
@@ -38,38 +38,42 @@ embedart:
     auto: no
 
 smartplaylist:
-    relative_to: ~/Music/playlists
-    playlist_dir: ~/Music/playlists
+    relative_to: ~/Music/Playlists
+    playlist_dir: ~/Music/Playlists
     playlists:
+        - name: _all.m3u
+          query: ''
+
         - name: _favorites.m3u
           query: 'favorite:true'
 
-        - name: bad-quality.m3u
-          query: [ 'format:mp3 bitrate:..319999'
-                 , 'format:acc'
-                 ]
+        - name: quality-low.m3u
+          query: 'bitrate:..319999'
 
-        - name: good-quality.m3u
+        - name: quality-standard.m3u
+          query: '^bitrate:..319999 ^format:flac'
+
+        - name: quality-high.m3u
           query: 'format:flac'
 
-        - name: afrobeat.m3u
-          query: 'genre:afrobeat bitrate:320000.. ^comp:true'
+        - name: genre-afrobeat.m3u
+          query: 'genre:afrobeat ^comp:true'
 
-        - name: electronic.m3u
-          query: [ 'genre:electronic bitrate:..319999'
-                 , 'genre:electro bitrate:..319999'
-                 , 'genre:house bitrate:..319999'
-                 , 'genre:techno bitrate:..319999'
+        - name: genre-electronic.m3u
+          query: [ 'genre:electronic ^comp:true'
+                 , 'genre:electro ^comp:true'
+                 , 'genre:house ^comp:true'
+                 , 'genre:techno ^comp:true'
                  ]
 
-        - name: new-wave.m3u
-          query: 'genre:"new wave" bitrate:320000.. ^comp:true'
+        - name: genre-new-wave.m3u
+          query: 'genre:"new wave" ^comp:true'
 
-        - name: rap.m3u
-          query: 'genre:rap bitrate:320000.. ^comp:true'
+        - name: genre-rap.m3u
+          query: 'genre:rap ^comp:true'
 
-        - name: rnb.m3u
-          query: 'genre:r&b bitrate:320000.. ^comp:true'
+        - name: genre-rnb.m3u
+          query: 'genre:r&b ^comp:true'
 
-        - name: soul.m3u
-          query: 'genre:soul bitrate:320000.. ^comp:true'
+        - name: genre-soul.m3u
+          query: 'genre:soul ^comp:true'
